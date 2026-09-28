@@ -63,7 +63,7 @@ run P0 (BoN=3, deterministic router, Judge, <=3 closure)  ->  evidence ledger  -
 human sign-off  ->  git commit + push ->  GitHub Actions (Verilator/Yosys/FRM/cocotb/SVA/mutation/coverage/ledger)
 ```
 
-- P0 defaults: `p0.py:P0_PROFILE` (`generators=[qwen3-coder-next→mapped to gpt-oss-20b local]`, `bon=3`, `train=nothing`, `inference=lmstudio-local`, `compute=local-cpu`).
+- P0 defaults: `p0.py:P0_PROFILE` (`generators=["selected-open-llm"]` bake-off winner alias; P0-A starts on `gpt-oss-20b` local, P0-B bakes off the LMStudio trio, `bon=3`, `train=nothing`, `inference=lmstudio-local`, `compute=local-cpu`). No foundation model is pinned (frozen architecture 2026-09-29).
 - Evidence per run: `RTL commit + spec commit + version + BoN + Verilator/Yosys/SVA/mutation + closure rounds + evidence/run_* + sign-off`.
 - Never auto-merge `rtl-merge/sign-off/tapeout-release/repair-merge` — `policy.py:HUMAN_SIGNOFF_ACTIONS`.
 

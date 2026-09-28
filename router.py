@@ -39,11 +39,30 @@ class Candidate:
 # --------------------------------------------------------------------------
 # Router — RouteMoA-inspired heuristic scorer (no training required).
 # Picks top-k generators per task kind; a learned 86M scorer slots in later.
+# MODEL-AGNOSTIC P0 (frozen architecture, 2026-09-29): P0 never names a
+# foundation model. "selected-open-llm" is the bake-off winner alias —
+# P0-A starts it on gpt-oss-20b (local LMStudio) until the P0-B bake-off
+# (BAKEOFF_CANDIDATES, same benchmark, correctness/quality/resources/
+# latency/tokens/cost) freezes the baseline. Capability priors below are
+# pre-bake-off placeholders replaced by measured values at baseline freeze.
 # --------------------------------------------------------------------------
 
+# P0-B bake-off slate (approved 2026-09-28): same verification benchmark,
+# selection on measured bands — never general benchmarks alone.
+BAKEOFF_CANDIDATES = ("gpt-oss-20b", "deepseek-coder-6.7b", "llama-3.1-8b",
+                      "qwen3-coder-next")
+
+# Bake-off winner alias. P0 code paths reference ONLY this name.
+BASELINE_GENERATOR = "selected-open-llm"
+
 # Capability prior per generator family, per task kind (0..1). Calibrate from
-# measured §6 baselines as they arrive; values below encode published bands.
+# measured §6 baselines as they arrive; values below encode published bands
+# (alias mirrors the P0-A starting point until the bake-off overwrites it).
 CAPABILITY = {
+    "selected-open-llm": {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
+    "gpt-oss-20b":        {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
+    "deepseek-coder-6.7b": {"mutant-kill": 0.68, "sva-validity": 0.62, "localization": 0.58, "coverage": 0.56},
+    "llama-3.1-8b":       {"mutant-kill": 0.62, "sva-validity": 0.58, "localization": 0.55, "coverage": 0.53},
     "qwen3-coder-next":   {"mutant-kill": 0.71, "sva-validity": 0.66, "localization": 0.62, "coverage": 0.60},
     "deepseek-v3.2":      {"mutant-kill": 0.70, "sva-validity": 0.64, "localization": 0.60, "coverage": 0.58},
     "glm-4.7":            {"mutant-kill": 0.72, "sva-validity": 0.63, "localization": 0.61, "coverage": 0.59},
@@ -51,19 +70,27 @@ CAPABILITY = {
     "kimi-k2.5":          {"mutant-kill": 0.70, "sva-validity": 0.62, "localization": 0.59, "coverage": 0.57},
 }
 
-# Per-call cost weights (relative); cheap models first on easy tasks.
+# Per-call cost weights (relative); local LMStudio trio cheapest (no API spend).
 COST = {
-    "qwen3-coder-next": 1.0,
+    "selected-open-llm": 1.0,
+    "gpt-oss-20b": 1.0,
+    "deepseek-coder-6.7b": 1.1,
+    "llama-3.1-8b": 1.2,
+    "qwen3-coder-next": 1.5,
     "deepseek-v3.2": 4.0,
     "glm-4.7": 3.0,
     "minimax-m2.5": 2.0,
     "kimi-k2.5": 3.5,
 }
 
-# Per-1M-token prices in USD (editable; illustrative bands anchored to
-# published open-model pricing — Qwen3-class cheap-active cheapest).
+# Per-1M-token prices in USD (editable; local trio = nominal operating bands —
+# local inference has no per-token bill, values keep cost math meaningful).
 # Tuple: (input $/1M, output $/1M, cached-read $/1M).
 PRICE = {
+    "selected-open-llm": (0.05, 0.20, 0.005),
+    "gpt-oss-20b": (0.05, 0.20, 0.005),
+    "deepseek-coder-6.7b": (0.05, 0.20, 0.005),
+    "llama-3.1-8b": (0.05, 0.20, 0.005),
     "qwen3-coder-next": (0.20, 0.80, 0.02),
     "deepseek-v3.2": (1.00, 3.00, 0.10),
     "glm-4.7": (0.80, 2.40, 0.08),
@@ -161,6 +188,9 @@ def run_task(task: Task, generate, verify, k: int | None = None,
     k=None selects the adaptive BoN width for the task difficulty.
     cascade=True runs round 1 on the cheapest generator only and escalates
     to the full shortlist solely on Judge fail (inverts always-ensemble cost).
+    Closure boundary (frozen architecture): at most max_rounds automatic
+    rounds; a task with no winner afterwards sets escalated_to_human=True —
+    no automatic fourth round is ever permitted.
     """
     if k is None:
         k = bon_width(task)
@@ -183,4 +213,5 @@ def run_task(task: Task, generate, verify, k: int | None = None,
     return {"task_id": task.task_id, "winner": winner.generator if winner else None,
             "approvals": winner.approvals if winner else 0, "rounds": rounds,
             "shortlist": shortlist, "history": history,
-            "bon_width": k, "cascaded": cascade}
+            "bon_width": k, "cascaded": cascade,
+            "escalated_to_human": winner is None}

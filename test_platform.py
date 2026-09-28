@@ -1,13 +1,14 @@
 """Unit tests for adopted architecture: policy, evidence ledger, P0 profile."""
 import unittest
 
-from evidence import EvidenceLedger, EvidenceRecord
+from evidence import (EVIDENCE_OPTIONAL, KNOWN_VERDICTS, EvidenceLedger,
+                      EvidenceRecord)
 from p0 import (DASHBOARD_FIELDS, P0_BENCHMARKS, P0_PROFILE, PHASES,
                 run_ablation)
 from policy import (DETERMINISTIC_OPS, HUMAN_SIGNOFF_ACTIONS, LLM_LANES,
                     SMALL_MODELS, assert_no_auto_merge, is_deterministic,
                     requires_human_signoff)
-from router import Task
+from router import BAKEOFF_CANDIDATES, BASELINE_GENERATOR, Task
 
 
 class TestPolicy(unittest.TestCase):
@@ -64,6 +65,28 @@ class TestLedger(unittest.TestCase):
         L.append(EvidenceRecord("R-1", "A-1", {}, "PENDING", signed_by="eng"))
         self.assertLess(L.audit_completeness(), 1.0)
 
+    def test_frozen_verdict_states_known(self):
+        for v in ("EXECUTED", "NOT_EXECUTED", "PASS", "FAIL", "UNPROVEN",
+                  "UNAVAILABLE", "SKIPPED_BY_POLICY", "DISPOSITIONED"):
+            self.assertIn(v, KNOWN_VERDICTS)
+        self.assertNotIn("PENDING", KNOWN_VERDICTS)
+
+    def test_not_executed_is_explicit_not_silent(self):
+        L = EvidenceLedger()
+        L.record_not_executed("R-9", "Vivado/synth", "no license on runner",
+                              run_id="ci-1")
+        self.assertAlmostEqual(L.audit_completeness(), 1.0)
+        rec = L.records[0]
+        self.assertEqual(rec.verdict, "NOT_EXECUTED")
+        # rewriting NOT_EXECUTED into PASS breaks the hash chain by construction
+        rec.verdict = "PASS"
+        self.assertFalse(L.verify_chain())
+
+    def test_unknown_verdict_breaks_c4(self):
+        L = EvidenceLedger()
+        L.append(EvidenceRecord("R-1", "A-1", {"equiv": True}, "MAYBE"))
+        self.assertLess(L.audit_completeness(), 1.0)
+
     def test_anonymous_signoff_denied(self):
         L = EvidenceLedger()
         with self.assertRaises(ValueError):
@@ -79,10 +102,18 @@ class TestLedger(unittest.TestCase):
 
 class TestP0(unittest.TestCase):
     def test_profile_minimal(self):
-        self.assertEqual(P0_PROFILE["generators"], ["qwen3-coder-next"])
+        # Frozen architecture: P0 is model-agnostic (bake-off winner alias).
+        self.assertEqual(P0_PROFILE["generators"], [BASELINE_GENERATOR])
+        self.assertEqual(P0_PROFILE["generators"], ["selected-open-llm"])
+        self.assertNotIn("qwen3-coder-next", P0_PROFILE["generators"])
         self.assertEqual(P0_PROFILE["bon"], 3)
         self.assertEqual(P0_PROFILE["router"], "deterministic")
         self.assertEqual(P0_PROFILE["train"], "nothing")
+        self.assertEqual(P0_PROFILE["max_rounds"], 3)  # hard closure boundary
+
+    def test_bakeoff_slate(self):
+        for m in ("gpt-oss-20b", "deepseek-coder-6.7b", "llama-3.1-8b"):
+            self.assertIn(m, BAKEOFF_CANDIDATES)
 
     def test_benchmarks_split(self):
         self.assertIn("P0-A", P0_BENCHMARKS)
@@ -91,14 +122,23 @@ class TestP0(unittest.TestCase):
     def test_dashboard_fields(self):
         for f in ("kill_rate", "audit_complete", "false_positive_rate",
                   "avg_cost_per_task", "avg_cpu_time_per_task",
-                  "avg_tokens_per_task"):
+                  "avg_tokens_per_task",
+                  # Frozen Gates B/D/E fields
+                  "closure_success_rate", "first_pass_rate",
+                  "avg_closure_iterations", "median_closure_iterations",
+                  "max_closure_iterations", "engineer_review_time_per_task",
+                  "human_rejection_rate", "human_override_rate",
+                  "evidence_items_reviewed_per_task", "signoff_status",
+                  "environment", "tool_versions", "model_runtime",
+                  "benchmark_version", "dataset_version", "seed",
+                  "artifact_hashes", "cross_env_variance"):
             self.assertIn(f, DASHBOARD_FIELDS)
 
     def test_phases_cover_0_to_7(self):
         self.assertEqual(sorted(PHASES), [0, 1, 2, 3, 4, 5, 6, 7])
         self.assertIn("CPU", PHASES[0])
         self.assertIn("GRPO", PHASES[6])
-        self.assertEqual(P0_PROFILE["inference"], "llama.cpp-gguf-local")
+        self.assertEqual(P0_PROFILE["inference"], "lmstudio-local")
         self.assertEqual(P0_PROFILE["compute"], "local-cpu")
 
     def test_ablation_shape_and_cost_order(self):
@@ -112,8 +152,10 @@ class TestP0(unittest.TestCase):
         self.assertEqual(sorted(rows), [1, 3, 5])  # CPU-first P0 default
         for n, row in rows.items():
             self.assertTrue(row["closed"])
-            for k in ("rounds", "approvals", "est_cost_usd"):
+            for k in ("rounds", "approvals", "est_cost_usd",
+                      "escalated_to_human"):
                 self.assertIn(k, row)
+            self.assertFalse(row["escalated_to_human"])
         costs = [rows[n]["est_cost_usd"] for n in (1, 3, 5)]
         self.assertEqual(costs, sorted(costs))
         wide = run_ablation(Task("T", "mutant-kill", 2), gen, ver, ns=(1, 3, 5, 8))

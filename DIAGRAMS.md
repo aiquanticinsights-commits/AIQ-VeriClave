@@ -9,7 +9,7 @@
 
 ## A. General AI framework
 
-### D01. General AI project architecture (data pipeline + model design)
+### D01. General AI project architecture (data pipeline + model design) — BACKGROUND ONLY, not AIQ-VeriClave P0
 
 ```text
                     YOUR AI PROJECT
@@ -41,7 +41,7 @@
                     Deployment
 ```
 
-### D02. Fine-tune pipeline (foundation model to specialized model)
+### D02. Fine-tune pipeline (foundation model to specialized model) — BACKGROUND ONLY, not AIQ-VeriClave P0
 
 ```text
 Existing foundation model
@@ -57,7 +57,7 @@ Evaluation
 Your specialized AI model
 ```
 
-### D03. Full serious-model stack (Python to Docker)
+### D03. Full serious-model stack (Python to Docker) — REFERENCE ONLY: conventional GPU training stack, NOT AIQ-VeriClave P0
 
 ```text
 Language
@@ -325,7 +325,7 @@ verification flywheel
                  ▼
         ┌─────────────────┐
         │ ONE primary LLM │
-        │ Qwen candidate  │
+        │ Selected OSS LLM│
         └────────┬────────┘
                  │
           BoN = 3 initially
@@ -616,12 +616,12 @@ F + closure loop
    SPEC + RTL                     YAML/JSON
         │
         ▼
-   Deterministic Router
-        │
-        ▼
-   Qwen3-Coder-Next
-        │
-      BoN=3
+                 Deterministic Router
+                         │
+                         ▼
+                   Selected Open LLM
+                         │
+                       BoN=3
         │
         ▼
  ┌──────────────────────┐
@@ -1371,3 +1371,25 @@ Is GPU acceleration actually necessary?
 ```bash
 vericlave run benchmark.yaml
 ```
+
+---
+
+## Freeze amendment (2026-09-29, frozen architecture — document bodies above unchanged except noted)
+
+Source: `Arch-Docs/AIQ-VeriClave_Architecture_Document_Fixed&FinalVersion1.0.md`
+(frozen verbatim; this amendment only records diagram-set alignment, it does
+not restate the architecture).
+
+- D11/D33: generator relabeled `Selected Open/OSS LLM` (was Qwen). P0 names no
+  foundation model; the P0-B bake-off (`gpt-oss-20b`, `deepseek-coder-6.7b`,
+  `llama-3.1-8b` on LMStudio trio, same benchmark) freezes the baseline.
+- D01/D02: background/educational reference. D03: conventional-GPU reference
+  (optional future accelerated compute), never P0.
+- Closure boundary: max 3 automatic rounds, then `escalated_to_human` (see
+  `router.run_task()`); BoN starts 1/3/5, n=8 only as a measured extension.
+- Evidence states: EXECUTED / NOT_EXECUTED / PASS / FAIL / UNPROVEN /
+  UNAVAILABLE / SKIPPED_BY_POLICY (+ DISPOSITIONED); NOT_EXECUTED is never
+  rewritten as PASS (see `evidence.EvidenceLedger`).
+- Authoritative set: overall architecture (D08/D09), truth layer (D04/D12),
+  bake-off + baseline (D43/D49), compute abstraction (D42/D54), conditional
+  training (D15/D19–D21/D52), flywheel (D06/D23/D53), evidence chain (D07).

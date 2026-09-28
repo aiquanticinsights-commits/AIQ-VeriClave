@@ -17,7 +17,13 @@ from router import PRICE, Task, mock_tokens, run_task
 
 # Mock per-generator, per-kind success probabilities (stand-ins for measured
 # §6 baselines; replace with live backend results in production runs).
+# The model-agnostic alias mirrors the P0-A starting point; bake-off
+# overwrites priors with measured values at baseline freeze.
 MOCK_P = {
+    "selected-open-llm":   {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
+    "gpt-oss-20b":         {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
+    "deepseek-coder-6.7b": {"mutant-kill": 0.68, "sva-validity": 0.62, "localization": 0.58, "coverage": 0.56},
+    "llama-3.1-8b":        {"mutant-kill": 0.62, "sva-validity": 0.58, "localization": 0.55, "coverage": 0.53},
     "qwen3-coder-next":   {"mutant-kill": 0.71, "sva-validity": 0.66, "localization": 0.62, "coverage": 0.60},
     "deepseek-v3.2":      {"mutant-kill": 0.70, "sva-validity": 0.64, "localization": 0.60, "coverage": 0.58},
     "glm-4.7":            {"mutant-kill": 0.72, "sva-validity": 0.63, "localization": 0.61, "coverage": 0.59},
@@ -116,14 +122,39 @@ def evaluate(suite: list[Task], seed: int = 7) -> dict:
         by_kind[kind] = {"tasks": len(rs), "closed": len(closed),
                          "closure_rate": round(len(closed) / len(rs), 4),
                          "avg_rounds": round(sum(r["rounds"] for r in rs) / len(rs), 2)}
+    rounds = [r["rounds"] for r in results]
+    winners = [r for r in results if r["winner"] is not None]
+    # Gate B: closure success = accepted among tasks that required closure
+    # (ran past the TUMIX minimum or never found a winner); first-pass =
+    # accepted within the minimum rounds (no extra closure iterations).
+    requiring = [r for r in results if r["rounds"] > 2 or r["winner"] is None]
+    requiring_closed = [r for r in requiring if r["winner"] is not None]
     report = {"total": len(results),
               "closed": sum(1 for r in results if r["winner"] is not None),
               "by_kind": by_kind}
     report["system_accuracy"] = round(report["closed"] / report["total"], 4)
+    report["closure_success_rate"] = round(
+        len(requiring_closed) / len(requiring), 4) if requiring else 1.0
+    report["first_pass_rate"] = round(
+        sum(1 for r in winners if r["rounds"] <= 2) / report["total"], 4)
+    report["avg_closure_iterations"] = round(sum(rounds) / len(rounds), 2)
+    srt = sorted(rounds)
+    report["median_closure_iterations"] = round(
+        (srt[(len(srt) - 1) // 2] + srt[len(srt) // 2]) / 2, 2)
+    report["max_closure_iterations"] = max(rounds)
+    report["escalated_to_human"] = sum(
+        1 for r in results if r["escalated_to_human"])
     report["tokens"] = ledger.summary()
     report["avg_cpu_time_s"] = round(cpu_s / max(1, len(results)), 4)
     report["avg_cost_per_task_usd"] = round(
         ledger.summary()["cost_usd"] / max(1, len(results)), 6)
+    # Gates D/E: human-efficiency and cross-env variance are measured at the
+    # review dashboard / portability benchmark, not the mock harness — the
+    # harness reports them as not-measured (None) rather than fabricating them.
+    report["engineer_review_time_per_task"] = None
+    report["human_rejection_rate"] = None
+    report["human_override_rate"] = None
+    report["cross_env_variance"] = None
     return report
 
 

@@ -1,9 +1,9 @@
 """Unit tests for the AIQ-VeriClave router (deterministic, no infra)."""
 import unittest
 
-from router import (CAPABILITY, Candidate, Task, bon_width, cheapest,
-                    estimate_call_cost, judge_filter, majority_vote,
-                    mock_tokens, route, run_task, score_generator)
+from router import (BAKEOFF_CANDIDATES, BASELINE_GENERATOR, CAPABILITY, Candidate,
+                    Task, bon_width, cheapest, estimate_call_cost, judge_filter,
+                    majority_vote, mock_tokens, route, run_task, score_generator)
 
 
 class TestEfficiencyRouting(unittest.TestCase):
@@ -14,8 +14,15 @@ class TestEfficiencyRouting(unittest.TestCase):
         self.assertEqual(bon_width(Task("T", "mutant-kill", 4)), 5)
         self.assertEqual(bon_width(Task("T", "mutant-kill", 5)), 8)
 
-    def test_cheapest_is_qwen_class(self):
-        self.assertEqual(cheapest(Task("T", "coverage", 5)), "qwen3-coder-next")
+    def test_cheapest_is_selected_baseline(self):
+        # Model-agnostic P0: the bake-off winner alias is cheapest (local LMStudio).
+        self.assertEqual(cheapest(Task("T", "coverage", 5)), BASELINE_GENERATOR)
+        self.assertEqual(BASELINE_GENERATOR, "selected-open-llm")
+
+    def test_bakeoff_slate_covers_local_trio(self):
+        for m in ("gpt-oss-20b", "deepseek-coder-6.7b", "llama-3.1-8b"):
+            self.assertIn(m, BAKEOFF_CANDIDATES)
+            self.assertIn(m, CAPABILITY)
 
     def test_cascade_round_one_single(self):
         seen = []
@@ -29,7 +36,7 @@ class TestEfficiencyRouting(unittest.TestCase):
             return {"syntax": True, "equiv": True, "proof": True}
 
         r = run_task(Task("T", "mutant-kill", 2), gen, ver, k=3)
-        self.assertEqual(seen, ["qwen3-coder-next"])
+        self.assertEqual(seen, [BASELINE_GENERATOR])
         self.assertTrue(r["cascaded"])
 
     def test_no_cascade_fans_out_round_one(self):
@@ -49,7 +56,7 @@ class TestEfficiencyRouting(unittest.TestCase):
     def test_cost_ceiling_keeps_cheapest(self):
         t = Task("T", "coverage", 5)
         short = route(t, k=5, max_cost_usd=0.0)
-        self.assertEqual(short, ["qwen3-coder-next"])
+        self.assertEqual(short, [BASELINE_GENERATOR])
 
     def test_estimate_cost_scales_with_difficulty(self):
         c1 = estimate_call_cost("qwen3-coder-next", 1)
@@ -74,10 +81,10 @@ class TestRouter(unittest.TestCase):
 
     def test_easy_tasks_prefer_cheap(self):
         easy, hard = Task("E", "coverage", 1), Task("H", "coverage", 5)
-        # qwen3-coder-next is cheapest (cost 1.0): must rank first on easy.
-        self.assertEqual(route(easy, k=5)[0], "qwen3-coder-next")
+        # selected-open-llm is cheapest (cost 1.0, local): must rank first on easy.
+        self.assertEqual(route(easy, k=5)[0], BASELINE_GENERATOR)
         # still competitive on hard (capability-led, RouteMoA priority)
-        self.assertIn("qwen3-coder-next", route(hard, k=3))
+        self.assertIn(BASELINE_GENERATOR, route(hard, k=3))
 
     def test_judge_discards_unproven(self):
         good = Candidate("T", "a", "o", {"syntax": True, "equiv": True})
@@ -112,6 +119,24 @@ class TestRouter(unittest.TestCase):
                      lambda g, t, o: {"syntax": False},
                      k=2, min_rounds=1, max_rounds=1)
         self.assertIsNone(r["winner"])
+
+    def test_closure_boundary_escalates_to_human(self):
+        # Frozen §41: no automatic fourth round — failure escalates.
+        r = run_task(Task("T", "mutant-kill", 5),
+                     lambda g, t, r: "o",
+                     lambda g, t, o: {"syntax": False},
+                     k=3, min_rounds=2, max_rounds=3)
+        self.assertIsNone(r["winner"])
+        self.assertEqual(r["rounds"], 3)
+        self.assertTrue(r["escalated_to_human"])
+
+    def test_winner_never_escalates(self):
+        r = run_task(Task("T", "mutant-kill", 2),
+                     lambda g, t, r: "o",
+                     lambda g, t, o: {"syntax": True, "equiv": True, "proof": True},
+                     k=2)
+        self.assertIsNotNone(r["winner"])
+        self.assertFalse(r["escalated_to_human"])
 
 
 if __name__ == "__main__":

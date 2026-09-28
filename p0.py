@@ -1,22 +1,26 @@
-"""P0 minimal system profile + BoN ablation runner (adopted as-is).
+"""P0 minimal system profile + BoN ablation runner (frozen architecture).
 
-P0 = deterministic router + ONE primary generator + BoN=3 + machine checks +
-Judge + evidence + ≤3 closure rounds. No GRPO, no learned router, no ensemble
-beyond BoN. The ablation runner (n=1/3/5/8) answers "does more generation
-actually help C1/C2/C3/cost?" before n=8 is ever paid for.
+P0 = deterministic router + ONE selected generator (bake-off winner alias) +
+BoN + machine checks + Judge + evidence + ≤3 closure rounds (hard stop, then
+human escalation). No GRPO, no learned router, no ensemble beyond BoN. The
+ablation runner (n=1/3/5; n=8 only as a measured extension) answers "does
+more generation actually help C1/C2/C3/cost?" before wider sampling is paid for.
 """
 from __future__ import annotations
 
-from router import estimate_call_cost, run_task
+from router import BASELINE_GENERATOR, estimate_call_cost, run_task
 
+# Model-agnostic P0 (frozen 2026-09-29): no foundation model is named here.
+# P0-A starts the alias on gpt-oss-20b (local LMStudio); P0-B bakes off
+# BAKEOFF_CANDIDATES on the same benchmark and freezes the baseline.
 P0_PROFILE = {
-    "generators": ["qwen3-coder-next"],  # Generator-01 (replaceable, not married)
+    "generators": [BASELINE_GENERATOR],  # bake-off winner alias, never a model pin
     "bon": 3,
     "router": "deterministic",
     "min_rounds": 2,
-    "max_rounds": 3,
+    "max_rounds": 3,                     # hard boundary: then escalate_to_human
     "train": "nothing",                  # P0 trains nothing, by decision
-    "inference": "llama.cpp-gguf-local",  # CPU-first: quantized local runtime
+    "inference": "lmstudio-local",       # local OpenAI-compatible runtime (see lock-in §6)
     "compute": "local-cpu",              # local CPU default; cloud = optional
 }
 
@@ -41,23 +45,36 @@ P0_BENCHMARKS = {
 }
 
 # P0 dashboard fields (every run reports all of these; no cherry-picking).
+# Quality / efficiency / human-oversight / reproducibility per frozen Gates A–E.
+# Human-efficiency fields are measured at the review dashboard; the harness
+# reports None until measured (never fabricates them).
 DASHBOARD_FIELDS = ("tasks", "candidates", "syntax_valid", "sim_valid",
                     "assertions_proven", "mutants_detected", "kill_rate",
                     "top3_localization", "closure_rate", "audit_complete",
                     "false_positive_rate", "avg_cost_per_task",
-                    "avg_cpu_time_per_task", "avg_tokens_per_task")
+                    "avg_cpu_time_per_task", "avg_tokens_per_task",
+                    "closure_success_rate", "first_pass_rate",
+                    "avg_closure_iterations", "median_closure_iterations",
+                    "max_closure_iterations", "engineer_review_time_per_task",
+                    "human_rejection_rate", "human_override_rate",
+                    "evidence_items_reviewed_per_task", "signoff_status",
+                    "environment", "tool_versions", "model_runtime",
+                    "benchmark_version", "dataset_version", "seed",
+                    "artifact_hashes", "cross_env_variance")
 
 
 def run_ablation(task, generate, verify, ns: tuple[int, ...] = (1, 3, 5)) -> dict:
-    """Same task across BoN widths (CPU-first P0 default n=1/3/5; n=8 only as
-    an extended option): closure/rounds/approvals + estimated cost, so wider
-    sampling must *earn* its keep over n=3 before adoption."""
+    """Same task across BoN widths (P0 start n=1/3/5; n=8 only as a measured
+    extension): closure/rounds/approvals/escalation + estimated cost, so wider
+    sampling must *earn* its keep over n=3 before adoption. Cost is priced at
+    the model-agnostic baseline alias (bake-off winner economics)."""
     rows = {}
     for n in ns:
         r = run_task(task, generate, verify, k=n, min_rounds=2, max_rounds=3,
                      cascade=False)
-        cost = n * r["rounds"] * estimate_call_cost("qwen3-coder-next",
+        cost = n * r["rounds"] * estimate_call_cost(BASELINE_GENERATOR,
                                                     task.difficulty)
         rows[n] = {"closed": r["winner"] is not None, "rounds": r["rounds"],
-                   "approvals": r["approvals"], "est_cost_usd": round(cost, 6)}
+                   "approvals": r["approvals"], "est_cost_usd": round(cost, 6),
+                   "escalated_to_human": r["escalated_to_human"]}
     return rows
