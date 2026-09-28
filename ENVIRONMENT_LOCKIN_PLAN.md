@@ -1,0 +1,86 @@
+# ---> DO NOT EDIT HERE; SOURCE: C:\Projects\ChipDesign\AIQ-VeriClave\ ---
+# (mirror note: this file is the canonical environment lock-in for AIQ-VeriClave developers)
+
+# AIQ-VeriClave — Environment Lock-in Plan (developer setup)
+
+> Canonical platform: **OpenCode + GitHub + Ubuntu Linux + Python + Docker + Open-source Verification Stack + Local LLM (LMStudio) + Evidence Ledger + Optional Vivado Adapter**
+> Verified: 2026-09-28. Status: locked. All versions below are measured, not assumed.
+
+## 1. What lives where (do not duplicate)
+
+| Function | Location | Verified version |
+|---|---|---|
+| Dev interface | OpenCode Desktop + CLI `1.18.33` | `AppData\Local\Programs\@opencode-aidesktop\OpenCode.exe`, `opencode --version` |
+| Config | `C:\Users\satis\.config\opencode\opencode.jsonc` | model `freellmapi/auto:fast`, providers `freellmapi/omniroute/k3-local` |
+| Skills | `~/.config/opencode/skills/` (Win + WSL) | `ai-verify-harness, ai-mutate, ai-localize, ai-close, ai-ensemble, ai-evidence` |
+| Canonical OS | WSL2 `Ubuntu 26.04 LTS x86_64` | `wsl -d Ubuntu` |
+| Truth layer (WSL) | `verilator / yosys / sby` | `5.032 / 0.52 / 0.68` |
+| Python | WSL `3.14` system + venv `~/vericlave-venv` | `cocotb 2.1.0 / pytest 9.1.1` in venv only (PEP 668) |
+| Local LLM | LMStudio server `:1234` | `gpt-oss-20b (Generator-01), deepseek-coder-6.7b, llama-3.1-8b, nomic-embed` |
+| GitHub | `aiquanticinsights-commits/AIQ-VeriClave` (private) | `gh auth` as `aiquanticinsights-commits` |
+| Contract | `python -m unittest discover -s . -p "test_*.py"` | 84 tests OK |
+| Docker | `29.8.0` (Desktop, stopped by default) | reproducible image = next step, not required for P0 |
+
+Windows holds **no** EDA tools by design. WSL holds **no** OpenCode config duplication — skills are mirrored copies.
+
+## 2. New-developer setup (15 min)
+
+```powershell
+# 1. Prereqs (Windows): LMStudio + Docker Desktop + gh + nodejs
+lms ls                                   # must show gpt-oss-20b
+lms server start                         # -> http://localhost:1234/v1/models
+gh auth status                           # must be aiquanticinsights-commits
+opencode --version                       # 1.18.33; if postinstall blocked:
+npm install -g --allow-scripts=opencode-ai opencode-ai@1.18.33
+
+# 2. Skills (this repo has no git worktree at ChipDesign level)
+New-Item -ItemType Directory -Force -Path $env:USERPROFILE\.config\opencode\skills
+Copy-Item -Recurse -Force C:\Projects\ChipDesign\AIQ-VeriClave\skills\* `
+  -Destination $env:USERPROFILE\.config\opencode\skills\
+wsl -d Ubuntu -- bash -lc 'mkdir -p ~/.config/opencode/skills && cp -r /mnt/c/Projects/ChipDesign/AIQ-VeriClave/skills/* ~/.config/opencode/skills/'
+
+# 3. Clone (private)
+gh repo clone aiquanticinsights-commits/AIQ-VeriClave
+# -- OR if working from existing C:\Projects\ChipDesign\AIQ-VeriClave, git init there --
+
+# 4. WSL venv (never pip install to system python)
+wsl -d Ubuntu -- python3 -m venv /home/satis/vericlave-venv
+wsl -d Ubuntu -- /home/satis/vericlave-venv/bin/pip install cocotb pytest
+
+# 5. Verify (must all pass before any code change)
+wsl -d Ubuntu -- /home/satis/vericlave-venv/bin/python -m unittest discover -s /mnt/c/Projects/ChipDesign/AIQ-VeriClave -p "test_*.py"
+wsl -d Ubuntu -- sby --version; wsl -d Ubuntu -- yosys -V; wsl -d Ubuntu -- verilator --version
+curl.exe -s http://localhost:1234/v1/models
+```
+
+## 3. Daily workflow
+
+```text
+lms server start  ->  wsl truth tools  ->  opencode (load ai-verify-harness)  ->
+run P0 (BoN=3, deterministic router, Judge, <=3 closure)  ->  evidence ledger  ->
+human sign-off  ->  git commit + push ->  GitHub Actions (Verilator/Yosys/FRM/cocotb/SVA/mutation/coverage/ledger)
+```
+
+- P0 defaults: `p0.py:P0_PROFILE` (`generators=[qwen3-coder-next→mapped to gpt-oss-20b local]`, `bon=3`, `train=nothing`, `inference=lmstudio-local`, `compute=local-cpu`).
+- Evidence per run: `RTL commit + spec commit + version + BoN + Verilator/Yosys/SVA/mutation + closure rounds + evidence/run_* + sign-off`.
+- Never auto-merge `rtl-merge/sign-off/tapeout-release/repair-merge` — `policy.py:HUMAN_SIGNOFF_ACTIONS`.
+
+## 4. Confidentiality (AIQI rule)
+
+- Private repo = default. Public split (`framework/docs/benchmarks`) only after review.
+- RTL/VCD/sim-logs/trajectories: local-only, tail of prompt, never cached. Cacheable: system prompts, specs (redacted), FRM templates, tool defs.
+- Remote backends (`free-cloud/accelerated-external` in `compute.py:BACKENDS`) receive redacted prompts only.
+
+## 5. Troubleshooting (hit during lock-in)
+
+| Symptom | Fix |
+|---|---|
+| `opencode.exe is not compatible` | postinstall blocked: `npm install -g --allow-scripts=opencode-ai opencode-ai@1.18.33` |
+| `externally-managed-environment (PEP 668)` | use `~/vericlave-venv`, never `--break-system-packages` |
+| `lms: server is not running` | `lms server start`, check `:1234/v1/models` |
+| `docker pipe not found` | start Docker Desktop; P0 does not need Docker |
+| `not a git repository` at `C:\Projects\ChipDesign` | intentional — git lives in `AIQ-VeriClave/` only (vendor drops stay unversioned) |
+
+## 6. Next (not in lock-in)
+
+`Dockerfile` (Ubuntu + truth + venv), `.github/workflows/vericlave.yml` (full gate ladder), Vivado/XSim adapter behind `sim_adapters.py` only.

@@ -1,0 +1,16 @@
+# AIQ-VeriClave (private)
+__pycache__/
+*.pyc
+.venv/
+venv/
+vericlave-venv/
+evidence/
+runs/
+*.vcd
+*.fst
+*.bit
+*.log
+*.jou
+.vscode/
+.idea/
+*.tmp
