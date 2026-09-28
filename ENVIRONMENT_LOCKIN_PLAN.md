@@ -4,7 +4,7 @@
 # AIQ-VeriClave — Environment Lock-in Plan (developer setup)
 
 > Canonical platform: **OpenCode + GitHub + Ubuntu Linux + Python + Docker + Open-source Verification Stack + Local LLM (LMStudio) + Evidence Ledger + Optional Vivado Adapter**
-> Verified: 2026-09-28. Status: locked. All versions below are measured, not assumed.
+> Verified: 2026-09-28. Status: locked. Gaps 1–4 closed 2026-09-29 (Docker image `aiq-vericlave:p0` 84 tests OK, CI workflow live). All versions below are measured, not assumed.
 
 ## 1. What lives where (do not duplicate)
 
@@ -19,7 +19,9 @@
 | Local LLM | LMStudio server `:1234` | `gpt-oss-20b (Generator-01), deepseek-coder-6.7b, llama-3.1-8b, nomic-embed` |
 | GitHub | `aiquanticinsights-commits/AIQ-VeriClave` (private) | `gh auth` as `aiquanticinsights-commits` |
 | Contract | `python -m unittest discover -s . -p "test_*.py"` | 84 tests OK |
-| Docker | `29.8.0` (Desktop, stopped by default) | reproducible image = next step, not required for P0 |
+| Docker | `29.8.0` Desktop running + image `aiq-vericlave:p0` (Ubuntu 24.04, Verilator 5.020/Yosys 0.33 in-image, 84 tests OK) | `Dockerfile`, `requirements.txt`, `.dockerignore` |
+| CI | `.github/workflows/vericlave.yml` (env → build → Verilator → Yosys → FRM/unittest → cocotb → SVA/sby non-blocking → ledger → artifact) | runs on push/PR to `main` |
+| GitHub mgmt | Issues ON, Projects ON, Wiki OFF (intentional), Releases via `v0.1.0` | see `PUBLIC_PRIVATE_SPLIT.md` for mirror boundary |
 
 Windows holds **no** EDA tools by design. WSL holds **no** OpenCode config duplication — skills are mirrored copies.
 
@@ -81,6 +83,21 @@ human sign-off  ->  git commit + push ->  GitHub Actions (Verilator/Yosys/FRM/co
 | `docker pipe not found` | start Docker Desktop; P0 does not need Docker |
 | `not a git repository` at `C:\Projects\ChipDesign` | intentional — git lives in `AIQ-VeriClave/` only (vendor drops stay unversioned) |
 
-## 6. Next (not in lock-in)
+## 6. LLM equivalence note (LMStudio vs llama.cpp/Ollama)
 
-`Dockerfile` (Ubuntu + truth + venv), `.github/workflows/vericlave.yml` (full gate ladder), Vivado/XSim adapter behind `sim_adapters.py` only.
+`dev_env.md` lists `llama.cpp` (core candidate) + `Ollama` (convenience). Per developer
+approval 2026-09-28 this lock-in substitutes **LMStudio server (`:1234`, OpenAI-compatible)**
+with `gpt-oss-20b` as Generator-01. Rationale: already installed, GGUF-local, zero duplicate
+runtimes, same confidentiality posture (localhost, redacted-prefix only). Add `llama.cpp`
+and/or `Ollama` only if a phase gate proves LMStudio insufficient (throughput, GGUF coverage,
+or headless-server need). `p0.py:P0_PROFILE["inference"]` stays swappable — one-line change.
+
+## 7. Version drift note
+
+WSL reference (5.032/0.52/SBY 0.68) vs Docker image (5.020/0.33, sby pool-dependent) differ
+by Ubuntu release. This is expected and caught by CI `*- --version` checks + the 84-test
+contract — never assumed equal. Formal sign-off runs on WSL reference until the image pins SBY.
+
+## 8. Next (not in lock-in)
+
+Vivado/XSim adapter behind `sim_adapters.py` only. Held-out P0-C evaluation. PHASE 1 model bake-off.
