@@ -1,0 +1,90 @@
+{
+  "tasks": 9,
+  "closed": 4,
+  "system_accuracy": 0.4444,
+  "closure_success_rate": 0.375,
+  "first_pass_rate": 0.1111,
+  "avg_closure_iterations": 2.89,
+  "median_closure_iterations": 3.0,
+  "max_closure_iterations": 3,
+  "escalated_to_human": 5,
+  "run_id": "p0d-20260928-185303",
+  "date": "2026-09-28",
+  "benchmark": "P0-D loop v1",
+  "benchmark_version": "wb_dma-v1",
+  "model": "llama-3.1-8b",
+  "bon_production": 3,
+  "ablation": {
+    "T1-sva-ack/n=1": {
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true
+    },
+    "T1-sva-ack/n=5": {
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true
+    },
+    "T3-localize-bus/n=1": {
+      "closed": true,
+      "rounds": 3,
+      "approvals": 1,
+      "escalated_to_human": false
+    },
+    "T3-localize-bus/n=5": {
+      "closed": true,
+      "rounds": 3,
+      "approvals": 1,
+      "escalated_to_human": false
+    },
+    "T6-width-fix/n=1": {
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true
+    },
+    "T6-width-fix/n=5": {
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true
+    }
+  },
+  "audit_completeness": 1.0,
+  "chain_valid": true,
+  "engineer_review_time_per_task": null,
+  "human_rejection_rate": null,
+  "human_override_rate": null,
+  "cross_env_variance": null,
+  "signoff": "PENDING",
+  "envelope": {
+    "environment": "local-cpu",
+    "os": "Windows 10",
+    "cpu": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "accelerator": "none",
+    "ram_gb": -1.0,
+    "model": "llama-3.1-8b",
+    "quantization": "",
+    "runtime": "LMStudio server :1234",
+    "runtime_version": "",
+    "tool_versions": {
+      "verilator": "5.032",
+      "yosys": "0.52",
+      "sby": "0.68"
+    },
+    "dataset_version": "",
+    "benchmark_version": "wb_dma-v1",
+    "seed": 7,
+    "token_settings": {
+      "temperature": 0.7
+    },
+    "verification_config": {
+      "bon": 3,
+      "min_rounds": 2,
+      "max_rounds": 3
+    },
+    "artifact_hashes": {}
+  }
+}

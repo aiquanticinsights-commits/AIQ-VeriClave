@@ -187,7 +187,8 @@ def lms_load(model_id: str) -> tuple[bool, str]:
     p = subprocess.run([LMS, "load", model_id], capture_output=True,
                        text=True, timeout=LOAD_TIMEOUT_S)
     log = (p.stdout or "") + (p.stderr or "")
-    ok = "successfully" in log.lower()
+    low = log.lower()
+    ok = "successfully" in low or "already loaded" in low
     return ok, log.strip().splitlines()[-1] if log.strip() else ""
 
 

@@ -36,7 +36,7 @@ def record_envelope(cfg: dict | None = None, model: str = "",
         ram_gb = round(os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
                        / (1024 ** 3), 1)
     except Exception:
-        ram_gb = -1.0
+        ram_gb = "unknown"  # e.g. Windows hosts without sysconf — never -1.0
     return {
         "environment": cfg.get("backend", "local-cpu"),
         "os": f"{platform.system()} {platform.release()}",

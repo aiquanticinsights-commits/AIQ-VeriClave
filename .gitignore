@@ -6,6 +6,7 @@ venv/
 vericlave-venv/
 evidence/
 runs/
+P0D_PARTIAL.json
 *.vcd
 *.fst
 *.bit
