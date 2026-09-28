@@ -130,12 +130,20 @@ def call_cost(tokens_in: int, tokens_out: int) -> float:
 def run_one(task: dict, width: int, query_fn=query) -> dict:
     """One task: BoN generation -> Judge (min 2 rounds) -> closure (max 3).
 
+    ELITIST closure (prescription 1): the best candidate so far is carried
+    into every later judging pool, so regen can only improve on the incumbent
+    — never destroy a round-1 winner (the T2/T7 backfire class). Carrying is
+    free: no extra generation calls. Ties favor the incumbent (status-quo
+    bias is the point). A task is CLOSED only with approvals >= 2; anything
+    weaker runs the full budget and escalates.
+
     Efficiency is instrumented per candidate (Gate C): total_latency_s,
     total_tokens, est_cost_usd accumulate over every generation call,
     including failed rounds — cost honesty requires counting misses too.
     """
     rounds, winner, history = 0, None, []
     total_latency, total_tokens, total_cost = 0.0, 0, 0.0
+    incumbent = None
     while rounds < MAX_ROUNDS:
         rounds += 1
         cands = []
@@ -146,8 +154,8 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
             else:
                 out, use, lat = query_fn(
                     BASELINE_API_ID,
-                    closure_prompt(task, failure_log(history[-1]["verdicts"])
-                                   if history else "no winner"),
+                    closure_prompt(task, failure_log(
+                        incumbent.verdicts if incumbent is not None else {})),
                     task["max_tokens"])
             total_latency += max(0.0, lat)
             tin = use.get("prompt_tokens", 0) if isinstance(use, dict) else 0
@@ -158,48 +166,55 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
             total_cost += call_cost(tin, tout)
             cands.append(Candidate(task["id"], BASELINE_NAME, out,
                                    verify_output(task, out)))
-        judged = [c for c in cands
+        pool = ([incumbent] if incumbent is not None else []) + cands
+        judged = [c for c in pool
                   if all(c.verdicts.get(r, False) for r in ("syntax",))]
         winner = majority_vote(judged)
+        if winner is not None and (incumbent is None
+                                   or winner.approvals > incumbent.approvals):
+            incumbent = winner
         Round = {"round": rounds, "approvals":
                  winner.approvals if winner else 0,
                  "verdicts": winner.verdicts if winner else {}}
         history.append(Round)
-        if rounds >= MIN_ROUNDS and winner is not None \
-                and winner.approvals >= 2:
+        closed = winner is not None and winner.approvals >= 2
+        if rounds >= MIN_ROUNDS and closed:
             break
+    closed = winner is not None and winner.approvals >= 2
     return {"task": task["id"], "kind": task["kind"], "width": width,
             "winner": winner.generator if winner else None,
             "approvals": winner.approvals if winner else 0,
             "rounds": rounds, "history": history,
-            "escalated_to_human": winner is None,
+            "closed": closed,
+            "escalated_to_human": not closed,
             "total_latency_s": round(total_latency, 1),
             "total_tokens": total_tokens,
             "est_cost_usd": round(total_cost, 6)}
 
 
 def ledger_for(results: list[dict], run_id: str) -> EvidenceLedger:
-    """Every task lands in the hash-chained ledger — wins and escalations."""
+    """Every task lands in the hash-chained ledger — closes and escalations."""
     ledger = EvidenceLedger()
     for r in results:
         last = r["history"][-1] if r["history"] else {"verdicts": {}}
-        if r["winner"] is not None:
+        if not r["escalated_to_human"]:
             ledger.append(__import__("evidence").EvidenceRecord(
                 r["task"], f"SVA-TB/{r['task']}/{BASELINE_NAME}",
                 dict(last["verdicts"]), "PASS", run_id=run_id))
         else:
             ledger.record_not_executed(
                 r["task"], f"closure/{r['task']}",
-                f"no winner after {r['rounds']} rounds; escalated to human",
+                f"no qualifying winner after {r['rounds']} rounds; "
+                "escalated to human",
                 run_id=run_id)
     return ledger
 
 
 def summarize(results: list[dict]) -> dict:
     rounds = [r["rounds"] for r in results]
-    winners = [r for r in results if r["winner"] is not None]
-    requiring = [r for r in results if r["rounds"] > 2 or r["winner"] is None]
-    req_closed = [r for r in requiring if r["winner"] is not None]
+    winners = [r for r in results if not r["escalated_to_human"]]
+    requiring = [r for r in results if r["rounds"] > 2 or r["escalated_to_human"]]
+    req_closed = [r for r in requiring if not r["escalated_to_human"]]
     srt = sorted(rounds)
     lat = sum(r.get("total_latency_s", 0.0) for r in results)
     tok = sum(r.get("total_tokens", 0) for r in results)
@@ -299,7 +314,7 @@ def main() -> int:
                         continue
                     r = run_one(t, n)
                     ablation[key] = {
-                        "closed": r["winner"] is not None,
+                        "closed": not r["escalated_to_human"],
                         "rounds": r["rounds"],
                         "approvals": r["approvals"],
                         "escalated_to_human": r["escalated_to_human"]}
@@ -314,7 +329,8 @@ def main() -> int:
     report = summarize(results)
     report.update({
         "run_id": run_id, "date": time.strftime("%Y-%m-%d"),
-        "benchmark": "P0-D loop v1", "benchmark_version": "wb_dma-v1",
+        "benchmark": "P0-D loop v2 (elitist closure)",
+        "benchmark_version": "wb_dma-v1",
         "model": BASELINE_NAME, "bon_production": 3, "ablation": ablation,
         "audit_completeness": round(ledger.audit_completeness(), 4),
         "chain_valid": ledger.verify_chain(),

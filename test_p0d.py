@@ -101,6 +101,35 @@ class TestLoop(unittest.TestCase):
         self.assertGreaterEqual(r["rounds"], 2)
         self.assertTrue(any("FAILED" in p for p in calls[1:]))
 
+    def test_elitism_preserves_round1_winner(self):
+        # T2/T7 backfire regression: good round 1, garbage regen after.
+        # Incumbent must survive; carrying costs zero extra calls.
+        calls = []
+
+        def q(model, prompt, max_tokens):
+            calls.append(prompt)
+            if len(calls) <= 2:
+                return "C", {}, 0.1  # SUITE[3]=T4: ranked True, approvals 2
+            return "garbage", {}, 0.1
+
+        r = run_one(SUITE[3], 2, query_fn=q)
+        self.assertEqual(r["winner"], "llama-3.1-8b")
+        self.assertTrue(r["closed"])
+        self.assertFalse(r["escalated_to_human"])
+        self.assertEqual(r["rounds"], 2)
+        self.assertEqual(len(calls), 4)  # width x rounds; incumbent is free
+
+    def test_weak_plurality_escalates(self):
+        # Approvals never reach 2: full budget runs, then escalation —
+        # weak closes are recorded as gaps, never as passes.
+        def q(model, prompt, max_tokens):
+            return "A", {}, 0.1  # T3 expects B: ranked False, approvals 1
+
+        r = run_one(SUITE[2], 2, query_fn=q)
+        self.assertEqual(r["rounds"], 3)
+        self.assertFalse(r["closed"])
+        self.assertTrue(r["escalated_to_human"])
+
     def test_ledger_records_both_outcomes(self):
         ok = run_one(SUITE[2], 1, query_fn=self._query("B"))
         bad = run_one(SUITE[0], 1, query_fn=self._query("garbage"))
