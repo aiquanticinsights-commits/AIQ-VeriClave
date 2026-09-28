@@ -64,6 +64,7 @@ human sign-off  ->  git commit + push ->  GitHub Actions (Verilator/Yosys/FRM/co
 ```
 
 - P0 defaults: `p0.py:P0_PROFILE` (`generators=["selected-open-llm"]` bake-off winner alias; P0-A starts on `gpt-oss-20b` local, P0-B bakes off the LMStudio trio, `bon=3`, `train=nothing`, `inference=lmstudio-local`, `compute=local-cpu`). No foundation model is pinned (frozen architecture 2026-09-29).
+- P0-B freeze 2026-09-28 (`P0B_BASELINE.json`, `bakeoff.py`, wb_dma-v1, deterministic scorers): winner **llama-3.1-8b** (pass 0.50 vs 0.33, 46.3s vs 77.5s, 1006 vs 1490 tokens); runner-up deepseek-coder-6.7b; gpt-oss-20b skipped (12.23 GB RAM guardrail — recorded, never silent). Alias priors mirror the winner; recalibration gate: P0-B v2 at n>=20/kind.
 - Evidence per run: `RTL commit + spec commit + version + BoN + Verilator/Yosys/SVA/mutation + closure rounds + evidence/run_* + sign-off`.
 - Never auto-merge `rtl-merge/sign-off/tapeout-release/repair-merge` — `policy.py:HUMAN_SIGNOFF_ACTIONS`.
 

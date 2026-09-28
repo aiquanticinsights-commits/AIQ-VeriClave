@@ -36,6 +36,21 @@ PHASES = {
     7: "Productization: local-first, optional open/accelerated cloud",
 }
 
+# P0-B baseline freeze (2026-09-28, wb_dma-v1, bakeoff.py, deterministic
+# scorers, no LLM judge): winner llama-3.1-8b — highest pass rate (0.50 vs
+# 0.33) AND lowest latency (46.3s vs 77.5s) AND fewest tokens (1006 vs 1490).
+# gpt-oss-20b skipped (12.23 GB RAM guardrail on this machine — recorded in
+# P0B_BASELINE.json, never silently dropped). Alias priors mirror the winner;
+# full measured table lives in P0B_BASELINE.json (committed evidence).
+BASELINE = {
+    "winner": "llama-3.1-8b",
+    "date": "2026-09-28",
+    "benchmark_version": "wb_dma-v1",
+    "evidence": "P0B_BASELINE.json",
+    "runner_up": "deepseek-coder-6.7b",
+    "skipped": {"gpt-oss-20b": "insufficient RAM (12.23 GB guardrail)"},
+}
+
 # P0 benchmark split: own IP first, external held-out never leaking into
 # training, prompts, thresholds, mutation templates, or judge tuning.
 P0_BENCHMARKS = {

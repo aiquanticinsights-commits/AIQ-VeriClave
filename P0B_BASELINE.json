@@ -1,0 +1,217 @@
+{
+  "benchmark": "P0-B bake-off v1",
+  "benchmark_version": "wb_dma-v1",
+  "date": "2026-09-28",
+  "slate": [
+    "deepseek-coder-6.7b",
+    "llama-3.1-8b",
+    "gpt-oss-20b"
+  ],
+  "selection_rule": "max pass_rate, tie-break min avg_latency_s, then min total_tokens",
+  "winner": "llama-3.1-8b",
+  "candidates": [
+    {
+      "model": "deepseek-coder-6.7b",
+      "loaded": true,
+      "skip_reason": "",
+      "pass_rate": 0.3333,
+      "by_kind": {
+        "localization": {
+          "tasks": 2,
+          "pass_rate": 0.5
+        },
+        "coverage": {
+          "tasks": 1,
+          "pass_rate": 1.0
+        },
+        "sva-validity": {
+          "tasks": 2,
+          "pass_rate": 0.0
+        },
+        "mutant-kill": {
+          "tasks": 1,
+          "pass_rate": 0.0
+        }
+      },
+      "avg_latency_s": 77.5,
+      "total_tokens": 1490,
+      "tasks": [
+        {
+          "task": "T1-sva-ack",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 100.6,
+          "prompt_tokens": 103,
+          "completion_tokens": 212,
+          "output_chars": 579
+        },
+        {
+          "task": "T2-sva-irq",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 118.4,
+          "prompt_tokens": 87,
+          "completion_tokens": 256,
+          "output_chars": 869
+        },
+        {
+          "task": "T3-localize-bus",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 36.2,
+          "prompt_tokens": 85,
+          "completion_tokens": 64,
+          "output_chars": 207
+        },
+        {
+          "task": "T4-classify-reset",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 35.3,
+          "prompt_tokens": 76,
+          "completion_tokens": 64,
+          "output_chars": 265
+        },
+        {
+          "task": "T5-req-ids",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 78.0,
+          "prompt_tokens": 76,
+          "completion_tokens": 182,
+          "output_chars": 722
+        },
+        {
+          "task": "T6-width-fix",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 96.3,
+          "prompt_tokens": 105,
+          "completion_tokens": 180,
+          "output_chars": 503
+        }
+      ]
+    },
+    {
+      "model": "llama-3.1-8b",
+      "loaded": true,
+      "skip_reason": "",
+      "pass_rate": 0.5,
+      "by_kind": {
+        "localization": {
+          "tasks": 2,
+          "pass_rate": 0.5
+        },
+        "coverage": {
+          "tasks": 1,
+          "pass_rate": 1.0
+        },
+        "sva-validity": {
+          "tasks": 2,
+          "pass_rate": 0.5
+        },
+        "mutant-kill": {
+          "tasks": 1,
+          "pass_rate": 0.0
+        }
+      },
+      "avg_latency_s": 46.3,
+      "total_tokens": 1006,
+      "tasks": [
+        {
+          "task": "T1-sva-ack",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 66.9,
+          "prompt_tokens": 107,
+          "completion_tokens": 76,
+          "output_chars": 240
+        },
+        {
+          "task": "T2-sva-irq",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 62.3,
+          "prompt_tokens": 89,
+          "completion_tokens": 133,
+          "output_chars": 519
+        },
+        {
+          "task": "T3-localize-bus",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 15.1,
+          "prompt_tokens": 96,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "T4-classify-reset",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 13.9,
+          "prompt_tokens": 89,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "T5-req-ids",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 67.2,
+          "prompt_tokens": 83,
+          "completion_tokens": 133,
+          "output_chars": 630
+        },
+        {
+          "task": "T6-width-fix",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 52.5,
+          "prompt_tokens": 109,
+          "completion_tokens": 87,
+          "output_chars": 280
+        }
+      ]
+    },
+    {
+      "model": "gpt-oss-20b",
+      "loaded": false,
+      "skip_reason": "\u001b[K\u001b[?25hError: Model loading was stopped due to insufficient system resources. Under the current settings, this model requires approximately 12.23 GB of memory, and continuing to load it would likely overload your system and cause it to freeze. If you think this is incorrect, you can adjust the model loading guardrails in settings.",
+      "pass_rate": 0.0,
+      "by_kind": {
+        "localization": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        },
+        "coverage": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        },
+        "sva-validity": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        },
+        "mutant-kill": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        }
+      },
+      "avg_latency_s": -1.0,
+      "total_tokens": 0,
+      "tasks": []
+    }
+  ],
+  "envelope": {
+    "os": "Windows 11 + WSL2 Ubuntu 26.04 LTS x86_64",
+    "runtime": "LMStudio server :1234 (local, temperature 0)",
+    "tool_versions": {
+      "verilator": "5.032",
+      "yosys": "0.52",
+      "sby": "0.68"
+    },
+    "scorer": "bakeoff.py (regex / exact-match / Verilator --lint-only); no LLM judge",
+    "caveat": "small-n v1 (1-2 tasks/kind); priors recalibrate at P0-B v2 with n>=20/kind"
+  },
+  "signoff": "PENDING"
+}

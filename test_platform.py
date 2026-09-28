@@ -3,7 +3,7 @@ import unittest
 
 from evidence import (EVIDENCE_OPTIONAL, KNOWN_VERDICTS, EvidenceLedger,
                       EvidenceRecord)
-from p0 import (DASHBOARD_FIELDS, P0_BENCHMARKS, P0_PROFILE, PHASES,
+from p0 import (BASELINE, DASHBOARD_FIELDS, P0_BENCHMARKS, P0_PROFILE, PHASES,
                 run_ablation)
 from policy import (DETERMINISTIC_OPS, HUMAN_SIGNOFF_ACTIONS, LLM_LANES,
                     SMALL_MODELS, assert_no_auto_merge, is_deterministic,
@@ -114,6 +114,15 @@ class TestP0(unittest.TestCase):
     def test_bakeoff_slate(self):
         for m in ("gpt-oss-20b", "deepseek-coder-6.7b", "llama-3.1-8b"):
             self.assertIn(m, BAKEOFF_CANDIDATES)
+
+    def test_baseline_freeze_record(self):
+        # P0-B measured winner; alias priors must mirror it (router.CAPABILITY).
+        from router import CAPABILITY
+        self.assertEqual(BASELINE["winner"], "llama-3.1-8b")
+        self.assertEqual(BASELINE["evidence"], "P0B_BASELINE.json")
+        self.assertIn("gpt-oss-20b", BASELINE["skipped"])
+        self.assertEqual(CAPABILITY[BASELINE_GENERATOR],
+                         CAPABILITY[BASELINE["winner"]])
 
     def test_benchmarks_split(self):
         self.assertIn("P0-A", P0_BENCHMARKS)

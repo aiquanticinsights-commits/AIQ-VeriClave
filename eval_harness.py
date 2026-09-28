@@ -15,15 +15,15 @@ import time
 
 from router import PRICE, Task, mock_tokens, run_task
 
-# Mock per-generator, per-kind success probabilities (stand-ins for measured
-# §6 baselines; replace with live backend results in production runs).
-# The model-agnostic alias mirrors the P0-A starting point; bake-off
-# overwrites priors with measured values at baseline freeze.
+# Mock per-generator, per-kind success probabilities. Frozen P0-B v1: local
+# trio mirrors MEASURED bake-off rates (P0B_BASELINE.json, wb_dma-v1, n=1-2);
+# remote entries remain published-band stand-ins until live backends replace
+# the mocks in production runs.
 MOCK_P = {
-    "selected-open-llm":   {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
+    "selected-open-llm":   {"mutant-kill": 0.0, "sva-validity": 0.5, "localization": 0.5, "coverage": 1.0},
     "gpt-oss-20b":         {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
-    "deepseek-coder-6.7b": {"mutant-kill": 0.68, "sva-validity": 0.62, "localization": 0.58, "coverage": 0.56},
-    "llama-3.1-8b":        {"mutant-kill": 0.62, "sva-validity": 0.58, "localization": 0.55, "coverage": 0.53},
+    "deepseek-coder-6.7b": {"mutant-kill": 0.0, "sva-validity": 0.0, "localization": 0.5, "coverage": 1.0},
+    "llama-3.1-8b":        {"mutant-kill": 0.0, "sva-validity": 0.5, "localization": 0.5, "coverage": 1.0},
     "qwen3-coder-next":   {"mutant-kill": 0.71, "sva-validity": 0.66, "localization": 0.62, "coverage": 0.60},
     "deepseek-v3.2":      {"mutant-kill": 0.70, "sva-validity": 0.64, "localization": 0.60, "coverage": 0.58},
     "glm-4.7":            {"mutant-kill": 0.72, "sva-validity": 0.63, "localization": 0.61, "coverage": 0.59},
