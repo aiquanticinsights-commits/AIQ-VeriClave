@@ -112,8 +112,12 @@ class TestLoop(unittest.TestCase):
         self.assertIn("NOT_EXECUTED", verdicts)
 
     def test_summarize_math(self):
-        rows = [{"winner": "m", "rounds": 2, "history": []},
-                {"winner": None, "rounds": 3, "history": []}]
+        rows = [{"winner": "m", "rounds": 2, "history": [],
+                 "total_latency_s": 10.0, "total_tokens": 100,
+                 "est_cost_usd": 0.001},
+                {"winner": None, "rounds": 3, "history": [],
+                 "total_latency_s": 20.0, "total_tokens": 200,
+                 "est_cost_usd": 0.002}]
         for r in rows:
             r["escalated_to_human"] = r["winner"] is None
         s = summarize(rows)
@@ -122,6 +126,30 @@ class TestLoop(unittest.TestCase):
         self.assertEqual(s["system_accuracy"], 0.5)
         self.assertEqual(s["max_closure_iterations"], 3)
         self.assertEqual(s["escalated_to_human"], 1)
+        self.assertEqual(s["total_latency_s"], 30.0)
+        self.assertEqual(s["total_tokens"], 300)
+        self.assertAlmostEqual(s["total_cost_usd"], 0.003)
+        self.assertAlmostEqual(s["avg_cost_per_task_usd"], 0.0015)
+
+    def test_run_one_instruments_efficiency(self):
+        def q(model, prompt, max_tokens):
+            return "B", {"prompt_tokens": 100, "completion_tokens": 50}, 2.5
+
+        r = run_one(SUITE[2], 1, query_fn=q)
+        self.assertEqual(r["winner"], "llama-3.1-8b")
+        # 2 rounds x 1 candidate x (100+50 tokens, 2.5s)
+        self.assertEqual(r["total_tokens"], 300)
+        self.assertEqual(r["total_latency_s"], 5.0)
+        self.assertGreater(r["est_cost_usd"], 0.0)
+
+    def test_run_one_counts_misses(self):
+        def q(model, prompt, max_tokens):
+            return "garbage", {}, 1.0
+
+        r = run_one(SUITE[0], 1, query_fn=q)
+        self.assertIsNone(r["winner"])
+        self.assertEqual(r["total_latency_s"], 3.0)  # 3 rounds counted
+        self.assertEqual(r["total_tokens"], 0)
 
 
 if __name__ == "__main__":

@@ -30,7 +30,7 @@ from bakeoff import (ENDPOINT, TASKS as BAKEOFF_TASKS, default_lint,
                      grade_width_fix, lms_load, lms_unload, query)
 from compute import record_envelope
 from evidence import EvidenceLedger
-from router import judge_filter, majority_vote, Candidate
+from router import BASELINE_GENERATOR, PRICE, judge_filter, majority_vote, Candidate
 
 BASELINE_API_ID = "meta-llama-3.1-8b-instruct"
 BASELINE_NAME = "llama-3.1-8b"
@@ -121,9 +121,21 @@ def failure_log(verdicts: dict) -> str:
     return "failed checks: " + (", ".join(bad) if bad else "none")
 
 
+def call_cost(tokens_in: int, tokens_out: int) -> float:
+    """USD for one baseline call (Gate C accounting; local nominal pricing)."""
+    pi, po, _ = PRICE[BASELINE_GENERATOR]
+    return tokens_in / 1e6 * pi + tokens_out / 1e6 * po
+
+
 def run_one(task: dict, width: int, query_fn=query) -> dict:
-    """One task: BoN generation -> Judge (min 2 rounds) -> closure (max 3)."""
+    """One task: BoN generation -> Judge (min 2 rounds) -> closure (max 3).
+
+    Efficiency is instrumented per candidate (Gate C): total_latency_s,
+    total_tokens, est_cost_usd accumulate over every generation call,
+    including failed rounds — cost honesty requires counting misses too.
+    """
     rounds, winner, history = 0, None, []
+    total_latency, total_tokens, total_cost = 0.0, 0, 0.0
     while rounds < MAX_ROUNDS:
         rounds += 1
         cands = []
@@ -137,6 +149,13 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
                     closure_prompt(task, failure_log(history[-1]["verdicts"])
                                    if history else "no winner"),
                     task["max_tokens"])
+            total_latency += max(0.0, lat)
+            tin = use.get("prompt_tokens", 0) if isinstance(use, dict) else 0
+            tout = use.get("completion_tokens", 0) if isinstance(use, dict) else 0
+            tin = tin if tin and tin > 0 else 0
+            tout = tout if tout and tout > 0 else 0
+            total_tokens += tin + tout
+            total_cost += call_cost(tin, tout)
             cands.append(Candidate(task["id"], BASELINE_NAME, out,
                                    verify_output(task, out)))
         judged = [c for c in cands
@@ -153,7 +172,10 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
             "winner": winner.generator if winner else None,
             "approvals": winner.approvals if winner else 0,
             "rounds": rounds, "history": history,
-            "escalated_to_human": winner is None}
+            "escalated_to_human": winner is None,
+            "total_latency_s": round(total_latency, 1),
+            "total_tokens": total_tokens,
+            "est_cost_usd": round(total_cost, 6)}
 
 
 def ledger_for(results: list[dict], run_id: str) -> EvidenceLedger:
@@ -179,6 +201,9 @@ def summarize(results: list[dict]) -> dict:
     requiring = [r for r in results if r["rounds"] > 2 or r["winner"] is None]
     req_closed = [r for r in requiring if r["winner"] is not None]
     srt = sorted(rounds)
+    lat = sum(r.get("total_latency_s", 0.0) for r in results)
+    tok = sum(r.get("total_tokens", 0) for r in results)
+    cost = sum(r.get("est_cost_usd", 0.0) for r in results)
     return {
         "tasks": len(results),
         "closed": len(winners),
@@ -192,6 +217,11 @@ def summarize(results: list[dict]) -> dict:
             (srt[(len(srt) - 1) // 2] + srt[len(srt) // 2]) / 2, 2),
         "max_closure_iterations": max(rounds),
         "escalated_to_human": sum(1 for r in results if r["escalated_to_human"]),
+        "total_latency_s": round(lat, 1),
+        "total_tokens": tok,
+        "total_cost_usd": round(cost, 6),
+        "avg_cost_per_task_usd": round(cost / len(results), 6),
+        "avg_latency_s_per_task": round(lat / len(results), 1),
     }
 
 
