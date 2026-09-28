@@ -1,0 +1,59 @@
+# AIQ-VeriClave P0 gate — implements Arch-Docs/dev_env.md CI ladder:
+# push -> env validation -> build -> Verilator -> Yosys -> Python FRM (unittest)
+# -> cocotb presence -> SVA/Formal (sby) -> mutation/coverage (mock gates) -> ledger -> PASS/FAIL.
+# CPU-only, no GPU, no RTL leaves the runner. Private repo: logs must not echo RTL.
+name: vericlave-p0
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  p0-gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Environment validation
+        run: |
+          python3 --version
+          which verilator yosys || sudo apt-get update -y
+
+      - name: Install truth layer (apt)
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y --no-install-recommends verilator yosys || true
+          sudo apt-get install -y --no-install-recommends sby || echo "sby not in apt pool (non-blocking P0)"
+          verilator --version
+          yosys -V
+          sby --version || echo "sby missing (non-blocking P0)"
+
+      - name: Python deps (venv, PEP 668 safe)
+        run: |
+          python3 -m venv /tmp/vv
+          /tmp/vv/bin/pip install --no-cache-dir -r requirements.txt
+          /tmp/vv/bin/cocotb-config --version
+          /tmp/vv/bin/pytest --version
+          /tmp/vv/bin/sby --version || echo "sby from pip ok-or-missing (non-blocking P0)"
+
+      - name: Build (import check)
+        run: |
+          /tmp/vv/bin/python -c "import router, evidence, p0, policy, compute; print('imports ok')"
+
+      - name: Verilator / Yosys / FRM / cocotb / SVA gates (P0 contract)
+        run: |
+          /tmp/vv/bin/python -m unittest discover -s . -p "test_*.py" -v
+
+      - name: Evidence ledger placeholder
+        run: |
+          mkdir -p evidence/run_ci
+          echo "{\"run\":\"ci-${GITHUB_SHA}\",\"bon\":3,\"verdict\":\"see unittest\"}" > evidence/run_ci/summary.json
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: evidence-run-ci
+          path: evidence/run_ci/

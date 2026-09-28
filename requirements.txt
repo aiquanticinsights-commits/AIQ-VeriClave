@@ -1,0 +1,8 @@
+# P0 CPU deps — frozen from WSL ~/vericlave-venv (2026-09-28).
+# Keep minimal: unittest contract needs stdlib only; cocotb/pytest are the truth-layer test runners;
+# pyyaml is optional (compute.py accepts JSON without it); symbiyosys provides `sby`.
+cocotb==2.1.0
+pytest==9.1.1
+pyyaml==6.0.3
+# NOTE: SymbiYosys (`sby`) is NOT on PyPI — install via apt (`sby` package where
+# available), oss-cad-suite, or the WSL host binary. CI treats sby as non-blocking P0.
