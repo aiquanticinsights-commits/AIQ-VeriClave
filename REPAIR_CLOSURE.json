@@ -1,0 +1,286 @@
+{
+  "date": "2026-09-29",
+  "run_id": "rep-20260929-184327",
+  "benchmark": "repair-closure ablation v1",
+  "arms": {
+    "A": "check-names-only closure (status quo)",
+    "B": "fault-hinted closure (lint excerpt + suspects)"
+  },
+  "by_arm": {
+    "A": {
+      "closed": 3,
+      "tasks": 6
+    },
+    "B": {
+      "closed": 4,
+      "tasks": 6
+    }
+  },
+  "rows": {
+    "R1-undeclared/A": {
+      "task": "R1-undeclared",
+      "arm": "A",
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 63.9,
+      "tokens": 380,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 2
+        },
+        {
+          "round": 2,
+          "approvals": 2
+        }
+      ]
+    },
+    "R1-undeclared/B": {
+      "task": "R1-undeclared",
+      "arm": "B",
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 73.4,
+      "tokens": 553,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 2
+        },
+        {
+          "round": 2,
+          "approvals": 2
+        }
+      ]
+    },
+    "R2-width/A": {
+      "task": "R2-width",
+      "arm": "A",
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "latency_s": 169.7,
+      "tokens": 763,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 0
+        }
+      ]
+    },
+    "R2-width/B": {
+      "task": "R2-width",
+      "arm": "B",
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "latency_s": 118.8,
+      "tokens": 651,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 0
+        }
+      ]
+    },
+    "R3-semicolon/A": {
+      "task": "R3-semicolon",
+      "arm": "A",
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 107.0,
+      "tokens": 452,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 2
+        },
+        {
+          "round": 2,
+          "approvals": 2
+        }
+      ]
+    },
+    "R3-semicolon/B": {
+      "task": "R3-semicolon",
+      "arm": "B",
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 87.7,
+      "tokens": 585,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 2
+        },
+        {
+          "round": 2,
+          "approvals": 2
+        }
+      ]
+    },
+    "R4-reset-value/A": {
+      "task": "R4-reset-value",
+      "arm": "A",
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "latency_s": 233.5,
+      "tokens": 909,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 0
+        }
+      ]
+    },
+    "R4-reset-value/B": {
+      "task": "R4-reset-value",
+      "arm": "B",
+      "closed": true,
+      "rounds": 3,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 220.3,
+      "tokens": 954,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 2
+        }
+      ]
+    },
+    "R5-double/A": {
+      "task": "R5-double",
+      "arm": "A",
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "latency_s": 212.7,
+      "tokens": 989,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 0
+        }
+      ]
+    },
+    "R5-double/B": {
+      "task": "R5-double",
+      "arm": "B",
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "latency_s": 215.6,
+      "tokens": 895,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 0
+        }
+      ]
+    },
+    "R6-golden/A": {
+      "task": "R6-golden",
+      "arm": "A",
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 102.0,
+      "tokens": 448,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 2
+        },
+        {
+          "round": 2,
+          "approvals": 2
+        }
+      ]
+    },
+    "R6-golden/B": {
+      "task": "R6-golden",
+      "arm": "B",
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 115.0,
+      "tokens": 646,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 2
+        },
+        {
+          "round": 2,
+          "approvals": 2
+        }
+      ]
+    }
+  },
+  "signoff": "PENDING"
+}

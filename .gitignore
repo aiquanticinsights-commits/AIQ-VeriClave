@@ -7,6 +7,8 @@ vericlave-venv/
 evidence/
 runs/
 P0D_PARTIAL.json
+BAKEOFF_PARTIAL_*.json
+REPAIR_PARTIAL.json
 formal/*_proof/
 formal/*_work/
 formal/demo/*_work/
