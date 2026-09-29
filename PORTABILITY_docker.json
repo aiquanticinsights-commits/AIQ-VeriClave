@@ -1,0 +1,35 @@
+{
+  "env": "docker",
+  "os": "Linux 6.18.33.1-microsoft-standard-WSL2",
+  "python": "3.12.3",
+  "checks": {
+    "unittest": {
+      "pass": true,
+      "tests": [
+        "206"
+      ]
+    },
+    "frm_traces": {
+      "pass": true,
+      "sha": "22b84d4eb8e9dc32",
+      "events": 11
+    },
+    "verilator_lint": {
+      "pass": null,
+      "reason": "no RTL/sibling tree"
+    },
+    "yosys_synth": {
+      "pass": null,
+      "reason": "no RTL/sibling tree"
+    },
+    "sby_demo": {
+      "pass": null,
+      "reason": "UNAVAILABLE here"
+    }
+  },
+  "tools": {
+    "verilator": "Verilator 5.020 2024-01-01 rev (Debian 5.020-1)",
+    "yosys": "Yosys 0.33 (git sha1 2584903a060)",
+    "sby": "UNAVAILABLE"
+  }
+}

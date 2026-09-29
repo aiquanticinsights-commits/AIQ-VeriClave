@@ -1,0 +1,47 @@
+{
+  "env_a": "wsl",
+  "env_b": "docker",
+  "rows": {
+    "python": {
+      "category": "metadata",
+      "variance": "version-drift",
+      "detail": "wsl='3.14.4' docker='3.12.3'"
+    },
+    "os": {
+      "category": "metadata",
+      "variance": "none",
+      "detail": "wsl='Linux 6.18.33.1-microsoft-standard-WSL2' docker='Linux 6.18.33.1-microsoft-standard-WSL2'"
+    },
+    "tools": {
+      "category": "metadata",
+      "variance": "version-drift",
+      "detail": "wsl={'verilator': 'Verilator 5.032 2025-01-01 rev (Debian 5.032-1)', 'yosys': 'Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)', 'sby': 'SBY v0.68'} docker={'verilator': 'Verilator 5.020 2024-01-01 rev (Debian 5.020-1)', 'yosys': 'Yosys 0.33 (git sha1 2584903a060)', 'sby': 'UNAVAILABLE'}"
+    },
+    "unittest": {
+      "category": "functional",
+      "variance": "none",
+      "detail": "wsl=True docker=True"
+    },
+    "frm_traces": {
+      "category": "functional",
+      "variance": "none",
+      "detail": "sha 22b84d4eb8e9dc32 vs 22b84d4eb8e9dc32"
+    },
+    "verilator_lint": {
+      "category": "functional",
+      "variance": "UNMEASURED",
+      "detail": "wsl=True docker=None"
+    },
+    "yosys_synth": {
+      "category": "functional",
+      "variance": "UNMEASURED",
+      "detail": "wsl=True docker=None"
+    },
+    "sby_demo": {
+      "category": "formal",
+      "variance": "UNMEASURED",
+      "detail": "wsl=True docker=None"
+    }
+  },
+  "signoff": "PENDING"
+}

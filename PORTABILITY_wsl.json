@@ -1,0 +1,36 @@
+{
+  "env": "wsl",
+  "date": "2026-09-29",
+  "os": "Linux 6.18.33.1-microsoft-standard-WSL2",
+  "python": "3.14.4",
+  "checks": {
+    "unittest": {
+      "pass": true,
+      "tests": [
+        "206"
+      ]
+    },
+    "frm_traces": {
+      "pass": true,
+      "sha": "22b84d4eb8e9dc32",
+      "events": 11
+    },
+    "verilator_lint": {
+      "pass": true,
+      "rc": 1
+    },
+    "yosys_synth": {
+      "pass": true,
+      "rc": 0
+    },
+    "sby_demo": {
+      "pass": true,
+      "status": "PASS"
+    }
+  },
+  "tools": {
+    "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
+    "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",
+    "sby": "SBY v0.68"
+  }
+}
