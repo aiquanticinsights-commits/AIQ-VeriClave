@@ -1,19 +1,76 @@
 {
   "tasks": 5,
-  "closed": 3,
-  "system_accuracy": 0.6,
+  "closed": 4,
+  "system_accuracy": 0.8,
   "closure_success_rate": 0.0,
-  "first_pass_rate": 0.6,
-  "avg_closure_iterations": 2.4,
+  "first_pass_rate": 0.8,
+  "avg_closure_iterations": 2.2,
   "median_closure_iterations": 2.0,
   "max_closure_iterations": 3,
-  "escalated_to_human": 2,
-  "total_latency_s": 392.3,
-  "total_tokens": 5623,
-  "total_cost_usd": 0.000411,
-  "avg_cost_per_task_usd": 8.2e-05,
-  "avg_latency_s_per_task": 78.5,
-  "run_id": "p0d-20260929-125557",
+  "escalated_to_human": 1,
+  "total_latency_s": 297.1,
+  "total_tokens": 4879,
+  "total_cost_usd": 0.000336,
+  "avg_cost_per_task_usd": 6.7e-05,
+  "avg_latency_s_per_task": 59.4,
+  "tasks_detail": [
+    {
+      "task": "T1-sva-ack",
+      "kind": "sva-validity",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 1,
+      "escalated_to_human": false,
+      "artifact": "A_GEN: assert(s_wb_ack == $past(s_wb_cyc && s_wb_stb));",
+      "latency_s": 50.9,
+      "tokens": 1287
+    },
+    {
+      "task": "T2-sva-irq",
+      "kind": "sva-validity",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "module tb_sva(input wire clk, input wire irq, input wire irq_en);\nproperty p_sva_irq;\n  @(posedge clk) $rose(irq) && !irq |-> $past(irq_en) == 1'b1;\nendproperty\nassert property (p_sva_irq);\nendmodule\n",
+      "latency_s": 63.9,
+      "tokens": 980
+    },
+    {
+      "task": "T6-width-fix",
+      "kind": "mutant-kill",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "module m(input wire [3:0] a, output wire [3:0] y);\nassign y = 4'b1111;\nendmodule\n",
+      "latency_s": 35.6,
+      "tokens": 588
+    },
+    {
+      "task": "T7-sva-cyc",
+      "kind": "sva-validity",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "module tb_sva(input wire clk, input wire m_wb_stb, input wire m_wb_cyc);\nproperty p_sva_cyc;\n  @(posedge clk) m_wb_stb && !m_wb_cyc |-> m_wb_cyc;\nendproperty\nassert property (p_sva_cyc);\nendmodule\n",
+      "latency_s": 85.5,
+      "tokens": 1035
+    },
+    {
+      "task": "T9-status-fix",
+      "kind": "mutant-kill",
+      "winner": null,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "artifact": "",
+      "latency_s": 61.2,
+      "tokens": 989
+    }
+  ],
+  "run_id": "p0d-20260929-142344",
   "date": "2026-09-29",
   "benchmark": "P0-D loop v2 (elitist closure)",
   "benchmark_version": "wb_dma-v1",
@@ -27,44 +84,7 @@
   ],
   "model": "llama-3.1-8b",
   "bon_production": 3,
-  "ablation": {
-    "T1-sva-ack/n=1": {
-      "closed": false,
-      "rounds": 3,
-      "approvals": 0,
-      "escalated_to_human": true
-    },
-    "T1-sva-ack/n=5": {
-      "closed": false,
-      "rounds": 3,
-      "approvals": 0,
-      "escalated_to_human": true
-    },
-    "T3-localize-bus/n=1": {
-      "closed": false,
-      "rounds": 3,
-      "approvals": 1,
-      "escalated_to_human": true
-    },
-    "T3-localize-bus/n=5": {
-      "closed": true,
-      "rounds": 2,
-      "approvals": 2,
-      "escalated_to_human": false
-    },
-    "T6-width-fix/n=1": {
-      "closed": true,
-      "rounds": 2,
-      "approvals": 2,
-      "escalated_to_human": false
-    },
-    "T6-width-fix/n=5": {
-      "closed": true,
-      "rounds": 2,
-      "approvals": 2,
-      "escalated_to_human": false
-    }
-  },
+  "ablation": {},
   "audit_completeness": 1.0,
   "chain_valid": true,
   "engineer_review_time_per_task": null,
