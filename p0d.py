@@ -142,16 +142,40 @@ def verify_output(task: dict, text: str, lint_fn=None,
     raise ValueError(f"no verifier for {tid}")
 
 
-def closure_prompt(task: dict, failed_log: str) -> str:
-    """Targeted regen prompt: root-cause hint from the deterministic failure."""
-    return (task["prompt"] + "\n\nYour previous answer FAILED deterministic "
-            f"verification ({failed_log}). Fix exactly that failure and reply "
-            "in the same format.")
+def closure_prompt(task: dict, failed_log: str, detail: str = "") -> str:
+    """Targeted regen prompt: root-cause hint from the deterministic failure,
+    plus raw tool diagnostics when available (fault-hinted closure)."""
+    prompt = (task["prompt"] + "\n\nYour previous answer FAILED deterministic "
+              f"verification ({failed_log}). Fix exactly that failure and reply "
+              "in the same format.")
+    if detail:
+        prompt += ("\nTool output for your previous attempt (fix these):\n"
+                   + detail)
+    return prompt
 
 
 def failure_log(verdicts: dict) -> str:
     bad = sorted(k for k, v in verdicts.items() if not v)
     return "failed checks: " + (", ".join(bad) if bad else "none")
+
+
+def diagnose(task: dict, text: str, lint_fn=None) -> str:
+    """Fault localization for the closure prompt: first lint diagnostics of
+    the candidate artifact. Only complete modules are linted directly (no
+    re-wrapping — that path caused the nested-module fiasco); anything else
+    yields '' and the prompt falls back to check names. Never raises."""
+    if "module" not in text:
+        return ""
+    lint = lint_fn or default_lint
+    try:
+        ok, log = lint(text, wall=True)
+    except Exception:
+        return ""
+    if ok:
+        return ""
+    lines = [l.strip()[:160] for l in log.splitlines()
+             if l.strip().startswith(("%Error", "%Warning"))]
+    return "\n".join(lines[:4])
 
 
 def call_cost(tokens_in: int, tokens_out: int) -> float:
@@ -204,6 +228,7 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
     # single-verdict formal tasks, where the proof IS the whole evidence
     # (bar 1). Weak plurality on multi-key tasks escalates (elitism rule).
     need = 1 if set(required) == {"formal"} else 2
+    last_text = ""
     while rounds < MAX_ROUNDS:
         rounds += 1
         cands = []
@@ -213,13 +238,17 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
                 call = lambda: query_fn(BASELINE_API_ID, prompt,
                                         task["max_tokens"])
             else:
+                hint = diagnose(task, last_text or (
+                    incumbent.output if incumbent is not None else ""),
+                    lint_fn)
                 call = lambda: query_fn(
                     BASELINE_API_ID,
                     closure_prompt(
                         {"id": task["id"], "kind": task["kind"],
                          "prompt": prompt, "max_tokens": task["max_tokens"]},
                         failure_log(
-                            incumbent.verdicts if incumbent is not None else {})),
+                            incumbent.verdicts if incumbent is not None else {}),
+                        hint),
                     task["max_tokens"])
             try:
                 out, use, lat = call()
@@ -250,6 +279,7 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
             cand = Candidate(task["id"], BASELINE_NAME, text, verdicts)
             cand.method = method  # informational only; Judge sees verdicts
             cands.append(cand)
+            last_text = text  # next round's fault hint localizes THIS artifact
         pool = ([incumbent] if incumbent is not None else []) + cands
         judged = [c for c in pool
                   if all(c.verdicts.get(r, False) for r in required)]

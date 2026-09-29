@@ -9,8 +9,8 @@ import shutil
 import tempfile
 import unittest
 
-from sim_frm import (WbDmaFrm, assemble_stim, compare_traces,
-                     grade_llm_stimulus, tool_ok, validate_stim)
+from sim_frm import (WbDmaFrm, assemble_stim, compare_traces, fpr_campaign,
+                     fuzz_stim, grade_llm_stimulus, tool_ok, validate_stim)
 
 XFER = ["rst",
         "w 0 00001000", "w 4 00002000", "w 8 00000002", "w c 00000007",
@@ -80,6 +80,27 @@ class TestCompare(unittest.TestCase):
         r = compare_traces(["a"], ["a", "b"])
         self.assertFalse(r["match"])
         self.assertEqual(r["first_diverge"], 1)
+
+
+class TestFuzz(unittest.TestCase):
+    def test_deterministic_and_valid(self):
+        a, b = fuzz_stim(3), fuzz_stim(3)
+        self.assertEqual(a, b)
+        self.assertNotEqual(fuzz_stim(3), fuzz_stim(4))
+        validate_stim(a)  # every fuzz program passes the DSL gate
+
+    def test_fpr_small_campaign(self):
+        if not _sim_available():
+            self.skipTest("needs Verilator + wb_dma RTL")
+        import tempfile
+        work = tempfile.mkdtemp(prefix="wbfpr_test_")
+        try:
+            rep = fpr_campaign([0, 1, 2], workdir=work)
+        finally:
+            shutil.rmtree(work, ignore_errors=True)
+        self.assertEqual(rep["n"], 3)
+        self.assertEqual(rep["mismatches"], 0)
+        self.assertEqual(rep["fpr"], 0.0)
 
 
 class TestStimSlots(unittest.TestCase):

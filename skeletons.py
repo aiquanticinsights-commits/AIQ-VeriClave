@@ -163,7 +163,9 @@ WIDTH_FRAMES = {
         "line_is_expr": True,
         "prompt": (
             "This Verilog has a width bug (4-bit literal on a 3-bit "
-            "signal): `status <= 4'b1000;`. Reply with ONLY the corrected "
+            "signal): `status <= 4'b1000;`. This is a RESET value: after "
+            "reset the register must read 0, so the replacement literal "
+            "must be all zeros. Reply with ONLY the corrected "
             "right-hand-side expression (e.g. 3'b000) and nothing else."),
     },
 }

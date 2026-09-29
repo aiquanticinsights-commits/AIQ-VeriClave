@@ -7,9 +7,9 @@ no Verilator is reachable.
 import shutil
 import unittest
 
-from bakeoff import (SLATE, TASKS, default_lint, extract_fence, grade_mc,
-                     grade_req_ids, grade_sva, grade_width_fix, select_winner,
-                     summarize)
+from bakeoff import (SLATE, TASKS, TASKS_V2, default_lint, extract_fence,
+                     grade_mc, grade_req_ids, grade_sva, grade_width,
+                     grade_width_fix, select_winner, summarize)
 
 
 def fake_clean(_verilog, wall=False):
@@ -104,6 +104,43 @@ class TestSelection(unittest.TestCase):
         from router import BAKEOFF_CANDIDATES
         for _, name in SLATE:
             self.assertIn(name, BAKEOFF_CANDIDATES)
+
+
+class TestV2Bank(unittest.TestCase):
+    def test_shape(self):
+        self.assertEqual(len(TASKS_V2), 40)
+        kinds = [t["kind"] for t in TASKS_V2]
+        for k in ("mutant-kill", "sva-validity", "localization", "coverage"):
+            self.assertEqual(kinds.count(k), 10)
+        self.assertEqual(len({t["id"] for t in TASKS_V2}), 40)
+        for t in TASKS_V2:
+            self.assertIn("grade", t)
+            self.assertTrue(callable(t["grade"]))
+            self.assertIn("prompt", t)
+
+    def test_mcq_answers_in_options(self):
+        for t in TASKS_V2:
+            if t["kind"] == "localization":
+                self.assertIn(t["expected"], ("A", "B", "C", "D"))
+                self.assertIn(t["expected"], t["prompt"])
+
+    def test_width_control(self):
+        ctrls = [t for t in TASKS_V2
+                 if t.get("bad") is not None and t.get("bad") == t.get("good")]
+        self.assertEqual(len(ctrls), 1)  # exactly one golden control
+        good = ("```verilog\nmodule w9(input wire [2:0] a, output wire [2:0] k);\n"
+                "assign k = 3'b000;\nendmodule\n```")
+        self.assertTrue(ctrls[0]["grade"](good, ))
+
+    def test_grade_width_gates(self):
+        from bakeoff import grade_width as gw
+        good = ("```verilog\nmodule w0(input wire [3:0] a, output wire [3:0] y);\n"
+                "assign y = 4'b1111;\nendmodule\n```")
+        self.assertTrue(gw(good, "4'b11111", "4'b1111",
+                           lint=lambda v, wall=False: (True, "")))
+        self.assertFalse(gw(good.replace("4'b1111", "4'b11111"),
+                            "4'b11111", "4'b1111",
+                            lint=lambda v, wall=False: (True, "")))
 
 
 def _have_verilator():

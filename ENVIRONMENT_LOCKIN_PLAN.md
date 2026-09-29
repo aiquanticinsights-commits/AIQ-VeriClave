@@ -73,6 +73,7 @@ human sign-off  ->  git commit + push ->  GitHub Actions (Verilator/Yosys/FRM/co
 - Item 3 review instrument (`review.py`, exception-first + `--exceptions-only` timing): measures review-time/reject/override per task into REVIEW JSON. Awaiting live human review to fill Gate D.
 - Item 4 portability (`portability.py`, `PORTABILITY.json`): WSL vs Docker identical on unittest (206 green both), FRM traces (sha-equal), OS kernel; version-drift only (python/tools). Lint/synth/sby_demo UNMEASURED in image (no sibling RTL, no sby) - recorded findings, not gaps assumed away.
 - P0 re-gate 2026-09-29 (`P0GATE_REVIEW_V2.md`): second NO-GO, narrower — Gate C flips to PASS (measured $0.00018/task nominal, ~5 min/task wall); A/B/D/E still FAIL with strictly less unknown each (sim+formal now evidenced, elitism verified, review instrumented, portability measured). No training/GPU authorized.
+- Fix campaign (`P0GATE_REVIEW_V3.md`): third NO-GO, narrowest — FPR 0.0/20 seeds, T9 closes (prompt carried the missing reset constraint), P0-B v2 priors at n=10/kind (baseline confirmed), fault-hinted closure live (strategy rescues measured, in-run rescue 0.0). 1/5 gates passing (C). Still open: A_IRQ formal, loop-at-scale C-bands, live human review, benchmark portability.
 - Evidence per run: `RTL commit + spec commit + version + BoN + Verilator/Yosys/SVA/mutation + closure rounds + evidence/run_* + sign-off`.
 - Never auto-merge `rtl-merge/sign-off/tapeout-release/repair-merge` — `policy.py:HUMAN_SIGNOFF_ACTIONS`.
 

@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-29",
+  "benchmark": "sim-frm-fpr v1",
+  "rtl_hash": "9848ef9e6e8b",
+  "fpr_campaign": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "n": 20,
+    "mismatches": 0,
+    "fpr": 0.0
+  },
+  "fpr_details": [],
+  "irq_lifecycle": {
+    "stimulus": [
+      "rst",
+      "w 14 1",
+      "w 0 00003000",
+      "w 4 00004000",
+      "w 8 00000001",
+      "w c 00000007",
+      "tick 12",
+      "r 10",
+      "w 10 f",
+      "r 10",
+      "r 14"
+    ],
+    "match": true,
+    "trace": [
+      "W 00000014 00000001 ack=1",
+      "W 00000000 00003000 ack=1",
+      "W 00000004 00004000 ack=1",
+      "W 00000008 00000001 ack=1",
+      "W 0000000c 00000007 ack=1",
+      "IRQ 1",
+      "R 00000010 00000002",
+      "W 00000010 0000000f ack=1",
+      "IRQ 0",
+      "R 00000010 00000002",
+      "IRQ 1",
+      "R 00000014 00000001"
+    ]
+  },
+  "lint_fpr": {
+    "wb_dma_lint": "PASS with 2 known-benign warnings only (WIDTHEXPAND, CASEINCOMPLETE) => syntax FPR 0"
+  },
+  "elapsed_s": 12.0,
+  "signoff": "PENDING"
+}

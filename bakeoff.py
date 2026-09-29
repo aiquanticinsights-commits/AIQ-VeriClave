@@ -42,8 +42,151 @@ SLATE = (
     ("openai/gpt-oss-20b", "gpt-oss-20b"),
 )
 
-TASK_TIMEOUT_S = 600
-LOAD_TIMEOUT_S = 600
+# --------------------------------------------------------------------------
+# P0-B v2 task bank: 10 tasks x 4 kinds (40 total), all wb_dma-grounded.
+# Honest scope: SVA = syntactic validity (lint-clean, immediate overlap
+# forms only — the only SVA shape this Verilator lints, measured);
+# localization = MCQ accuracy; coverage = REQ-ID structure; mutant-kill =
+# width-fix gates. These are GENERATOR capability rates at scale (priors),
+# not C1/C2 proof claims — those need the full loop at scale (P1).
+# --------------------------------------------------------------------------
+
+_SVA_PAIRS = [
+    ("irq", "irq_en", "clk, irq, irq_en"),
+    ("m_wb_stb", "m_wb_cyc", "clk, m_wb_stb, m_wb_cyc"),
+    ("m_wb_we", "m_wb_cyc", "clk, m_wb_we, m_wb_cyc"),
+    ("m_wb_we", "m_wb_stb", "clk, m_wb_we, m_wb_stb"),
+    ("s_wb_we", "s_wb_stb", "clk, s_wb_we, s_wb_stb"),
+    ("s_wb_stb", "s_wb_cyc", "clk, s_wb_stb, s_wb_cyc"),
+    ("irq", "s_wb_stb", "clk, irq, s_wb_stb"),
+    ("m_wb_stb", "s_wb_stb", "clk, m_wb_stb, s_wb_stb"),
+    ("s_wb_ack", "s_wb_cyc", "clk, s_wb_ack, s_wb_cyc"),
+    ("irq", "m_wb_cyc", "clk, irq, m_wb_cyc"),
+]
+
+
+def _sva_task(i: int, ante: str, cons: str, sigs: str) -> dict:
+    ports = "input wire " + ", input wire ".join(s.strip() for s in
+                                                 ["clk"] + sigs.split(",")[1:])
+    return {"id": f"V2-sva-{i:02d}", "kind": "sva-validity", "max_tokens": 256,
+            "prompt": (
+                "Write ONE SystemVerilog concurrent assertion (a single "
+                "property + assert statement, no testbench, no module) of the "
+                f"overlap-implication form: whenever {ante} holds, {cons} "
+                f"must hold the same cycle. Use signals {sigs}. Plain "
+                "boolean expressions only (no cycle delays — the checker "
+                "accepts immediate forms). Reply with a fenced systemverilog "
+                "block."),
+            "ports": ports,
+            "grade": lambda t, p=ports: grade_sva(t, p)}
+
+
+_MCQ = [
+    ("s_wb_ack never asserts although s_wb_stb toggles; clock and reset are "
+     "correct.",
+     ["timeout counter", "slave ack generation logic",
+      "clock-domain crossing", "reset sequencing"], "B"),
+    ("After reset deasserts, dma_state stays S_READ forever although "
+     "m_wb_ack pulses.",
+     ["reset sequencing", "timeout counter", "state-machine ack handling",
+      "clock-domain crossing"], "C"),
+    ("DMA completes (status shows done) but irq stays 0 although the driver "
+     "enabled interrupts.",
+     ["reset sequencing", "irq enable / irq_flag path",
+      "clock-domain crossing", "timeout counter"], "B"),
+    ("Read data is always 0 although writes to the same register ack.",
+     ["timeout counter", "read mux / s_wb_dat_r path",
+      "clock-domain crossing", "reset sequencing"], "B"),
+    ("Transfer never starts although ctrl start bit is 1 and word_count > 0.",
+     ["start gating / busy status stuck", "timeout counter",
+      "clock-domain crossing", "reset sequencing"], "A"),
+    ("A second transfer corrupts addresses although the first completed.",
+     ["timeout counter", "reset sequencing", "shadow address registers",
+      "clock-domain crossing"], "C"),
+    ("Status done bit never sets although the engine runs to completion.",
+     ["timeout counter", "status update logic", "clock-domain crossing",
+      "reset sequencing"], "B"),
+    ("m_wb_adr frozen during a burst although words complete.",
+     ["timeout counter", "reset sequencing", "clock-domain crossing",
+      "shadow increment / ctrl bits"], "D"),
+    ("Byte writes clobber the other three bytes of the register.",
+     ["sel masking logic", "timeout counter", "clock-domain crossing",
+      "reset sequencing"], "A"),
+    ("Spurious irq with no transfer ever programmed.",
+     ["timeout counter", "reset sequencing", "clock-domain crossing",
+      "irq_flag reset / enable path"], "D"),
+]
+
+
+def _mcq_task(i: int, symptom: str, options: list[str], expected: str) -> dict:
+    lines = "\n".join(f"{chr(65 + j)}. {o}" for j, o in enumerate(options))
+    return {"id": f"V2-loc-{i:02d}", "kind": "localization", "max_tokens": 64,
+            "prompt": (f"Wishbone DMA failure: {symptom} Rank the most likely "
+                       f"culprit. Reply with exactly one letter.\n{lines}"),
+            "expected": expected,
+            "grade": lambda t, e=expected: grade_mc(t, e)}
+
+
+_REQ_SENTENCES = [
+    "Vehicle must enter safe state within 10 cycles after watchdog timeout.",
+    "DMA must assert slave ack within 2 cycles of a valid strobe.",
+    "Interrupt must fire exactly when a transfer completes with enable set.",
+    "A second transfer must not start before software clears the done bit.",
+    "Byte selects must mask unwritten bytes on partial writes.",
+    "Reset must clear all control, status, and flag registers.",
+    "Master strobe must never assert without master cycle.",
+    "Write strobe must never assert without master cycle.",
+    "Status busy must read 1 while any transfer is in flight.",
+    "Read data must reflect the last written value of the addressed register.",
+]
+
+
+def _req_task(i: int, sentence: str) -> dict:
+    return {"id": f"V2-cov-{i:02d}", "kind": "coverage", "max_tokens": 256,
+            "prompt": ("Decompose into atomic requirements with IDs (format "
+                       f"REQ-001, REQ-002, ...): '{sentence}' Reply with one "
+                       "requirement per line, each starting with its REQ-ID."),
+            "grade": grade_req_ids}
+
+
+_WIDTH_SPECS = [
+    ("w0", "y", "[3:0]", "4'b11111", "4'b1111"),
+    ("w1", "q", "[7:0]", "9'b100000001", "8'b00000001"),
+    ("w2", "d", "[15:0]", "17'h10000", "16'h0000"),
+    ("w3", "s", "[2:0]", "4'b1000", "3'b000"),
+    ("w4", "v", "[3:0]", "4'b10101", "4'b0101"),
+    ("w5", "t", "[1:0]", "3'b111", "2'b11"),
+    ("w6", "u", "[7:0]", "8'h1ff", "8'hff"),
+    ("w7", "p", "[3:0]", "4'b00000", "4'b0000"),
+    ("w8", "n", "[15:0]", "16'h12345", "16'h2345"),
+    ("w9", "k", "[2:0]", "3'b000", "3'b000"),
+]
+
+
+def _width_task(i: int, mod: str, sig: str, rng: str, bad: str,
+                good: str) -> dict:
+    return {"id": f"V2-mut-{i:02d}", "kind": "mutant-kill", "max_tokens": 256,
+            "prompt": ("This Verilog has a width bug (wrong-size literal). "
+                       "Reply with the CORRECTED module in a fenced verilog "
+                       "block, changing only the literal:\n"
+                       "```verilog\n"
+                       f"module {mod}(input wire {rng} a, output wire {rng} {sig});\n"
+                       f"assign {sig} = {bad};\nendmodule\n```"),
+            "bad": bad, "good": good,
+            "grade": lambda t, b=bad, g=good: grade_width(t, b, g)}
+
+
+def v2_bank() -> tuple:
+    tasks = []
+    for i, (a, c, s) in enumerate(_SVA_PAIRS):
+        tasks.append(_sva_task(i, a, c, s))
+    for i, (sym, opts, exp) in enumerate(_MCQ):
+        tasks.append(_mcq_task(i, sym, opts, exp))
+    for i, sent in enumerate(_REQ_SENTENCES):
+        tasks.append(_req_task(i, sent))
+    for i, (mod, sig, rng, bad, good) in enumerate(_WIDTH_SPECS):
+        tasks.append(_width_task(i, mod, sig, rng, bad, good))
+    return tuple(tasks)
 
 
 # --------------------------------------------------------------------------
@@ -129,6 +272,27 @@ def grade_width_fix(text: str, lint=default_lint) -> bool:
         return False
     ok, log = lint(snippet, wall=True)
     return ok and "%Warning-WIDTH" not in log
+
+
+TASK_TIMEOUT_S = 600
+LOAD_TIMEOUT_S = 600
+
+
+def grade_width(text: str, bad: str, good: str, lint=default_lint) -> bool:
+    """Parameterized width-fix gate for the v2 bank. Control case
+    (bad == good, already-correct module) passes on clean lint alone —
+    a specificity control against trigger-happy rewriters."""
+    snippet = extract_fence(text)
+    if bad == good:
+        ok, _ = lint(snippet)
+        return ok
+    if bad in snippet or good not in snippet:
+        return False
+    ok, log = lint(snippet, wall=True)
+    return ok and "%Warning-WIDTH" not in log
+
+
+TASKS_V2 = v2_bank()
 
 
 # --------------------------------------------------------------------------
@@ -223,36 +387,69 @@ def lms_unload(model_id: str) -> None:
                    text=True, timeout=120)
 
 
-def run_candidate(api_id: str) -> dict:
-    """Load one model, run all tasks, unload. Never raises: failures recorded."""
+def partial_path(suite: str) -> str:
+    here = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(here, f"BAKEOFF_PARTIAL_{suite}.json")
+
+
+def load_partial(suite: str) -> dict:
+    try:
+        with open(partial_path(suite), encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, ValueError):
+        return {}
+
+
+def save_partial(suite: str, data: dict) -> None:
+    with open(partial_path(suite), "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+
+
+def run_candidate(api_id: str, tasks: tuple = TASKS,
+                  done: dict | None = None, suite: str = "") -> dict:
+    """Load one model, run all tasks, unload. Never raises: failures recorded.
+    `done` maps task id -> recorded row (resume support); with `suite` set,
+    every row is checkpointed to BAKEOFF_PARTIAL_<suite>.json immediately."""
     loaded, note = lms_load(api_id)
     if not loaded:
         return {"loaded": False, "skip_reason": note, "tasks": []}
+    done = done or {}
     rows = []
     try:
-        for t in TASKS:
+        for t in tasks:
+            if t["id"] in done:
+                rows.append(done[t["id"]])
+                continue
             try:
                 text, usage, latency = query(api_id, t["prompt"], t["max_tokens"])
                 passed = bool(t["grade"](text))
-                rows.append({"task": t["id"], "kind": t["kind"], "pass": passed,
-                             "latency_s": round(latency, 1),
-                             "prompt_tokens": usage.get("prompt_tokens", -1),
-                             "completion_tokens": usage.get("completion_tokens", -1),
-                             "output_chars": len(text)})
+                row = {"task": t["id"], "kind": t["kind"], "pass": passed,
+                       "latency_s": round(latency, 1),
+                       "prompt_tokens": usage.get("prompt_tokens", -1),
+                       "completion_tokens": usage.get("completion_tokens", -1),
+                       "output_chars": len(text)}
             except Exception as exc:  # noqa: BLE001 — record, never abort slate
-                rows.append({"task": t["id"], "kind": t["kind"], "pass": False,
-                             "latency_s": -1.0, "prompt_tokens": -1,
-                             "completion_tokens": -1, "output_chars": 0,
-                             "error": str(exc)[:200]})
+                row = {"task": t["id"], "kind": t["kind"], "pass": False,
+                       "latency_s": -1.0, "prompt_tokens": -1,
+                       "completion_tokens": -1, "output_chars": 0,
+                       "error": str(exc)[:200]}
+            rows.append(row)
+            done[t["id"]] = row
+            if suite:
+                partial = load_partial(suite)
+                partial[api_id] = done
+                save_partial(suite, partial)
     finally:
         lms_unload(api_id)
-    return {"loaded": True, "skip_reason": "", "tasks": rows}
+    res = {"loaded": True, "skip_reason": "", "tasks": rows}
+    return res
 
 
-def summarize(name: str, res: dict) -> dict:
+def summarize(name: str, res: dict, kinds: tuple | None = None) -> dict:
     rows = res["tasks"]
+    kinds = kinds or tuple({t["kind"] for t in TASKS})
     by_kind: dict[str, dict] = {}
-    for kind in {t["kind"] for t in TASKS}:
+    for kind in kinds:
         krows = [r for r in rows if r["kind"] == kind]
         by_kind[kind] = {"tasks": len(krows),
                          "pass_rate": round(sum(r["pass"] for r in krows)
@@ -281,27 +478,34 @@ def select_winner(summaries: list[dict]) -> str:
 
 
 def main() -> int:
+    v2 = "--v2" in sys.argv
+    tasks = TASKS_V2 if v2 else TASKS
+    kinds = ("mutant-kill", "sva-validity", "localization", "coverage")
+    suite = "v2" if v2 else "v1"
+    out_name = "P0B_V2_BASELINE.json" if v2 else "P0B_BASELINE.json"
     if "--list" in sys.argv:
-        for t in TASKS:
+        for t in tasks:
             print(f"{t['id']} [{t['kind']}] max_tokens={t['max_tokens']}")
         return 0
+    partial = load_partial(suite) if "--resume" in sys.argv else {}
     summaries = []
     for api_id, name in SLATE:
         print(f"== {name} ({api_id}) ==", flush=True)
-        summaries.append(summarize(name, run_candidate(api_id)))
+        res = run_candidate(api_id, tasks, partial.get(api_id, {}), suite)
+        summaries.append(summarize(name, res, kinds))
         done = summaries[-1]
         print(f"   loaded={done['loaded']} pass_rate={done['pass_rate']} "
               f"avg_latency={done['avg_latency_s']}s tokens={done['total_tokens']}",
               flush=True)
     winner = select_winner(summaries)
-    results = {"benchmark": "P0-B bake-off v1", "benchmark_version": "wb_dma-v1",
+    results = {"benchmark": f"P0-B bake-off {'v2' if v2 else 'v1'}",
+               "benchmark_version": "wb_dma-v2" if v2 else "wb_dma-v1",
                "date": time.strftime("%Y-%m-%d"),
                "slate": [n for _, n in SLATE],
                "selection_rule": "max pass_rate, tie-break min avg_latency_s, then min total_tokens",
                "winner": winner, "candidates": summaries,
                "signoff": "PENDING"}
-    out = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                       "P0B_BASELINE.json")
+    out = os.path.join(os.path.dirname(os.path.abspath(__file__)), out_name)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(results, f, indent=2)
     print(f"winner: {winner} -> {out}")

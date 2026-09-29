@@ -1,0 +1,828 @@
+{
+  "benchmark": "P0-B bake-off v2",
+  "benchmark_version": "wb_dma-v2",
+  "date": "2026-09-29",
+  "slate": [
+    "deepseek-coder-6.7b",
+    "llama-3.1-8b",
+    "gpt-oss-20b"
+  ],
+  "selection_rule": "max pass_rate, tie-break min avg_latency_s, then min total_tokens",
+  "winner": "llama-3.1-8b",
+  "candidates": [
+    {
+      "model": "deepseek-coder-6.7b",
+      "loaded": true,
+      "skip_reason": "",
+      "pass_rate": 0.4,
+      "by_kind": {
+        "mutant-kill": {
+          "tasks": 10,
+          "pass_rate": 0.3
+        },
+        "sva-validity": {
+          "tasks": 10,
+          "pass_rate": 0.0
+        },
+        "localization": {
+          "tasks": 10,
+          "pass_rate": 0.3
+        },
+        "coverage": {
+          "tasks": 10,
+          "pass_rate": 1.0
+        }
+      },
+      "avg_latency_s": 85.3,
+      "total_tokens": 10898,
+      "tasks": [
+        {
+          "task": "V2-sva-00",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 46.7,
+          "prompt_tokens": 105,
+          "completion_tokens": 157,
+          "output_chars": 524
+        },
+        {
+          "task": "V2-sva-01",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 110.9,
+          "prompt_tokens": 121,
+          "completion_tokens": 246,
+          "output_chars": 668
+        },
+        {
+          "task": "V2-sva-02",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 121.3,
+          "prompt_tokens": 119,
+          "completion_tokens": 256,
+          "output_chars": 727
+        },
+        {
+          "task": "V2-sva-03",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 116.2,
+          "prompt_tokens": 119,
+          "completion_tokens": 256,
+          "output_chars": 704
+        },
+        {
+          "task": "V2-sva-04",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 98.0,
+          "prompt_tokens": 119,
+          "completion_tokens": 199,
+          "output_chars": 568
+        },
+        {
+          "task": "V2-sva-05",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 117.3,
+          "prompt_tokens": 121,
+          "completion_tokens": 254,
+          "output_chars": 827
+        },
+        {
+          "task": "V2-sva-06",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 115.9,
+          "prompt_tokens": 111,
+          "completion_tokens": 250,
+          "output_chars": 851
+        },
+        {
+          "task": "V2-sva-07",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 80.2,
+          "prompt_tokens": 121,
+          "completion_tokens": 171,
+          "output_chars": 512
+        },
+        {
+          "task": "V2-sva-08",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 91.9,
+          "prompt_tokens": 119,
+          "completion_tokens": 219,
+          "output_chars": 682
+        },
+        {
+          "task": "V2-sva-09",
+          "kind": "sva-validity",
+          "pass": false,
+          "latency_s": 109.3,
+          "prompt_tokens": 111,
+          "completion_tokens": 230,
+          "output_chars": 814
+        },
+        {
+          "task": "V2-loc-00",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 37.8,
+          "prompt_tokens": 85,
+          "completion_tokens": 64,
+          "output_chars": 211
+        },
+        {
+          "task": "V2-loc-01",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 39.6,
+          "prompt_tokens": 84,
+          "completion_tokens": 64,
+          "output_chars": 214
+        },
+        {
+          "task": "V2-loc-02",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 34.7,
+          "prompt_tokens": 87,
+          "completion_tokens": 64,
+          "output_chars": 247
+        },
+        {
+          "task": "V2-loc-03",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 37.4,
+          "prompt_tokens": 83,
+          "completion_tokens": 64,
+          "output_chars": 276
+        },
+        {
+          "task": "V2-loc-04",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 35.9,
+          "prompt_tokens": 82,
+          "completion_tokens": 64,
+          "output_chars": 264
+        },
+        {
+          "task": "V2-loc-05",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 42.5,
+          "prompt_tokens": 69,
+          "completion_tokens": 64,
+          "output_chars": 306
+        },
+        {
+          "task": "V2-loc-06",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 32.5,
+          "prompt_tokens": 69,
+          "completion_tokens": 64,
+          "output_chars": 266
+        },
+        {
+          "task": "V2-loc-07",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 38.9,
+          "prompt_tokens": 76,
+          "completion_tokens": 64,
+          "output_chars": 293
+        },
+        {
+          "task": "V2-loc-08",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 37.0,
+          "prompt_tokens": 71,
+          "completion_tokens": 64,
+          "output_chars": 259
+        },
+        {
+          "task": "V2-loc-09",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 34.4,
+          "prompt_tokens": 74,
+          "completion_tokens": 64,
+          "output_chars": 281
+        },
+        {
+          "task": "V2-cov-00",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 114.6,
+          "prompt_tokens": 76,
+          "completion_tokens": 256,
+          "output_chars": 932
+        },
+        {
+          "task": "V2-cov-01",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 88.9,
+          "prompt_tokens": 76,
+          "completion_tokens": 203,
+          "output_chars": 805
+        },
+        {
+          "task": "V2-cov-02",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 105.1,
+          "prompt_tokens": 72,
+          "completion_tokens": 256,
+          "output_chars": 1029
+        },
+        {
+          "task": "V2-cov-03",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 111.2,
+          "prompt_tokens": 73,
+          "completion_tokens": 256,
+          "output_chars": 1040
+        },
+        {
+          "task": "V2-cov-04",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 109.1,
+          "prompt_tokens": 71,
+          "completion_tokens": 256,
+          "output_chars": 1110
+        },
+        {
+          "task": "V2-cov-05",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 106.6,
+          "prompt_tokens": 71,
+          "completion_tokens": 256,
+          "output_chars": 1026
+        },
+        {
+          "task": "V2-cov-06",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 115.9,
+          "prompt_tokens": 69,
+          "completion_tokens": 256,
+          "output_chars": 1115
+        },
+        {
+          "task": "V2-cov-07",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 142.5,
+          "prompt_tokens": 69,
+          "completion_tokens": 256,
+          "output_chars": 933
+        },
+        {
+          "task": "V2-cov-08",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 121.5,
+          "prompt_tokens": 72,
+          "completion_tokens": 256,
+          "output_chars": 984
+        },
+        {
+          "task": "V2-cov-09",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 111.5,
+          "prompt_tokens": 72,
+          "completion_tokens": 256,
+          "output_chars": 1011
+        },
+        {
+          "task": "V2-mut-00",
+          "kind": "mutant-kill",
+          "pass": true,
+          "latency_s": 88.6,
+          "prompt_tokens": 100,
+          "completion_tokens": 176,
+          "output_chars": 537
+        },
+        {
+          "task": "V2-mut-01",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 83.1,
+          "prompt_tokens": 104,
+          "completion_tokens": 169,
+          "output_chars": 441
+        },
+        {
+          "task": "V2-mut-02",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 93.3,
+          "prompt_tokens": 103,
+          "completion_tokens": 202,
+          "output_chars": 628
+        },
+        {
+          "task": "V2-mut-03",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 100.5,
+          "prompt_tokens": 99,
+          "completion_tokens": 204,
+          "output_chars": 674
+        },
+        {
+          "task": "V2-mut-04",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 95.0,
+          "prompt_tokens": 100,
+          "completion_tokens": 187,
+          "output_chars": 637
+        },
+        {
+          "task": "V2-mut-05",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 73.6,
+          "prompt_tokens": 98,
+          "completion_tokens": 139,
+          "output_chars": 480
+        },
+        {
+          "task": "V2-mut-06",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 89.7,
+          "prompt_tokens": 97,
+          "completion_tokens": 172,
+          "output_chars": 537
+        },
+        {
+          "task": "V2-mut-07",
+          "kind": "mutant-kill",
+          "pass": true,
+          "latency_s": 99.4,
+          "prompt_tokens": 100,
+          "completion_tokens": 201,
+          "output_chars": 632
+        },
+        {
+          "task": "V2-mut-08",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 113.1,
+          "prompt_tokens": 103,
+          "completion_tokens": 241,
+          "output_chars": 565
+        },
+        {
+          "task": "V2-mut-09",
+          "kind": "mutant-kill",
+          "pass": true,
+          "latency_s": 69.8,
+          "prompt_tokens": 98,
+          "completion_tokens": 153,
+          "output_chars": 499
+        }
+      ]
+    },
+    {
+      "model": "llama-3.1-8b",
+      "loaded": true,
+      "skip_reason": "",
+      "pass_rate": 0.675,
+      "by_kind": {
+        "mutant-kill": {
+          "tasks": 10,
+          "pass_rate": 0.2
+        },
+        "sva-validity": {
+          "tasks": 10,
+          "pass_rate": 1.0
+        },
+        "localization": {
+          "tasks": 10,
+          "pass_rate": 0.5
+        },
+        "coverage": {
+          "tasks": 10,
+          "pass_rate": 1.0
+        }
+      },
+      "avg_latency_s": 40.8,
+      "total_tokens": 7352,
+      "tasks": [
+        {
+          "task": "V2-sva-00",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 58.1,
+          "prompt_tokens": 110,
+          "completion_tokens": 94,
+          "output_chars": 384
+        },
+        {
+          "task": "V2-sva-01",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 55.2,
+          "prompt_tokens": 124,
+          "completion_tokens": 105,
+          "output_chars": 305
+        },
+        {
+          "task": "V2-sva-02",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 72.5,
+          "prompt_tokens": 122,
+          "completion_tokens": 143,
+          "output_chars": 484
+        },
+        {
+          "task": "V2-sva-03",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 64.1,
+          "prompt_tokens": 122,
+          "completion_tokens": 139,
+          "output_chars": 473
+        },
+        {
+          "task": "V2-sva-04",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 56.6,
+          "prompt_tokens": 122,
+          "completion_tokens": 118,
+          "output_chars": 440
+        },
+        {
+          "task": "V2-sva-05",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 41.0,
+          "prompt_tokens": 124,
+          "completion_tokens": 101,
+          "output_chars": 340
+        },
+        {
+          "task": "V2-sva-06",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 39.8,
+          "prompt_tokens": 116,
+          "completion_tokens": 89,
+          "output_chars": 343
+        },
+        {
+          "task": "V2-sva-07",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 66.0,
+          "prompt_tokens": 124,
+          "completion_tokens": 152,
+          "output_chars": 508
+        },
+        {
+          "task": "V2-sva-08",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 50.3,
+          "prompt_tokens": 122,
+          "completion_tokens": 99,
+          "output_chars": 331
+        },
+        {
+          "task": "V2-sva-09",
+          "kind": "sva-validity",
+          "pass": true,
+          "latency_s": 40.0,
+          "prompt_tokens": 116,
+          "completion_tokens": 100,
+          "output_chars": 384
+        },
+        {
+          "task": "V2-loc-00",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 8.1,
+          "prompt_tokens": 96,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-01",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 7.0,
+          "prompt_tokens": 94,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-02",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 7.2,
+          "prompt_tokens": 95,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-03",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 6.6,
+          "prompt_tokens": 94,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-04",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 6.1,
+          "prompt_tokens": 94,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-05",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 6.1,
+          "prompt_tokens": 85,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-06",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 6.4,
+          "prompt_tokens": 86,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-07",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 6.6,
+          "prompt_tokens": 89,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-08",
+          "kind": "localization",
+          "pass": false,
+          "latency_s": 8.2,
+          "prompt_tokens": 86,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-loc-09",
+          "kind": "localization",
+          "pass": true,
+          "latency_s": 8.2,
+          "prompt_tokens": 86,
+          "completion_tokens": 2,
+          "output_chars": 1
+        },
+        {
+          "task": "V2-cov-00",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 45.1,
+          "prompt_tokens": 83,
+          "completion_tokens": 96,
+          "output_chars": 499
+        },
+        {
+          "task": "V2-cov-01",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 56.3,
+          "prompt_tokens": 85,
+          "completion_tokens": 97,
+          "output_chars": 435
+        },
+        {
+          "task": "V2-cov-02",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 41.2,
+          "prompt_tokens": 82,
+          "completion_tokens": 99,
+          "output_chars": 492
+        },
+        {
+          "task": "V2-cov-03",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 32.9,
+          "prompt_tokens": 83,
+          "completion_tokens": 78,
+          "output_chars": 364
+        },
+        {
+          "task": "V2-cov-04",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 55.3,
+          "prompt_tokens": 81,
+          "completion_tokens": 131,
+          "output_chars": 667
+        },
+        {
+          "task": "V2-cov-05",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 51.5,
+          "prompt_tokens": 82,
+          "completion_tokens": 121,
+          "output_chars": 576
+        },
+        {
+          "task": "V2-cov-06",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 42.1,
+          "prompt_tokens": 80,
+          "completion_tokens": 100,
+          "output_chars": 455
+        },
+        {
+          "task": "V2-cov-07",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 44.3,
+          "prompt_tokens": 80,
+          "completion_tokens": 99,
+          "output_chars": 456
+        },
+        {
+          "task": "V2-cov-08",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 73.2,
+          "prompt_tokens": 83,
+          "completion_tokens": 156,
+          "output_chars": 756
+        },
+        {
+          "task": "V2-cov-09",
+          "kind": "coverage",
+          "pass": true,
+          "latency_s": 58.6,
+          "prompt_tokens": 83,
+          "completion_tokens": 128,
+          "output_chars": 683
+        },
+        {
+          "task": "V2-mut-00",
+          "kind": "mutant-kill",
+          "pass": true,
+          "latency_s": 49.5,
+          "prompt_tokens": 104,
+          "completion_tokens": 106,
+          "output_chars": 332
+        },
+        {
+          "task": "V2-mut-01",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 36.9,
+          "prompt_tokens": 105,
+          "completion_tokens": 80,
+          "output_chars": 257
+        },
+        {
+          "task": "V2-mut-02",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 63.4,
+          "prompt_tokens": 104,
+          "completion_tokens": 139,
+          "output_chars": 498
+        },
+        {
+          "task": "V2-mut-03",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 49.2,
+          "prompt_tokens": 104,
+          "completion_tokens": 107,
+          "output_chars": 352
+        },
+        {
+          "task": "V2-mut-04",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 54.8,
+          "prompt_tokens": 104,
+          "completion_tokens": 125,
+          "output_chars": 422
+        },
+        {
+          "task": "V2-mut-05",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 44.2,
+          "prompt_tokens": 103,
+          "completion_tokens": 99,
+          "output_chars": 301
+        },
+        {
+          "task": "V2-mut-06",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 57.6,
+          "prompt_tokens": 104,
+          "completion_tokens": 133,
+          "output_chars": 401
+        },
+        {
+          "task": "V2-mut-07",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 64.8,
+          "prompt_tokens": 104,
+          "completion_tokens": 131,
+          "output_chars": 462
+        },
+        {
+          "task": "V2-mut-08",
+          "kind": "mutant-kill",
+          "pass": false,
+          "latency_s": 41.4,
+          "prompt_tokens": 104,
+          "completion_tokens": 82,
+          "output_chars": 265
+        },
+        {
+          "task": "V2-mut-09",
+          "kind": "mutant-kill",
+          "pass": true,
+          "latency_s": 54.0,
+          "prompt_tokens": 103,
+          "completion_tokens": 117,
+          "output_chars": 392
+        }
+      ]
+    },
+    {
+      "model": "gpt-oss-20b",
+      "loaded": false,
+      "skip_reason": "\u001b[K\u001b[?25hError: Model loading was stopped due to insufficient system resources. Under the current settings, this model requires approximately 12.23 GB of memory, and continuing to load it would likely overload your system and cause it to freeze. If you think this is incorrect, you can adjust the model loading guardrails in settings.",
+      "pass_rate": 0.0,
+      "by_kind": {
+        "mutant-kill": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        },
+        "sva-validity": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        },
+        "localization": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        },
+        "coverage": {
+          "tasks": 0,
+          "pass_rate": 0.0
+        }
+      },
+      "avg_latency_s": -1.0,
+      "total_tokens": 0,
+      "tasks": []
+    }
+  ],
+  "signoff": "PENDING",
+  "envelope": {
+    "os": "Windows 11 + WSL2 Ubuntu 26.04",
+    "runtime": "LMStudio temp 0",
+    "tools": {
+      "verilator": "5.032",
+      "yosys": "0.52",
+      "sby": "0.68"
+    },
+    "scope": "sva=syntactic-validity (lint-clean immediate forms), not FPV-proven; C-bands still need loop-at-scale (P1)"
+  }
+}

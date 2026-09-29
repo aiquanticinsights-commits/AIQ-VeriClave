@@ -407,3 +407,47 @@ def assemble_stim(text: str) -> list[str] | None:
         return None  # start bit required: a program that never starts
     return ["rst", f"w 0 {src:08x}", f"w 4 {dst:08x}", f"w 8 {count:x}",
             f"w c {ctrl:x}", f"w 14 {irqen:x}", f"tick {wait}", "r 10"]
+
+
+# --------------------------------------------------------------------------
+# Golden-vs-golden FPR campaign (Gate A/C5): constrained-random VALID
+# programs through FRM-vs-RTL co-simulation. Any mismatch is a false
+# positive of the equivalence check (both sides run the same DSL).
+# Deterministic per seed; shared workdir keeps one sim build.
+# --------------------------------------------------------------------------
+
+def fuzz_stim(seed: int) -> list[str]:
+    """One random-but-valid program: register pokes, short transfers, reads."""
+    import random as _random
+    rng = _random.Random(1000 + seed)
+    prog = ["rst"]
+    for _ in range(rng.randint(2, 4)):
+        reg = rng.choice([0, 1, 3, 5])
+        prog.append(f"w {reg * 4:x} {rng.getrandbits(32):08x}")
+    if rng.random() < 0.7:
+        prog += [f"w 8 {rng.randint(1, 4):x}", "w c 7", "w 14 1",
+                 f"tick {rng.randint(8, 60)}", "w c 6", "tick 4", "r 10"]
+    for _ in range(rng.randint(1, 3)):
+        prog.append(f"r {rng.choice([0, 1, 2, 3, 4, 5]) * 4:x}")
+    return prog
+
+
+def fpr_campaign(seeds: list[int], workdir: str = "",
+                 rtl_path: str = DEFAULT_RTL) -> dict:
+    """Run fuzz programs; FPR = mismatches / total. Shared build dir."""
+    import tempfile as _tf
+    workdir = workdir or _tf.mkdtemp(prefix="wbfpr_")
+    binary = build_sim(rtl_path, workdir)
+    mism, details = 0, []
+    for s in seeds:
+        stim = fuzz_stim(s)
+        frm_trace = WbDmaFrm().run_stim(stim)
+        rtl_trace = run_sim(binary, stim)
+        cmp = compare_traces(frm_trace, rtl_trace)
+        if not cmp["match"]:
+            mism += 1
+            details.append({"seed": s, "first_diverge": cmp["first_diverge"],
+                            "frm": cmp["frm"], "rtl": cmp["rtl"]})
+    return {"seeds": list(seeds), "n": len(seeds), "mismatches": mism,
+            "fpr": round(mism / len(seeds), 4) if seeds else 0.0,
+            "details": details, "rtl_hash": rtl_hash(rtl_path)}

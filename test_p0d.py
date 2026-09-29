@@ -65,6 +65,46 @@ class TestVerify(unittest.TestCase):
         self.assertIn("failed checks: syntax", p)
         self.assertIn(t["prompt"], p)
 
+    def test_closure_prompt_carries_tool_detail(self):
+        t = SUITE[0]
+        p = closure_prompt(t, "failed checks: syntax",
+                           "%Error-UNSUPPORTED: ## range")
+        self.assertIn("%Error-UNSUPPORTED: ## range", p)
+
+    def test_diagnose_extracts_tool_lines(self):
+        def fake(mod, wall=False):
+            return False, "%Error-UNSUPPORTED: ## range\nnoise line"
+        from p0d import diagnose
+        d = diagnose({"id": "T1-sva-ack"}, "module m;\nendmodule\n",
+                     lint_fn=fake)
+        self.assertIn("%Error-UNSUPPORTED", d)
+        self.assertNotIn("noise line", d)
+
+    def test_diagnose_quiet_cases(self):
+        from p0d import diagnose
+        self.assertEqual(diagnose({"id": "T1"}, "no module here",
+                                  lint_fn=fake_clean), "")
+        self.assertEqual(diagnose({"id": "T1"}, "module m;\nendmodule\n",
+                                  lint_fn=fake_clean), "")
+
+    def test_closure_receives_fault_hint(self):
+        # The fault-hinted closure contract: round-2+ prompts carry the
+        # previous candidate's tool diagnostics, not just check names.
+        seen = []
+
+        def q(model, prompt, max_tokens):
+            seen.append(prompt)
+            return ("ANTECEDENT: irq\nCONSEQUENT: irq_en", {}, 0.1)
+
+        def fake(mod, wall=False):
+            return False, "%Error-FAKE: something broke"
+
+        t = next(x for x in SUITE if x["id"] == "T2-sva-irq")
+        r = run_one(t, 1, query_fn=q, lint_fn=fake, constrained=True)
+        self.assertTrue(r["escalated_to_human"])  # lint always fails here
+        self.assertTrue(any("Tool output" in p for p in seen[1:]))
+        self.assertTrue(any("%Error-FAKE" in p for p in seen[1:]))
+
     def test_failure_log(self):
         self.assertEqual(failure_log({"a": True, "b": False}),
                          "failed checks: b")

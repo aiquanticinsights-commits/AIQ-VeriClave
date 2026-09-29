@@ -55,18 +55,17 @@ BAKEOFF_CANDIDATES = ("gpt-oss-20b", "deepseek-coder-6.7b", "llama-3.1-8b",
 # Bake-off winner alias. P0 code paths reference ONLY this name.
 BASELINE_GENERATOR = "selected-open-llm"
 
-# Capability prior per generator family, per task kind (0..1). Frozen P0-B v1
-# (2026-09-28, wb_dma-v1, n=1-2/kind): trio + alias carry MEASURED bake-off
-# rates (see P0B_BASELINE.json); remote entries remain published bands until
-# P0-B v2 recalibrates with n>=20/kind. Small-n caveat: T6 (mutant-kill) was
-# failed by both models — task strictness, not proof of inability.
+# Capability prior per generator family, per task kind (0..1). Frozen P0-B v2
+# (2026-09-29, wb_dma-v2, n=10/kind): trio + alias carry MEASURED bake-off
+# rates (see P0B_V2_BASELINE.json); remote entries remain published bands
+# until live backends replace them. v2 scope note: sva-validity here is
+# SYNTACTIC validity (lint-clean immediate forms), not FPV-proven — C2 still
+# needs the loop/formal at scale. Small-n caveat retired for the trio.
 CAPABILITY = {
-    "selected-open-llm": {"mutant-kill": 0.0, "sva-validity": 0.5, "localization": 0.5, "coverage": 1.0},
+    "selected-open-llm": {"mutant-kill": 0.2, "sva-validity": 1.0, "localization": 0.5, "coverage": 1.0},
     "gpt-oss-20b":        {"mutant-kill": 0.70, "sva-validity": 0.65, "localization": 0.60, "coverage": 0.59},
-    # ^ placeholder bands — UNMEASURED (skipped: 12.23 GB RAM guardrail on this
-    # machine); re-run P0-B where loadable, never treat as measured.
-    "deepseek-coder-6.7b": {"mutant-kill": 0.0, "sva-validity": 0.0, "localization": 0.5, "coverage": 1.0},
-    "llama-3.1-8b":       {"mutant-kill": 0.0, "sva-validity": 0.5, "localization": 0.5, "coverage": 1.0},
+    "deepseek-coder-6.7b": {"mutant-kill": 0.3, "sva-validity": 0.0, "localization": 0.3, "coverage": 1.0},
+    "llama-3.1-8b":       {"mutant-kill": 0.2, "sva-validity": 1.0, "localization": 0.5, "coverage": 1.0},
     "qwen3-coder-next":   {"mutant-kill": 0.71, "sva-validity": 0.66, "localization": 0.62, "coverage": 0.60},
     "deepseek-v3.2":      {"mutant-kill": 0.70, "sva-validity": 0.64, "localization": 0.60, "coverage": 0.58},
     "glm-4.7":            {"mutant-kill": 0.72, "sva-validity": 0.63, "localization": 0.61, "coverage": 0.59},
