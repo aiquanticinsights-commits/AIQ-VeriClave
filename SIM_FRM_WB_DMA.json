@@ -1,0 +1,68 @@
+{
+  "date": "2026-09-29",
+  "benchmark": "sim-frm v1",
+  "benchmark_version": "wb_dma-v1",
+  "rtl": "rideprotect-rv/rtl/wb_dma.v",
+  "rtl_hash": "9848ef9e6e8b",
+  "assumption": "master stub acks immediately with pattern data (identical both sides; timing-exact by construction)",
+  "vectors": {
+    "transfer-2word-irq": {
+      "stimulus": [
+        "rst",
+        "w 0 00001000",
+        "w 4 00002000",
+        "w 8 00000002",
+        "w c 00000007",
+        "w 14 00000001",
+        "tick 10",
+        "w c 00000006",
+        "tick 4",
+        "r 10"
+      ],
+      "match": true,
+      "events": 8,
+      "first_diverge": -1,
+      "trace": [
+        "W 00000000 00001000 ack=1",
+        "W 00000004 00002000 ack=1",
+        "W 00000008 00000002 ack=1",
+        "W 0000000c 00000007 ack=1",
+        "W 00000014 00000001 ack=1",
+        "IRQ 1",
+        "W 0000000c 00000006 ack=1",
+        "R 00000010 00000002"
+      ]
+    },
+    "regfile-rw": {
+      "stimulus": [
+        "rst",
+        "w 0 deadbeef",
+        "w 4 cafef00d",
+        "w 8 0010",
+        "w c 00000007",
+        "r 0",
+        "r 4",
+        "r 8",
+        "r c",
+        "r 10",
+        "r 14"
+      ],
+      "match": true,
+      "events": 10,
+      "first_diverge": -1,
+      "trace": [
+        "W 00000000 deadbeef ack=1",
+        "W 00000004 cafef00d ack=1",
+        "W 00000008 00000010 ack=1",
+        "W 0000000c 00000007 ack=1",
+        "R 00000000 deadbeef",
+        "R 00000004 cafef00d",
+        "R 00000008 00000010",
+        "R 0000000c 00000007",
+        "R 00000010 00000001",
+        "R 00000014 00000000"
+      ]
+    }
+  },
+  "signoff": "PENDING"
+}

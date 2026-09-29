@@ -1,0 +1,28 @@
+{
+  "date": "2026-09-29",
+  "model": "llama-3.1-8b",
+  "strategy": "stimulus-slots-v1",
+  "attempts": [
+    {
+      "raw": "DMA Transfer Programming:\n\nSRC: 4000\nDST: 5000\nCOUNT: 2\nCTRL: 6\nIRQEN: 1\nWAIT: 120",
+      "assembled": false
+    },
+    {
+      "raw": "DMA_transfer: \n    LDX #<SRC\n    LDY #>SRC\n    STX DMA_SRC\n    STY DMA_SRC+1\n    LDX #<DST\n    LDY #>DST\n    STA DMA_DST,X\n    STY DMA_DST+1,X\n    LDA #<COUNT\n    STA DMA_COUNT+0,X\n    LDA #>COUNT\n    STA DMA_COUNT+1,X\n    LDA #(COUNT AND $00FF)\n    ROR A\n    CLC\n    ADC #$01\n    ROR A\n    ROR A\n    STA DMA_CTRL,X\n    LDA #IRQEN\n    STA DMA_IRQEN,X\n    LDX #WAIT\nDMA_WAIT: \n    DEX\n    BNE DMA_WAIT",
+      "assembled": false
+    }
+  ],
+  "program": null,
+  "result": {
+    "verdict": false
+  },
+  "signoff": "PENDING",
+  "closure_attempts": [
+    {
+      "hint": "CTRL start-bit (bit0) must be 1",
+      "fills": "1000 / 2000 / 2 / 5 / 1 / 80 (bare values, labels dropped)",
+      "outcome": "slot-reject (labels are the protocol)"
+    }
+  ],
+  "note": "0/2 initial (one start-bit near-miss, one format collapse) + 0/1 closure (labels dropped). Slot-label discipline is the binding constraint for this model on sim stimulus; future: fewer slots per turn or labeled few-shot example."
+}
