@@ -31,6 +31,7 @@ from bakeoff import (ENDPOINT, TASKS as BAKEOFF_TASKS, default_lint,
 from compute import record_envelope
 from evidence import EvidenceLedger
 from router import BASELINE_GENERATOR, PRICE, judge_filter, majority_vote, Candidate
+from skeletons import SKELETONS, WIDTH_FRAMES, assemble, constrained_prompt
 
 BASELINE_API_ID = "meta-llama-3.1-8b-instruct"
 BASELINE_NAME = "llama-3.1-8b"
@@ -71,14 +72,28 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # Deterministic verifiers (wrap bake-off graders into verdict dicts)
 # --------------------------------------------------------------------------
 
-def verify_output(task: dict, text: str, lint_fn=None) -> dict:
+def verify_output(task: dict, text: str, lint_fn=None,
+                  preassembled: bool = False) -> dict:
     """One output -> machine verdicts. Never repairs into truth.
 
-    `lint_fn` is injectable so unit tests stay hermetic (no Verilator);
-    live runs always use the real Verilator lint via WSL.
+    `preassembled` (skeleton path): text is ALREADY a complete module from
+    `skeletons.assemble` — lint it as-is. Re-wrapping it in another module
+    block is a harness bug that fails correct artifacts (measured P0-D
+    skeleton v2: nested-module %Error on T2/T7).
+
+    `lint_fn` is injectable so unit tests stay hermetic (no Verilator).
     """
     lint = lint_fn or default_lint
     tid = task["id"]
+    if preassembled and tid in SKELETONS:
+        ok, _ = lint(text)
+        return {"syntax": ok, "proof_shape": ok}
+    if preassembled and tid in WIDTH_FRAMES:
+        spec = WIDTH_FRAMES[tid]
+        ok, log = lint(text, wall=True)
+        kill = (ok and "%Warning-WIDTH" not in log
+                and spec["bad"] not in text and spec["good"] in text)
+        return {"syntax": ok, "kill": kill}
     if tid in ("T1-sva-ack", "T2-sva-irq"):
         from bakeoff import SVA_PORTS_ACK, SVA_PORTS_IRQ
         ports = SVA_PORTS_ACK if tid == "T1-sva-ack" else SVA_PORTS_IRQ
@@ -127,7 +142,27 @@ def call_cost(tokens_in: int, tokens_out: int) -> float:
     return tokens_in / 1e6 * pi + tokens_out / 1e6 * po
 
 
-def run_one(task: dict, width: int, query_fn=query) -> dict:
+def is_skeleton_task(task_id: str) -> bool:
+    return task_id in SKELETONS or task_id in WIDTH_FRAMES
+
+
+# Verdict keys per kind for skeleton-rejects (assemble() said NO): the
+# failure is recorded without consulting any tool — an unparseable fill
+# must fail even if the toolchain would lint an empty file cleanly.
+REJECT_KEYS = {"sva-validity": ("syntax", "proof_shape"),
+               "mutant-kill": ("syntax", "kill"),
+               "localization": ("syntax", "ranked"),
+               "coverage": ("syntax", "traceable")}
+
+
+def base_prompt(task: dict, constrained: bool) -> str:
+    if constrained:
+        return constrained_prompt(task["id"], task["prompt"])
+    return task["prompt"]
+
+
+def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
+            constrained: bool = False) -> dict:
     """One task: BoN generation -> Judge (min 2 rounds) -> closure (max 3).
 
     ELITIST closure (prescription 1): the best candidate so far is carried
@@ -144,19 +179,30 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
     rounds, winner, history = 0, None, []
     total_latency, total_tokens, total_cost = 0.0, 0, 0.0
     incumbent = None
+    sketched = constrained and is_skeleton_task(task["id"])
+    query_errors = 0
     while rounds < MAX_ROUNDS:
         rounds += 1
         cands = []
         for _ in range(width):
+            prompt = base_prompt(task, constrained)
             if rounds == 1:
-                out, use, lat = query_fn(BASELINE_API_ID, task["prompt"],
-                                         task["max_tokens"])
+                call = lambda: query_fn(BASELINE_API_ID, prompt,
+                                        task["max_tokens"])
             else:
-                out, use, lat = query_fn(
+                call = lambda: query_fn(
                     BASELINE_API_ID,
-                    closure_prompt(task, failure_log(
-                        incumbent.verdicts if incumbent is not None else {})),
+                    closure_prompt(
+                        {"id": task["id"], "kind": task["kind"],
+                         "prompt": prompt, "max_tokens": task["max_tokens"]},
+                        failure_log(
+                            incumbent.verdicts if incumbent is not None else {})),
                     task["max_tokens"])
+            try:
+                out, use, lat = call()
+            except Exception:  # noqa: BLE001 — infra fault, not a verdict:
+                out, use, lat = "", {}, 0.0  # ledgered as failure, run continues
+                query_errors += 1
             total_latency += max(0.0, lat)
             tin = use.get("prompt_tokens", 0) if isinstance(use, dict) else 0
             tout = use.get("completion_tokens", 0) if isinstance(use, dict) else 0
@@ -164,8 +210,23 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
             tout = tout if tout and tout > 0 else 0
             total_tokens += tin + tout
             total_cost += call_cost(tin, tout)
-            cands.append(Candidate(task["id"], BASELINE_NAME, out,
-                                   verify_output(task, out)))
+            if sketched:
+                built = assemble(task["id"], out)
+                if built is None:
+                    verdicts = dict.fromkeys(
+                        REJECT_KEYS[task["kind"]], False)
+                    text, method = "", "skeleton-reject"
+                else:
+                    text, method = built, "skeleton"
+            else:
+                text, method = out, "free"
+            if not (sketched and method == "skeleton-reject"):
+                verdicts = verify_output(
+                    task, text, lint_fn=lint_fn,
+                    preassembled=(sketched and is_skeleton_task(task["id"])))
+            cand = Candidate(task["id"], BASELINE_NAME, text, verdicts)
+            cand.method = method  # informational only; Judge sees verdicts
+            cands.append(cand)
         pool = ([incumbent] if incumbent is not None else []) + cands
         judged = [c for c in pool
                   if all(c.verdicts.get(r, False) for r in ("syntax",))]
@@ -187,6 +248,7 @@ def run_one(task: dict, width: int, query_fn=query) -> dict:
             "rounds": rounds, "history": history,
             "closed": closed,
             "escalated_to_human": not closed,
+            "query_errors": query_errors,
             "total_latency_s": round(total_latency, 1),
             "total_tokens": total_tokens,
             "est_cost_usd": round(total_cost, 6)}
@@ -261,9 +323,23 @@ def main() -> int:
     resume = "--resume" in sys.argv
     suite_only = "--suite-only" in sys.argv
     ablation_only = "--ablation-only" in sys.argv
+    no_ablation = "--no-ablation" in sys.argv
+    sketched = "--skeleton" in sys.argv
+    only = []
+    for i, a in enumerate(sys.argv):
+        if a.startswith("--tasks="):
+            only = a.split("=", 1)[1].split(",")
+        elif a == "--tasks" and i + 1 < len(sys.argv):
+            only = sys.argv[i + 1].split(",")
     suite = list(SUITE)
     if quick:
         suite = [t for t in SUITE if t["id"] in ABLATION_SUBSET]
+    if only:
+        wanted = set(only)
+        suite = [t for t in SUITE if t["id"] in wanted]
+        if not suite:
+            print(f"FATAL: --tasks matched nothing in {[t['id'] for t in SUITE]}")
+            return 1
 
     partials = load_partials() if resume else {"results": {}, "ablation": {},
                                                "run_id": ""}
@@ -279,6 +355,9 @@ def main() -> int:
     if not ok:
         print(f"FATAL: cannot load baseline: {note}")
         return 1
+    # Live calls carry GEN_TEMPERATURE for BoN diversity (bake-off default
+    # temp 0 is for comparability; the loop needs diverse candidates).
+    live_query = lambda m, p, n: query(m, p, n, GEN_TEMPERATURE)
     try:
         results = []
         if not ablation_only:
@@ -288,7 +367,7 @@ def main() -> int:
                           flush=True)
                     results.append(done[t["id"]])
                     continue
-                r = run_one(t, 3)
+                r = run_one(t, 3, query_fn=live_query, constrained=sketched)
                 results.append(r)
                 done[r["task"]] = r
                 save_partials({"results": done, "ablation": ablation,
@@ -303,7 +382,7 @@ def main() -> int:
                       f"missing {missing}. Run suite first or use --resume.")
                 return 1
             results = [done[t["id"]] for t in suite]
-        if not quick and not suite_only:
+        if not quick and not suite_only and not no_ablation:
             for tid in ABLATION_SUBSET:
                 t = next(x for x in SUITE if x["id"] == tid)
                 for n in (1, 5):
@@ -312,7 +391,8 @@ def main() -> int:
                         print(f"  ablation {key}: already recorded, skipping",
                               flush=True)
                         continue
-                    r = run_one(t, n)
+                    r = run_one(t, n, query_fn=live_query,
+                                constrained=sketched)
                     ablation[key] = {
                         "closed": not r["escalated_to_human"],
                         "rounds": r["rounds"],
@@ -331,6 +411,9 @@ def main() -> int:
         "run_id": run_id, "date": time.strftime("%Y-%m-%d"),
         "benchmark": "P0-D loop v2 (elitist closure)",
         "benchmark_version": "wb_dma-v1",
+        "strategy": ("skeleton-v1 for T1/T2/T6/T7/T9 + free for the rest"
+                     if sketched else "free-form"),
+        "task_filter": [t["id"] for t in suite],
         "model": BASELINE_NAME, "bon_production": 3, "ablation": ablation,
         "audit_completeness": round(ledger.audit_completeness(), 4),
         "chain_valid": ledger.verify_chain(),
@@ -347,7 +430,8 @@ def main() -> int:
             verification_config={"bon": 3, "min_rounds": MIN_ROUNDS,
                                  "max_rounds": MAX_ROUNDS}),
     })
-    out = os.path.join(HERE, "P0D_REPORT.json")
+    out = os.path.join(HERE, "P0D_SKELETON.json" if sketched
+                         else "P0D_REPORT.json")
     with open(out, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
     print(f"audit={report['audit_completeness']} chain={report['chain_valid']} "

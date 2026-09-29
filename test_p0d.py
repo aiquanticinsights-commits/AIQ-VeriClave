@@ -2,8 +2,9 @@
 import unittest
 
 from evidence import EvidenceLedger
-from p0d import (ABLATION_SUBSET, ABLATION_WIDTHS, SUITE, closure_prompt,
-                 failure_log, ledger_for, run_one, summarize, verify_output)
+from p0d import (ABLATION_SUBSET, ABLATION_WIDTHS, SUITE, base_prompt,
+                 closure_prompt, failure_log, is_skeleton_task, ledger_for,
+                 run_one, summarize, verify_output)
 
 
 def good_output(task):
@@ -130,6 +131,93 @@ class TestLoop(unittest.TestCase):
         self.assertFalse(r["closed"])
         self.assertTrue(r["escalated_to_human"])
 
+
+class TestSkeletonPath(unittest.TestCase):
+    def _query(self, text):
+        def q(model, prompt, max_tokens):
+            return text, {"prompt_tokens": 1, "completion_tokens": 1}, 0.1
+        return q
+
+    def test_is_skeleton_task(self):
+        for tid in ("T1-sva-ack", "T2-sva-irq", "T7-sva-cyc",
+                    "T6-width-fix", "T9-status-fix"):
+            self.assertTrue(is_skeleton_task(tid))
+        self.assertFalse(is_skeleton_task("T3-localize-bus"))
+
+    def test_base_prompt(self):
+        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
+        self.assertIn("ANTECEDENT", base_prompt(t, True))
+        self.assertEqual(base_prompt(t, False), t["prompt"])
+
+    def test_skeleton_slots_close(self):
+        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
+        slots = ("ANTECEDENT: s_wb_stb\nLOW: 1\nHIGH: 2\n"
+                 "CONSEQUENT: s_wb_ack")
+
+        def q(model, prompt, max_tokens):
+            self.assertIn("ANTECEDENT", prompt)  # skeleton prompt used
+            return slots, {}, 0.1
+
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        self.assertTrue(r["closed"])
+        self.assertFalse(r["escalated_to_human"])
+
+    def test_skeleton_reject_escalates(self):
+        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
+
+        def q(model, prompt, max_tokens):
+            return "free prose, no slots", {}, 0.1
+
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        self.assertFalse(r["closed"])
+        self.assertTrue(r["escalated_to_human"])
+
+    def test_skeleton_width_fix_closes(self):
+        t = next(x for x in SUITE if x["id"] == "T6-width-fix")
+
+        def q(model, prompt, max_tokens):
+            return "assign y = 4'b1111;", {}, 0.1
+
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        self.assertTrue(r["closed"])
+
+    def test_constrained_leaves_free_tasks_alone(self):
+        t = next(x for x in SUITE if x["id"] == "T3-localize-bus")
+
+        def q(model, prompt, max_tokens):
+            self.assertNotIn("ANTECEDENT", prompt)
+            return "B", {}, 0.1
+
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        self.assertTrue(r["closed"])
+
+    def test_preassembled_module_not_rewrapped(self):
+        # Regression (skeleton v2): assembled modules linted as-is — a
+        # second module wrapper is a harness-authored syntax error.
+        seen = []
+
+        def fake(mod, wall=False):
+            seen.append(mod)
+            return True, ""
+
+        mod = ("module tb_sva(input wire clk);\n"
+               "assert property (@(posedge clk) 1'b1);\nendmodule\n")
+        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
+        v = verify_output(t, mod, lint_fn=fake, preassembled=True)
+        self.assertTrue(all(v.values()))
+        self.assertEqual(seen[0].count("module tb_sva"), 1)
+
+    def test_preassembled_width_gates(self):
+        t = next(x for x in SUITE if x["id"] == "T6-width-fix")
+        good = ("module m(input wire [3:0] a, output wire [3:0] y);\n"
+                "assign y = 4'b1111;\nendmodule\n")
+        v = verify_output(t, good, lint_fn=fake_clean, preassembled=True)
+        self.assertTrue(all(v.values()))
+        bad = good.replace("4'b1111", "4'b11111")
+        v2 = verify_output(t, bad, lint_fn=fake_clean, preassembled=True)
+        self.assertFalse(v2["kill"])
+        self.assertFalse(all(v2.values()))
+
     def test_ledger_records_both_outcomes(self):
         ok = run_one(SUITE[2], 1, query_fn=self._query("B"))
         bad = run_one(SUITE[0], 1, query_fn=self._query("garbage"))
@@ -179,6 +267,16 @@ class TestLoop(unittest.TestCase):
         self.assertIsNone(r["winner"])
         self.assertEqual(r["total_latency_s"], 3.0)  # 3 rounds counted
         self.assertEqual(r["total_tokens"], 0)
+
+    def test_query_exception_does_not_crash_loop(self):
+        def q(model, prompt, max_tokens):
+            raise ConnectionError("server down")
+
+        r = run_one(SUITE[2], 1, query_fn=q)
+        self.assertEqual(r["rounds"], 3)
+        self.assertFalse(r["closed"])
+        self.assertTrue(r["escalated_to_human"])
+        self.assertEqual(r["query_errors"], 3)  # every call faulted, all counted
 
 
 if __name__ == "__main__":

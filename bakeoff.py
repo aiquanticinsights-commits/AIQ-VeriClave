@@ -25,6 +25,7 @@ from __future__ import annotations
 import json
 import os
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -66,28 +67,45 @@ def grade_req_ids(text: str, minimum: int = 3) -> bool:
     return len(set(re.findall(r"REQ-\d{3}", text))) >= minimum
 
 
-def default_lint(verilog: str, wall: bool = False) -> tuple[bool, str]:
-    """Write snippet to a temp file and Verilator --lint-only it via WSL.
+# Verilator's `%Error: Exiting due to N warning(s)` line is exit-status noise,
+# not a diagnostic: it appears whenever warnings exist, even with zero real
+# errors. It is stripped before judging; genuine `%Error-*` lines always fail.
+# (Measured P0-D skeleton v1: the noise line failed correct T2/T6/T7 outputs.)
+EXIT_NOISE = re.compile(r"^%Error: Exiting due to \d+ (?:warning|error)\(s\)\s*$",
+                        re.MULTILINE)
 
+
+def _tool_cmd(path: str, wall: bool) -> list[str]:
+    """Verilator via WSL on Windows, natively elsewhere (CI-safe)."""
+    if os.name == "nt":
+        wsl_path = "/mnt/" + path[0].lower() + path[2:].replace("\\", "/")
+        return ["wsl", "verilator", "--lint-only"] + (["-Wall"] if wall else []) + [wsl_path], path
+    return (["verilator", "--lint-only"] + (["-Wall"] if wall else []) + [path],
+            path)
+
+
+def default_lint(verilog: str, wall: bool = False) -> tuple[bool, str]:
+    """Write snippet to a temp file and Verilator --lint-only it.
+
+    The file is named after the module it contains: a random temp name trips
+    DECLFILENAME warnings that fail otherwise-correct artifacts (measured).
     Returns (no_error, log). With wall=True the caller inspects the log for
     specific warnings (e.g. WIDTH); errors always fail.
     """
-    tmp = tempfile.NamedTemporaryFile("w", suffix=".sv", delete=False,
-                                      encoding="utf-8")
+    m = re.search(r"^\s*module\s+(\w+)", verilog, re.MULTILINE)
+    d = tempfile.mkdtemp()
+    path = os.path.join(d, (m.group(1) if m else "t") + ".sv")
     try:
-        tmp.write(verilog)
-        tmp.close()
-        wsl_path = "/mnt/" + tmp.name[0].lower() + tmp.name[2:].replace("\\", "/")
-        cmd = ["wsl", "verilator", "--lint-only"]
-        if wall:
-            cmd.append("-Wall")
-        cmd.append(wsl_path)
+        with open(path, "w", encoding="utf-8") as f:
+            f.write(verilog)
+        cmd, _ = _tool_cmd(path, wall)
         p = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
-        log = (p.stdout or "") + (p.stderr or "")
+        log = EXIT_NOISE.sub("", (p.stdout or "") + (p.stderr or ""))
         return ("%Error" not in log, log)
     finally:
         try:
-            os.unlink(tmp.name)
+            os.unlink(path)
+            os.rmdir(d)
         except OSError:
             pass
 
@@ -168,11 +186,19 @@ TASKS = (
 # Runner
 # --------------------------------------------------------------------------
 
-def query(model_id: str, prompt: str, max_tokens: int) -> tuple[str, dict, float]:
-    """One chat completion. Returns (text, usage, latency_s)."""
+def query(model_id: str, prompt: str, max_tokens: int,
+          temperature: float = 0.0) -> tuple[str, dict, float]:
+    """One chat completion. Returns (text, usage, latency_s).
+
+    temperature defaults to 0 (deterministic — bake-off comparability).
+    P0-D passes GEN_TEMPERATURE explicitly for BoN candidate diversity and
+    records it in the envelope (measured: without this, BoN widths are
+    near-identical re-samples and width ablations are confounded).
+    """
     body = json.dumps({"model": model_id,
                        "messages": [{"role": "user", "content": prompt}],
-                       "max_tokens": max_tokens, "temperature": 0}).encode()
+                       "max_tokens": max_tokens,
+                       "temperature": temperature}).encode()
     req = urllib.request.Request(ENDPOINT, data=body,
                                  headers={"Content-Type": "application/json"})
     start = time.perf_counter()

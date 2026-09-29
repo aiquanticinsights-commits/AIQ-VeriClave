@@ -1,12 +1,15 @@
 """Unit tests for the P0-B bake-off harness (deterministic, no models).
 
-All lint calls are injected fakes — real Verilator runs happen only in the
-live bake-off on the Windows dev machine (Verilator via WSL).
+Lint calls are injected fakes except TestLiveLint, which runs the real
+Verilator locally (native on Linux CI, via WSL on Windows) and skips when
+no Verilator is reachable.
 """
+import shutil
 import unittest
 
-from bakeoff import (SLATE, TASKS, extract_fence, grade_mc, grade_req_ids,
-                     grade_sva, grade_width_fix, select_winner, summarize)
+from bakeoff import (SLATE, TASKS, default_lint, extract_fence, grade_mc,
+                     grade_req_ids, grade_sva, grade_width_fix, select_winner,
+                     summarize)
 
 
 def fake_clean(_verilog, wall=False):
@@ -101,6 +104,49 @@ class TestSelection(unittest.TestCase):
         from router import BAKEOFF_CANDIDATES
         for _, name in SLATE:
             self.assertIn(name, BAKEOFF_CANDIDATES)
+
+
+def _have_verilator():
+    import os
+    if os.name == "nt":
+        return shutil.which("wsl") is not None
+    return shutil.which("verilator") is not None
+
+
+@unittest.skipUnless(_have_verilator(), "needs reachable Verilator")
+class TestLiveLint(unittest.TestCase):
+    def test_clean_module_passes(self):
+        ok, _ = default_lint("module t(input wire a, output wire y);\n"
+                             "assign y = a;\nendmodule\n")
+        self.assertTrue(ok)
+
+    def test_syntax_error_fails(self):
+        ok, log = default_lint("module t(input wire a;\nendmodule\n")
+        self.assertFalse(ok)
+        self.assertIn("%Error", log)
+
+    def test_warnings_only_still_pass(self):
+        # Regression (P0-D skeleton v1): the synthetic
+        # "%Error: Exiting due to N warning(s)" line must not fail an
+        # otherwise-clean artifact; DECLFILENAME is killed by module-named
+        # temp files, UNUSEDSIGNAL is warning-only here.
+        ok, _ = default_lint("module t(input wire [3:0] a, output wire [3:0] y);\n"
+                             "assign y = a;\nendmodule\n",
+                             wall=True)
+        self.assertTrue(ok)
+
+    def test_width_bug_is_hard_error(self):
+        # Over-wide literals are %Error, not %Warning: buggy fails loudly,
+        # fixed passes — exactly the mutant-kill gate grade_width_fix needs.
+        ok, log = default_lint("module m(input wire [3:0] a, output wire [3:0] y);\n"
+                               "assign y = 4'b11111;\nendmodule\n",
+                               wall=True)
+        self.assertFalse(ok)
+        self.assertIn("%Error", log)
+        ok2, _ = default_lint("module m(input wire [3:0] a, output wire [3:0] y);\n"
+                              "assign y = 4'b1111;\nendmodule\n",
+                              wall=True)
+        self.assertTrue(ok2)
 
 
 if __name__ == "__main__":
