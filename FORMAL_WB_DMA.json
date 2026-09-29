@@ -1,0 +1,62 @@
+{
+  "date": "2026-09-29",
+  "run_id": "formal-20260929-134225",
+  "report": "symbiyosys v0.68 [wb_dma]: PASS (2 asserts, 1s)",
+  "assert_to_task": {
+    "A_ACK": "T1-sva-ack",
+    "A_CYC": "T7-sva-cyc"
+  },
+  "not_executed": {
+    "A_IRQ": "irq_en DUT-internal; toolchain resolves no hierarchical references (proven by formal/demo/hier.sby); T2 stays lint-checked until sim/FRM exercises irq (item 2)"
+  },
+  "evidence": {
+    "tool": "SymbiYosys",
+    "tool_version": "v0.68",
+    "target_device": "wb_dma",
+    "rtl_commit": "sha256:9848ef9e6e8b4f36",
+    "run_id": "formal-20260929-134225",
+    "requirement_ids": [
+      "REQ-DMA-ACK",
+      "REQ-DMA-CYC"
+    ],
+    "formal": {
+      "status": "PASS",
+      "asserts": {
+        "A_ACK": "PASS",
+        "A_CYC": "PASS"
+      },
+      "duration_s": 0.9,
+      "reason": ""
+    },
+    "artifacts": [
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\config.sby",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\logfile.txt",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\PASS",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\status",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\status.sqlite",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\wb_dma_prove.xml",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\engine_0\\logfile.txt",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design.il",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design.json",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design.log",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design.ys",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_prep.il",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_prep.log",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_prep.ys",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_smt2.log",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_smt2.smt2",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_smt2.ys",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\src\\wb_dma.v",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\src\\wb_dma_formal.sv"
+    ],
+    "artifact_hashes": {
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\config.sby": "26a6436d2349a256",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\wb_dma_prove.xml": "4c696949a59bb235",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design.log": "8f2a939577a30a74",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_prep.log": "f913c74dbf39c15d",
+      "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_dma_proof\\model\\design_smt2.log": "6841c97d526350de"
+    },
+    "evidence_hash": "a45b066f21a878b7"
+  },
+  "signoff": "PENDING"
+}

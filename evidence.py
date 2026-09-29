@@ -84,7 +84,8 @@ class EvidenceLedger:
         disposition). C4 demands 1.0: no record may sit verdict-less,
         under an unknown verdict, or evidence-less without an explicit
         disposition state. NOT_EXECUTED recorded explicitly is complete —
-        it must never be rewritten as PASS (see record_not_executed)."""
+        it must never be rewritten as PASS (see record_not_executed).
+        UNPROVEN carries its bounded run as evidence (checks required)."""
         if not self.records:
             return 1.0
         ok = sum(1 for r in self.records

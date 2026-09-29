@@ -1,0 +1,17 @@
+# Hermetic demo proof: runs on CI iff sby is installed, else UNAVAILABLE.
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 10
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -formal cnt_formal.sv
+prep -top cnt_formal
+
+[files]
+cnt_formal.sv

@@ -50,7 +50,7 @@ def parse_slots(text: str, labels: tuple[str, ...]) -> dict | None:
     """Extract `LABEL: value` lines for every label. All-or-nothing."""
     found = {}
     for line in text.splitlines():
-        m = re.match(r"^\s*([A-Za-z]+)\s*:\s*(.+?)\s*$", line)
+        m = re.match(r"^\s*([A-Za-z_]+)\s*:\s*(.+?)\s*$", line)
         if m and m.group(1).upper() in labels:
             found[m.group(1).upper()] = m.group(2)
     if any(label not in found for label in labels):
@@ -74,6 +74,10 @@ SVA_RANGE_SKELETON = """property {name};
 endproperty
 assert property ({name});
 """
+# NOTE: Verilator --lint-only parses NO ## delays in any mode and this
+# Yosys parses no concurrent |-> at all (both measured) — range-form SVA is
+# therefore uncheckable outside a full formal run. Delay requirements use
+# the past-form below, which sby proves directly (see formal_adapter).
 
 SVA_SIMPLE_SKELETON = """property {name};
   @(posedge clk) {ante} |-> {cons};
@@ -81,25 +85,33 @@ endproperty
 assert property ({name});
 """
 
+# Past-form: exact-cycle reading of a delay requirement, provable by sby.
+# Template placeholders: {past} = last-cycle condition, {now} = this-cycle.
+SVA_PAST_SKELETON = """A_GEN: assert({now} == $past({past}));"""
+
 # task id -> skeleton spec. Ports mirror the free-form wrappers in p0d.py so
 # the same Verilator lint judges both strategies identically.
 SKELETONS = {
     "T1-sva-ack": {
-        "kind": "sva-range",
-        "labels": ("ANTECEDENT", "LOW", "HIGH", "CONSEQUENT"),
+        "kind": "sva-past",
+        # Exact-cycle reading of "ack within 2 of stb": the RTL registers
+        # ack in exactly one cycle, so ack == past(cyc&&stb) is faithful
+        # (and stronger). Uncheckable by lint — proved by sby (formal_fn).
+        "labels": ("PAST_EXPR", "NOW_EXPR"),
+        "mention": {"PAST_EXPR": ("stb",), "NOW_EXPR": ("ack",)},
         "ports": "input wire clk, input wire s_wb_stb, input wire s_wb_ack",
         "name": "p_sva_ack",
         "prompt": (
-            "Fill the blanks of this SystemVerilog assertion skeleton for a "
-            "Wishbone slave (signals: clk, s_wb_stb, s_wb_ack). Requirement: "
-            "s_wb_ack must be asserted within 2 cycles after s_wb_stb. "
-            "Reply with EXACTLY these four lines and nothing else:\n"
-            "ANTECEDENT: <boolean expression over s_wb_stb>\n"
-            "LOW: <non-negative integer>\n"
-            "HIGH: <non-negative integer, at most 2 per the requirement>\n"
-            "CONSEQUENT: <boolean expression over s_wb_ack>\n"
-            "Sampled-value functions like $rose/$fell are allowed. Plain "
-            "expressions only, no extra text."),
+            "A Wishbone slave registers its ack: s_wb_ack is 1 exactly when "
+            "s_wb_cyc && s_wb_stb held on the previous cycle (signals: clk, "
+            "s_wb_stb, s_wb_ack). Reply with EXACTLY these two lines and "
+            "nothing else:\n"
+            "PAST_EXPR: <previous-cycle boolean condition over s_wb_stb>\n"
+            "NOW_EXPR: <this-cycle boolean expression over s_wb_ack>\n"
+            "They will be checked as NOW_EXPR == $past(PAST_EXPR) by formal "
+            "proof. Write PLAIN conditions: do NOT wrap anything in $past "
+            "yourself and do NOT invent functions like sampled/past — the "
+            "harness adds the single $past. No extra text."),
     },
     "T2-sva-irq": {
         "kind": "sva-simple",
@@ -191,6 +203,16 @@ def assemble(task_id: str, text: str) -> str | None:
             prop = SVA_RANGE_SKELETON.format(
                 name=spec["name"], ante=slots["ANTECEDENT"], lo=lo, hi=hi,
                 cons=slots["CONSEQUENT"])
+        elif spec["kind"] == "sva-past":
+            # Requirement-trace gate: each slot must mention its required
+            # signal (cheap intent check; formal proof checks truth).
+            for label, needles in spec.get("mention", {}).items():
+                if not any(n.lower() in slots[label].lower()
+                           for n in needles):
+                    return None
+            prop = SVA_PAST_SKELETON.format(now=slots["NOW_EXPR"],
+                                            past=slots["PAST_EXPR"])
+            return prop  # proved directly by sby; no lint wrapper applies
         else:
             prop = SVA_SIMPLE_SKELETON.format(
                 name=spec["name"], ante=slots["ANTECEDENT"],

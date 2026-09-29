@@ -71,6 +71,15 @@ class TestLedger(unittest.TestCase):
             self.assertIn(v, KNOWN_VERDICTS)
         self.assertNotIn("PENDING", KNOWN_VERDICTS)
 
+    def test_unproven_needs_evidence(self):
+        from evidence import EvidenceRecord as ER
+        L = EvidenceLedger()
+        L.append(ER("R-2", "A-2", {"formal_proof": {}}, "UNPROVEN"))
+        self.assertAlmostEqual(L.audit_completeness(), 1.0)
+        L2 = EvidenceLedger()
+        L2.append(ER("R-3", "A-3", {}, "UNPROVEN"))
+        self.assertLess(L2.audit_completeness(), 1.0)
+
     def test_not_executed_is_explicit_not_silent(self):
         L = EvidenceLedger()
         L.record_not_executed("R-9", "Vivado/synth", "no license on runner",

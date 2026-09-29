@@ -1,0 +1,75 @@
+{
+  "tasks": 1,
+  "closed": 1,
+  "system_accuracy": 1.0,
+  "closure_success_rate": 1.0,
+  "first_pass_rate": 1.0,
+  "avg_closure_iterations": 2.0,
+  "median_closure_iterations": 2.0,
+  "max_closure_iterations": 2,
+  "escalated_to_human": 0,
+  "total_latency_s": 90.7,
+  "total_tokens": 1288,
+  "total_cost_usd": 8.6e-05,
+  "avg_cost_per_task_usd": 8.6e-05,
+  "avg_latency_s_per_task": 90.7,
+  "tasks_detail": [
+    {
+      "task": "T1-sva-ack",
+      "kind": "sva-validity",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 1,
+      "escalated_to_human": false,
+      "artifact": "A_GEN: assert(s_wb_ack == $past(s_wb_stb && s_wb_cyc));",
+      "latency_s": 90.7,
+      "tokens": 1288
+    }
+  ],
+  "run_id": "p0d-20260929-135919",
+  "date": "2026-09-29",
+  "benchmark": "P0-D loop v2 (elitist closure)",
+  "benchmark_version": "wb_dma-v1",
+  "strategy": "skeleton-v1 for T1/T2/T6/T7/T9 + free for the rest",
+  "task_filter": [
+    "T1-sva-ack"
+  ],
+  "model": "llama-3.1-8b",
+  "bon_production": 3,
+  "ablation": {},
+  "audit_completeness": 1.0,
+  "chain_valid": true,
+  "engineer_review_time_per_task": null,
+  "human_rejection_rate": null,
+  "human_override_rate": null,
+  "cross_env_variance": null,
+  "signoff": "PENDING",
+  "envelope": {
+    "environment": "local-cpu",
+    "os": "Windows 10",
+    "cpu": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+    "accelerator": "none",
+    "ram_gb": "unknown",
+    "model": "llama-3.1-8b",
+    "quantization": "",
+    "runtime": "LMStudio server :1234",
+    "runtime_version": "",
+    "tool_versions": {
+      "verilator": "5.032",
+      "yosys": "0.52",
+      "sby": "0.68"
+    },
+    "dataset_version": "",
+    "benchmark_version": "wb_dma-v1",
+    "seed": 7,
+    "token_settings": {
+      "temperature": 0.7
+    },
+    "verification_config": {
+      "bon": 3,
+      "min_rounds": 2,
+      "max_rounds": 3
+    },
+    "artifact_hashes": {}
+  }
+}

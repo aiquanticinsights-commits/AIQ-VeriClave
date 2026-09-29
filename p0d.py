@@ -30,6 +30,7 @@ from bakeoff import (ENDPOINT, TASKS as BAKEOFF_TASKS, default_lint,
                      grade_width_fix, lms_load, lms_unload, query)
 from compute import record_envelope
 from evidence import EvidenceLedger
+from formal_adapter import prove_wb_prop
 from router import BASELINE_GENERATOR, PRICE, judge_filter, majority_vote, Candidate
 from skeletons import SKELETONS, WIDTH_FRAMES, assemble, constrained_prompt
 
@@ -37,6 +38,13 @@ BASELINE_API_ID = "meta-llama-3.1-8b-instruct"
 BASELINE_NAME = "llama-3.1-8b"
 GEN_TEMPERATURE = 0.7
 MIN_ROUNDS, MAX_ROUNDS = 2, 3
+
+# T1-class delay requirements are unlintable (no ## support anywhere in the
+# lint toolchain — measured) and go to sby instead. judge_on reroutes the
+# Judge to the formal verdict for exactly these tasks.
+TASK_OVERLAYS = {
+    "T1-sva-ack": {"formal": True, "judge_on": ("formal",)},
+}
 
 ABLATION_WIDTHS = (1, 3, 5)
 ABLATION_SUBSET = ("T1-sva-ack", "T3-localize-bus", "T6-width-fix")
@@ -64,7 +72,8 @@ EXTRA_TASKS = (
      "bad": "4'b1000", "good": "3'b000"},
 )
 
-SUITE = BAKEOFF_TASKS + EXTRA_TASKS
+SUITE = [dict(t, **TASK_OVERLAYS.get(t["id"], {}))
+         for t in (BAKEOFF_TASKS + EXTRA_TASKS)]
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -73,7 +82,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 # --------------------------------------------------------------------------
 
 def verify_output(task: dict, text: str, lint_fn=None,
-                  preassembled: bool = False) -> dict:
+                  preassembled: bool = False,
+                  formal_fn=None) -> dict:
     """One output -> machine verdicts. Never repairs into truth.
 
     `preassembled` (skeleton path): text is ALREADY a complete module from
@@ -81,10 +91,18 @@ def verify_output(task: dict, text: str, lint_fn=None,
     block is a harness bug that fails correct artifacts (measured P0-D
     skeleton v2: nested-module %Error on T2/T7).
 
+    `formal_fn` (T1-class only): property text that no linter can check
+    (## delays unsupported everywhere — measured) goes to sby instead.
+    None (tool unavailable/bounded-unknown) fails CLOSED: escalates, never
+    passes.
+
     `lint_fn` is injectable so unit tests stay hermetic (no Verilator).
     """
     lint = lint_fn or default_lint
     tid = task["id"]
+    if task.get("formal") and preassembled:
+        res = formal_fn(text) if formal_fn is not None else None
+        return {"formal": res is True}
     if preassembled and tid in SKELETONS:
         ok, _ = lint(text)
         return {"syntax": ok, "proof_shape": ok}
@@ -162,7 +180,7 @@ def base_prompt(task: dict, constrained: bool) -> str:
 
 
 def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
-            constrained: bool = False) -> dict:
+            constrained: bool = False, formal_fn=None) -> dict:
     """One task: BoN generation -> Judge (min 2 rounds) -> closure (max 3).
 
     ELITIST closure (prescription 1): the best candidate so far is carried
@@ -181,6 +199,11 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
     incumbent = None
     sketched = constrained and is_skeleton_task(task["id"])
     query_errors = 0
+    required = task.get("judge_on", ("syntax",))
+    # Close bar: unanimous on required verdicts AND approvals >= 2 — except
+    # single-verdict formal tasks, where the proof IS the whole evidence
+    # (bar 1). Weak plurality on multi-key tasks escalates (elitism rule).
+    need = 1 if set(required) == {"formal"} else 2
     while rounds < MAX_ROUNDS:
         rounds += 1
         cands = []
@@ -222,14 +245,14 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
                 text, method = out, "free"
             if not (sketched and method == "skeleton-reject"):
                 verdicts = verify_output(
-                    task, text, lint_fn=lint_fn,
+                    task, text, lint_fn=lint_fn, formal_fn=formal_fn,
                     preassembled=(sketched and is_skeleton_task(task["id"])))
             cand = Candidate(task["id"], BASELINE_NAME, text, verdicts)
             cand.method = method  # informational only; Judge sees verdicts
             cands.append(cand)
         pool = ([incumbent] if incumbent is not None else []) + cands
         judged = [c for c in pool
-                  if all(c.verdicts.get(r, False) for r in ("syntax",))]
+                  if all(c.verdicts.get(r, False) for r in required)]
         winner = majority_vote(judged)
         if winner is not None and (incumbent is None
                                    or winner.approvals > incumbent.approvals):
@@ -238,10 +261,10 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
                  winner.approvals if winner else 0,
                  "verdicts": winner.verdicts if winner else {}}
         history.append(Round)
-        closed = winner is not None and winner.approvals >= 2
+        closed = winner is not None and winner.approvals >= need
         if rounds >= MIN_ROUNDS and closed:
             break
-    closed = winner is not None and winner.approvals >= 2
+    closed = winner is not None and winner.approvals >= need
     return {"task": task["id"], "kind": task["kind"], "width": width,
             "winner": winner.generator if winner else None,
             "approvals": winner.approvals if winner else 0,
@@ -249,6 +272,9 @@ def run_one(task: dict, width: int, query_fn=query, lint_fn=None,
             "closed": closed,
             "escalated_to_human": not closed,
             "query_errors": query_errors,
+            # Winning artifact text (truncated): evidence must show WHAT was
+            # proven, not just the verdict. Histories stay verdict-only.
+            "artifact": (winner.output[:500] if winner is not None else ""),
             "total_latency_s": round(total_latency, 1),
             "total_tokens": total_tokens,
             "est_cost_usd": round(total_cost, 6)}
@@ -358,6 +384,7 @@ def main() -> int:
     # Live calls carry GEN_TEMPERATURE for BoN diversity (bake-off default
     # temp 0 is for comparability; the loop needs diverse candidates).
     live_query = lambda m, p, n: query(m, p, n, GEN_TEMPERATURE)
+    live_formal = lambda prop: prove_wb_prop(prop, run_id=run_id)
     try:
         results = []
         if not ablation_only:
@@ -367,7 +394,8 @@ def main() -> int:
                           flush=True)
                     results.append(done[t["id"]])
                     continue
-                r = run_one(t, 3, query_fn=live_query, constrained=sketched)
+                r = run_one(t, 3, query_fn=live_query, constrained=sketched,
+                            formal_fn=live_formal)
                 results.append(r)
                 done[r["task"]] = r
                 save_partials({"results": done, "ablation": ablation,
@@ -392,7 +420,7 @@ def main() -> int:
                               flush=True)
                         continue
                     r = run_one(t, n, query_fn=live_query,
-                                constrained=sketched)
+                                constrained=sketched, formal_fn=live_formal)
                     ablation[key] = {
                         "closed": not r["escalated_to_human"],
                         "rounds": r["rounds"],
@@ -407,6 +435,15 @@ def main() -> int:
 
     ledger = ledger_for(results, run_id)
     report = summarize(results)
+    # Per-task evidence: WHAT was proven/accepted, not just the verdict.
+    report["tasks_detail"] = [
+        {"task": r["task"], "kind": r["kind"], "winner": r["winner"],
+         "rounds": r["rounds"], "approvals": r["approvals"],
+         "escalated_to_human": r["escalated_to_human"],
+         "artifact": r.get("artifact", "")[:500],
+         "latency_s": r.get("total_latency_s", 0.0),
+         "tokens": r.get("total_tokens", 0)}
+        for r in results]
     report.update({
         "run_id": run_id, "date": time.strftime("%Y-%m-%d"),
         "benchmark": "P0-D loop v2 (elitist closure)",
@@ -430,8 +467,14 @@ def main() -> int:
             verification_config={"bon": 3, "min_rounds": MIN_ROUNDS,
                                  "max_rounds": MAX_ROUNDS}),
     })
-    out = os.path.join(HERE, "P0D_SKELETON.json" if sketched
-                         else "P0D_REPORT.json")
+    rep = []
+    for i, a in enumerate(sys.argv):
+        if a.startswith("--report="):
+            rep = [a.split("=", 1)[1]]
+        elif a == "--report" and i + 1 < len(sys.argv):
+            rep = [sys.argv[i + 1]]
+    default_out = "P0D_SKELETON.json" if sketched else "P0D_REPORT.json"
+    out = os.path.join(HERE, rep[0] if rep else default_out)
     with open(out, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
     print(f"audit={report['audit_completeness']} chain={report['chain_valid']} "

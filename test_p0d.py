@@ -81,6 +81,7 @@ class TestLoop(unittest.TestCase):
         self.assertEqual(r["winner"], "llama-3.1-8b")
         self.assertFalse(r["escalated_to_human"])
         self.assertLessEqual(r["rounds"], 3)
+        self.assertEqual(r["artifact"], "B")
 
     def test_all_bad_escalates_at_boundary(self):
         r = run_one(SUITE[0], 3, query_fn=self._query("garbage"))
@@ -146,21 +147,42 @@ class TestSkeletonPath(unittest.TestCase):
 
     def test_base_prompt(self):
         t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
-        self.assertIn("ANTECEDENT", base_prompt(t, True))
+        self.assertIn("PAST_EXPR", base_prompt(t, True))
         self.assertEqual(base_prompt(t, False), t["prompt"])
 
     def test_skeleton_slots_close(self):
-        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
-        slots = ("ANTECEDENT: s_wb_stb\nLOW: 1\nHIGH: 2\n"
-                 "CONSEQUENT: s_wb_ack")
+        t = next(x for x in SUITE if x["id"] == "T2-sva-irq")
+        slots = "ANTECEDENT: irq\nCONSEQUENT: irq_en"
 
         def q(model, prompt, max_tokens):
             self.assertIn("ANTECEDENT", prompt)  # skeleton prompt used
             return slots, {}, 0.1
 
-        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True,
+                    formal_fn=lambda p: True)
         self.assertTrue(r["closed"])
         self.assertFalse(r["escalated_to_human"])
+
+    def test_formal_true_false_none(self):
+        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
+        self.assertEqual(t.get("judge_on"), ("formal",))
+        slots = "PAST_EXPR: s_wb_cyc && s_wb_stb\nNOW_EXPR: s_wb_ack"
+
+        def q(model, prompt, max_tokens):
+            return slots, {}, 0.1
+
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True,
+                    formal_fn=lambda p: True)
+        self.assertTrue(r["closed"])
+        r2 = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True,
+                     formal_fn=lambda p: False)
+        self.assertFalse(r2["closed"])
+        self.assertTrue(r2["escalated_to_human"])
+        # None (tool down / bounded-unknown) fails CLOSED: escalates, no pass
+        r3 = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True,
+                     formal_fn=lambda p: None)
+        self.assertFalse(r3["closed"])
+        self.assertTrue(r3["escalated_to_human"])
 
     def test_skeleton_reject_escalates(self):
         t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
@@ -194,6 +216,7 @@ class TestSkeletonPath(unittest.TestCase):
     def test_preassembled_module_not_rewrapped(self):
         # Regression (skeleton v2): assembled modules linted as-is — a
         # second module wrapper is a harness-authored syntax error.
+        # (T2: non-formal skeleton task, so the lint path is exercised.)
         seen = []
 
         def fake(mod, wall=False):
@@ -202,7 +225,7 @@ class TestSkeletonPath(unittest.TestCase):
 
         mod = ("module tb_sva(input wire clk);\n"
                "assert property (@(posedge clk) 1'b1);\nendmodule\n")
-        t = next(x for x in SUITE if x["id"] == "T1-sva-ack")
+        t = next(x for x in SUITE if x["id"] == "T2-sva-irq")
         v = verify_output(t, mod, lint_fn=fake, preassembled=True)
         self.assertTrue(all(v.values()))
         self.assertEqual(seen[0].count("module tb_sva"), 1)

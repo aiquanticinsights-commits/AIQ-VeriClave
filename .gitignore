@@ -7,6 +7,11 @@ vericlave-venv/
 evidence/
 runs/
 P0D_PARTIAL.json
+formal/*_proof/
+formal/*_work/
+formal/demo/*_work/
+formal/wb_dma_dbg*/
+formal/wb_dma_last.log
 *.vcd
 *.fst
 *.bit

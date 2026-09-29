@@ -1,0 +1,26 @@
+# wb_dma formal proof (smtbmc/z3, BMC depth 20) — REQ-DMA-ACK/IRG/CYC.
+# Dev-machine run: sby needs the sibling rideprotect-rv tree; CI does NOT run
+# this file (see formal/demo/ for the hermetic CI-safe proof).
+# Single task proves all three asserts; the adapter maps per-assert results
+# (A_ACK/A_IRQ/A_CYC) back to T1/T2/T7 from the engine log.
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 20
+
+[engines]
+smtbmc z3
+
+# Dev-machine file: ABSOLUTE /mnt paths (sby 0.68 resolves [files] against
+# CWD/workdir in version-dependent ways; absolute paths are unambiguous).
+# CI does NOT run this file (see formal/demo/ for the hermetic proof).
+[script]
+read_verilog -formal /mnt/c/Projects/ChipDesign/rideprotect-rv/rtl/wb_dma.v
+read_verilog -formal wb_dma_formal.sv
+prep -top wb_dma_formal
+
+[files]
+/mnt/c/Projects/ChipDesign/rideprotect-rv/rtl/wb_dma.v
+wb_dma_formal.sv

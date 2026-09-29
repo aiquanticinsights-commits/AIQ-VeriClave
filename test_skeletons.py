@@ -16,6 +16,11 @@ class TestSlots(unittest.TestCase):
     def test_missing_label_rejected(self):
         self.assertIsNone(parse_slots("ANTECEDENT: x", ("ANTECEDENT", "LOW")))
 
+    def test_underscore_labels(self):
+        s = parse_slots("PAST_EXPR: a\nNOW_EXPR: b",
+                        ("PAST_EXPR", "NOW_EXPR"))
+        self.assertEqual(s, {"PAST_EXPR": "a", "NOW_EXPR": "b"})
+
     def test_smuggling_rejected(self):
         self.assertIsNone(clean_slot("a; assert property(p)"))
         self.assertIsNone(clean_slot("`define X"))
@@ -40,15 +45,18 @@ class TestSlots(unittest.TestCase):
 
 
 class TestAssembleSVA(unittest.TestCase):
-    def test_t1_range_ok(self):
-        t = ("ANTECEDENT: s_wb_stb\nLOW: 1\nHIGH: 2\nCONSEQUENT: s_wb_ack")
+    def test_t1_past_form_ok(self):
+        t = "PAST_EXPR: s_wb_cyc && s_wb_stb\nNOW_EXPR: s_wb_ack"
         a = assemble("T1-sva-ack", t)
-        self.assertIn("##[1:2]", a)
-        self.assertIn("module tb_sva", a)
+        self.assertIn("$past(s_wb_cyc && s_wb_stb)", a)
+        self.assertIn("assert(s_wb_ack", a)
 
-    def test_t1_inverted_range_rejected(self):
-        t = ("ANTECEDENT: s_wb_stb\nLOW: 5\nHIGH: 2\nCONSEQUENT: s_wb_ack")
+    def test_t1_mention_gate(self):
+        # Slots must mention the requirement's signals (traceability gate).
+        t = "PAST_EXPR: foo\nNOW_EXPR: s_wb_ack"
         self.assertIsNone(assemble("T1-sva-ack", t))
+        t2 = "PAST_EXPR: s_wb_stb\nNOW_EXPR: bar"
+        self.assertIsNone(assemble("T1-sva-ack", t2))
 
     def test_t2_simple_ok(self):
         a = assemble("T2-sva-irq", "ANTECEDENT: irq\nCONSEQUENT: irq_en")
