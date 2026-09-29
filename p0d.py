@@ -42,8 +42,21 @@ MIN_ROUNDS, MAX_ROUNDS = 2, 3
 # T1-class delay requirements are unlintable (no ## support anywhere in the
 # lint toolchain — measured) and go to sby instead. judge_on reroutes the
 # Judge to the formal verdict for exactly these tasks.
+# T4 (r2): the v1 scenario under-determined the answer (CDC defensible).
+# The r2 scenario adds the waveform observation a real bug report would
+# carry, which rules CDC out — scenario clarification, not answer leaking.
 TASK_OVERLAYS = {
     "T1-sva-ack": {"formal": True, "judge_on": ("formal",)},
+    "T4-classify-reset": {
+        "prompt": ("Failure: after reset deasserts, dma_state stays S_READ "
+                   "forever although m_wb_ack pulses. Waveforms at the slave "
+                   "pads show m_wb_ack arriving cleanly every cycle, and the "
+                   "design is single-clock (no clock-domain crossings "
+                   "exist). Most likely root cause? Reply with exactly one "
+                   "letter.\n"
+                   "A. reset sequencing\nB. timeout counter\n"
+                   "C. state-machine ack handling\nD. clock-domain crossing"),
+    },
 }
 
 ABLATION_WIDTHS = (1, 3, 5)

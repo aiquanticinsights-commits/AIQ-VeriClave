@@ -10,7 +10,8 @@ import tempfile
 import unittest
 
 from sim_frm import (WbDmaFrm, assemble_stim, compare_traces, fpr_campaign,
-                     fuzz_stim, grade_llm_stimulus, tool_ok, validate_stim)
+                     fuzz_stim, grade_llm_stimulus, program_from_fills,
+                     run_slot_sequence, tool_ok, validate_stim)
 
 XFER = ["rst",
         "w 0 00001000", "w 4 00002000", "w 8 00000002", "w c 00000007",
@@ -121,6 +122,38 @@ class TestStimSlots(unittest.TestCase):
         self.assertIsNone(assemble_stim("free prose"))
         self.assertIsNone(assemble_stim(  # non-hex
             "SRC: xyz\nDST: 2000\nCOUNT: 1\nCTRL: 7\nIRQEN: 1\nWAIT: 40"))
+
+
+class TestSequentialSlots(unittest.TestCase):
+    def _q(self, values):
+        def q(model, prompt, max_tokens, temperature=0.7):
+            i = len(self.seen)
+            self.seen.append(prompt)
+            if i >= len(values):
+                raise AssertionError("too many slot prompts")
+            return values[i], {}, 0.1
+        self.seen = []
+        return q
+
+    def test_full_sequence_assembles(self):
+        r = run_slot_sequence(self._q(["3000", "4000", "2", "7", "1", "28"]),
+                              "m")
+        prog = program_from_fills(r)
+        self.assertEqual(prog[:3], ["rst", "w 0 00003000", "w 4 00004000"])
+        self.assertIn("r 10", prog)
+        # one prompt per slot, prior fills echoed as context
+        self.assertEqual(len(self.seen), 6)
+        self.assertIn("SRC: 3000", self.seen[1])
+
+    def test_bad_middle_slot_fails(self):
+        r = run_slot_sequence(self._q(["3000", "4000", "ZZZ", "7", "1", "28"]),
+                              "m")
+        self.assertIsNone(r)  # non-hex slot aborts the sequence
+
+    def test_query_fault_fails_closed(self):
+        def q(model, prompt, max_tokens, temperature=0.7):
+            raise ConnectionError("down")
+        self.assertIsNone(run_slot_sequence(q, "m"))
 
 
 def _sim_available():

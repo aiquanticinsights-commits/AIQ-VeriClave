@@ -8,15 +8,128 @@
   "median_closure_iterations": 2.0,
   "max_closure_iterations": 3,
   "escalated_to_human": 4,
-  "total_latency_s": 2822.6,
-  "total_tokens": 13798,
-  "total_cost_usd": 0.001654,
-  "avg_cost_per_task_usd": 0.000184,
-  "avg_latency_s_per_task": 313.6,
-  "run_id": "p0d-20260928-215350",
-  "date": "2026-09-28",
+  "total_latency_s": 3303.6,
+  "total_tokens": 16410,
+  "total_cost_usd": 0.001935,
+  "avg_cost_per_task_usd": 0.000215,
+  "avg_latency_s_per_task": 367.1,
+  "tasks_detail": [
+    {
+      "task": "T1-sva-ack",
+      "kind": "sva-validity",
+      "winner": null,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "artifact": "",
+      "latency_s": 705.0,
+      "tokens": 2820
+    },
+    {
+      "task": "T2-sva-irq",
+      "kind": "sva-validity",
+      "winner": null,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "artifact": "",
+      "latency_s": 737.7,
+      "tokens": 2585
+    },
+    {
+      "task": "T3-localize-bus",
+      "kind": "localization",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "B.",
+      "latency_s": 95.4,
+      "tokens": 848
+    },
+    {
+      "task": "T4-classify-reset",
+      "kind": "localization",
+      "winner": "llama-3.1-8b",
+      "rounds": 3,
+      "approvals": 1,
+      "escalated_to_human": true,
+      "artifact": "D",
+      "latency_s": 197.6,
+      "tokens": 1479
+    },
+    {
+      "task": "T5-req-ids",
+      "kind": "coverage",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "REQ-001: The vehicle system must have a watchdog timer implemented to detect and respond to potential faults or failures.\n\nREQ-002: The watchdog timer must be designed to generate a timeout event in case the system fails to send a valid heartbeat signal within a predefined time period.\n\nREQ-003: A safe state for the vehicle system must be defined, which includes all necessary actions to ensure the safety of people and equipment.\n\nREQ-004: The safe state for the vehicle system must include any ne",
+      "latency_s": 329.5,
+      "tokens": 1400
+    },
+    {
+      "task": "T6-width-fix",
+      "kind": "mutant-kill",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "```verilog\nmodule m(input wire [3:0] a, output wire [3:0] y);\nassign y = 4'b1111;\nendmodule\n```\n\nI changed the literal from `4'b11111` to `4'b1111`, which is now only 4 bits wide.",
+      "latency_s": 246.8,
+      "tokens": 1722
+    },
+    {
+      "task": "T7-sva-cyc",
+      "kind": "sva-validity",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "```systemverilog\n// Concurrent assertion for Wishbone DMA master\nproperty wb_dma_property;\n  @(posedge clk) ($rose(m_wb_stb) |-> $rose(m_wb_cyc)) |=> m_wb_stb === 1'b0;\nendproperty\n\nassert property (wb_dma_property) else begin\n  $error(\"Wishbone DMA master assertion failed: m_wb_stb must be low when reset.\");\nend\n```",
+      "latency_s": 410.4,
+      "tokens": 1668
+    },
+    {
+      "task": "T8-localize-irq",
+      "kind": "localization",
+      "winner": "llama-3.1-8b",
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "artifact": "B",
+      "latency_s": 96.0,
+      "tokens": 822
+    },
+    {
+      "task": "T9-status-fix",
+      "kind": "mutant-kill",
+      "winner": null,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "artifact": "",
+      "latency_s": 485.2,
+      "tokens": 3066
+    }
+  ],
+  "run_id": "p0d-20260929-220600",
+  "date": "2026-09-29",
   "benchmark": "P0-D loop v2 (elitist closure)",
   "benchmark_version": "wb_dma-v1",
+  "strategy": "free-form",
+  "task_filter": [
+    "T1-sva-ack",
+    "T2-sva-irq",
+    "T3-localize-bus",
+    "T4-classify-reset",
+    "T5-req-ids",
+    "T6-width-fix",
+    "T7-sva-cyc",
+    "T8-localize-irq",
+    "T9-status-fix"
+  ],
   "model": "llama-3.1-8b",
   "bon_production": 3,
   "ablation": {
@@ -33,10 +146,10 @@
       "escalated_to_human": true
     },
     "T3-localize-bus/n=1": {
-      "closed": true,
-      "rounds": 2,
-      "approvals": 2,
-      "escalated_to_human": false
+      "closed": false,
+      "rounds": 3,
+      "approvals": 1,
+      "escalated_to_human": true
     },
     "T3-localize-bus/n=5": {
       "closed": true,
@@ -45,16 +158,16 @@
       "escalated_to_human": false
     },
     "T6-width-fix/n=1": {
-      "closed": false,
-      "rounds": 3,
-      "approvals": 0,
-      "escalated_to_human": true
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false
     },
     "T6-width-fix/n=5": {
-      "closed": false,
-      "rounds": 3,
-      "approvals": 0,
-      "escalated_to_human": true
+      "closed": true,
+      "rounds": 2,
+      "approvals": 2,
+      "escalated_to_human": false
     }
   },
   "audit_completeness": 1.0,

@@ -1,12 +1,13 @@
 {
   "env": "docker",
+  "date": "2026-09-29",
   "os": "Linux 6.18.33.1-microsoft-standard-WSL2",
   "python": "3.12.3",
   "checks": {
     "unittest": {
       "pass": true,
       "tests": [
-        "206"
+        "243"
       ]
     },
     "frm_traces": {
@@ -15,12 +16,16 @@
       "events": 11
     },
     "verilator_lint": {
-      "pass": null,
-      "reason": "no RTL/sibling tree"
+      "pass": true,
+      "rc": 0,
+      "fixture": true,
+      "target": "cnt_formal"
     },
     "yosys_synth": {
-      "pass": null,
-      "reason": "no RTL/sibling tree"
+      "pass": true,
+      "rc": 0,
+      "fixture": true,
+      "target": "cnt_formal"
     },
     "sby_demo": {
       "pass": null,

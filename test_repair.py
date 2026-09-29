@@ -1,7 +1,8 @@
 """Unit tests for the repair-closure ablation (fakes only, no models)."""
 import unittest
 
-from repair import REPAIR_TASKS, closure_prompt, run_task, verify
+from repair import (REPAIR_TASKS, closure_prompt, extract_decl, literal_values,
+                    run_task, task_prompt, value_gate, verify)
 
 GOOD_R1 = ("```verilog\nmodule r1(input wire [3:0] a, output wire [3:0] y);\n"
            "wire [3:0] b;\nassign y = a & b;\nendmodule\n```")
@@ -37,6 +38,56 @@ class TestVerify(unittest.TestCase):
         for t in REPAIR_TASKS:
             self.assertIn("must_contain", t)
             self.assertIn("buggy", t)
+
+    def test_line_mode(self):
+        t = next(x for x in REPAIR_TASKS if x["id"] == "R2-width")
+        self.assertIn("ONLY the corrected assign line", task_prompt(t))
+        v, _ = verify(t, "assign q = 8'b00000001;", lint_fn=fake_clean)
+        self.assertTrue(all(v.values()))
+        v2, _ = verify(t, "assign q = 9'b100000001;", lint_fn=fake_clean)
+        self.assertFalse(any(v2.values()))
+        v3, _ = verify(t, "free prose", lint_fn=fake_clean)
+        self.assertFalse(any(v3.values()))
+
+    def test_declline_mode(self):
+        t = next(x for x in REPAIR_TASKS if x["id"] == "R5-double")
+        self.assertIn("EXACTLY two lines", task_prompt(t))
+        good = "DECL: wire [3:0] c;\nASSIGN: assign y = a + c + 4'b1111;"
+        v, _ = verify(t, good, lint_fn=fake_clean)
+        self.assertTrue(all(v.values()))
+        bad_iface = ("DECL: input wire [3:0] c;\n"
+                     "ASSIGN: assign y = a + c + 4'b1111;")
+        v2, _ = verify(t, bad_iface, lint_fn=fake_clean)
+        self.assertFalse(any(v2.values()))
+        self.assertIsNone(extract_decl("no wires here"))
+        self.assertEqual(extract_decl("`wire [3:0] c;`"), "wire [3:0] c;")
+
+    def test_free_tasks_ask_full_module(self):
+        t = next(x for x in REPAIR_TASKS if x["id"] == "R1-undeclared")
+        self.assertIn("full module", task_prompt(t))
+
+
+class TestValueGate(unittest.TestCase):
+    def test_literals(self):
+        self.assertEqual(literal_values("assign y = 4'b1111;"), [(4, 15)])
+        self.assertEqual(literal_values("x = 8'd15 + 1;"),
+                         [(8, 15), (None, 1)])
+        self.assertEqual(literal_values("no numbers here"), [])
+
+    def test_value_truth(self):
+        self.assertTrue(value_gate("assign y = a + c + 8'd15;",
+                                   15, "4'b11111"))
+        self.assertTrue(value_gate("assign q = 8'b00000001;",
+                                   1, "9'b100000001"))
+        self.assertFalse(value_gate("assign q = 8'b10000000;",
+                                    1, "9'b100000001"))  # wrong value
+        self.assertFalse(value_gate("assign q = 9'b100000001;",
+                                    1, "9'b100000001"))  # bug present
+        # Equivalent forms accepted: value truth, not text identity.
+        self.assertTrue(value_gate("assign q = 16'h1;",
+                                   1, "9'b100000001"))
+        self.assertTrue(value_gate("assign q = 4'b0001;",
+                                   1, "9'b100000001"))
 
 
 class TestPrompts(unittest.TestCase):

@@ -29,13 +29,13 @@
     },
     "verilator_lint": {
       "category": "functional",
-      "variance": "UNMEASURED",
-      "detail": "wsl=True docker=None"
+      "variance": "none",
+      "detail": "wsl=True docker=True"
     },
     "yosys_synth": {
       "category": "functional",
-      "variance": "UNMEASURED",
-      "detail": "wsl=True docker=None"
+      "variance": "none",
+      "detail": "wsl=True docker=True"
     },
     "sby_demo": {
       "category": "formal",

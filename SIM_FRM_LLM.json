@@ -10,11 +10,84 @@
     {
       "raw": "DMA_transfer: \n    LDX #<SRC\n    LDY #>SRC\n    STX DMA_SRC\n    STY DMA_SRC+1\n    LDX #<DST\n    LDY #>DST\n    STA DMA_DST,X\n    STY DMA_DST+1,X\n    LDA #<COUNT\n    STA DMA_COUNT+0,X\n    LDA #>COUNT\n    STA DMA_COUNT+1,X\n    LDA #(COUNT AND $00FF)\n    ROR A\n    CLC\n    ADC #$01\n    ROR A\n    ROR A\n    STA DMA_CTRL,X\n    LDA #IRQEN\n    STA DMA_IRQEN,X\n    LDX #WAIT\nDMA_WAIT: \n    DEX\n    BNE DMA_WAIT",
       "assembled": false
+    },
+    {
+      "strategy": "sequential-slots-v1",
+      "fills": {
+        "SRC": "2000",
+        "DST": "0200",
+        "COUNT": "01",
+        "CTRL": "20",
+        "IRQEN": "0",
+        "WAIT": "A2"
+      },
+      "program": null,
+      "latency_s": null,
+      "result": {
+        "verdict": false,
+        "sim_equiv": null,
+        "transfer_completed": null,
+        "events": null,
+        "first_diverge": null
+      }
+    },
+    {
+      "strategy": "sequential-slots-v1 + slot-closure",
+      "fills": {
+        "SRC": "2000",
+        "DST": "4000",
+        "COUNT": "3e8",
+        "CTRL": "41",
+        "IRQEN": "0",
+        "WAIT": "1d4"
+      },
+      "program": null,
+      "result": {
+        "verdict": false,
+        "sim_equiv": null,
+        "transfer_completed": null,
+        "events": null,
+        "first_diverge": null
+      }
+    },
+    {
+      "strategy": "sequential-slots-v1 + slot-closure",
+      "fills": {
+        "SRC": "3c00",
+        "DST": "4000",
+        "COUNT": "1",
+        "CTRL": "7",
+        "IRQEN": "1",
+        "WAIT": "2E"
+      },
+      "program": [
+        "rst",
+        "w 0 00003c00",
+        "w 4 00004000",
+        "w 8 1",
+        "w c 7",
+        "w 14 1",
+        "tick 46",
+        "r 10"
+      ],
+      "result": {
+        "verdict": true,
+        "sim_equiv": true,
+        "transfer_completed": true,
+        "events": 7,
+        "first_diverge": -1
+      }
     }
   ],
   "program": null,
   "result": {
-    "verdict": false
+    "sim_equiv": true,
+    "transfer_completed": true,
+    "verdict": true,
+    "events": 7,
+    "first_diverge": -1,
+    "frm_only": "",
+    "rtl_only": ""
   },
   "signoff": "PENDING",
   "closure_attempts": [
@@ -24,5 +97,6 @@
       "outcome": "slot-reject (labels are the protocol)"
     }
   ],
-  "note": "0/2 initial (one start-bit near-miss, one format collapse) + 0/1 closure (labels dropped). Slot-label discipline is the binding constraint for this model on sim stimulus; future: fewer slots per turn or labeled few-shot example."
+  "note": "0/2 initial (one start-bit near-miss, one format collapse) + 0/1 closure (labels dropped). Slot-label discipline is the binding constraint for this model on sim stimulus; future: fewer slots per turn or labeled few-shot example.",
+  "closed_by": "sequential slots + slot-level closure"
 }

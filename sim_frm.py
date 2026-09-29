@@ -384,6 +384,49 @@ WAIT: <idle cycles to let the transfer finish, 10-200>
 Example values (NOT the answer — compute your own): 1-word transfer from
 0x1000 to 0x2000 is SRC 1000, DST 2000, COUNT 1, CTRL 7, IRQEN 1, WAIT 40."""
 
+# Sequential slot-filling (label-discipline fix): ONE slot per prompt, prior
+# fills echoed as settled context. Six cheap calls instead of one hard one —
+# measured: the model drops labels under six-slot load, not under one.
+SLOT_ASKS = {
+    "SRC": "Source byte address in plain hex (e.g. 1000). Reply with ONLY the value.",
+    "DST": "Destination byte address in plain hex (e.g. 2000). Reply with ONLY the value.",
+    "COUNT": "Word count 1-4 in plain hex. Reply with ONLY the value.",
+    "CTRL": "Control byte in plain hex (bit0=start MUST be 1, bit1=src-incr, bit2=dst-incr). Reply with ONLY the value.",
+    "IRQEN": "1 to enable interrupt, else 0. Reply with ONLY the value.",
+    "WAIT": "Idle cycles 10-200 in plain hex (e.g. 40 hex = 64 cycles). Reply with ONLY the value.",
+}
+
+
+def run_slot_sequence(query_fn, model_id: str,
+                      temperature: float = 0.7) -> dict | None:
+    """Fill slots one per prompt (context-chained). Returns fills dict or
+    None on any unparseable answer. Never raises (query faults -> None)."""
+    fills: dict[str, str] = {}
+    for label in STIM_SLOT_LABELS:
+        context = "".join(f"{k}: {v}\n" for k, v in fills.items())
+        prompt = ("Program a 2-word DMA transfer (src 0x3000, dst 0x4000, "
+                  "incr both, irq on). Fill ONE slot; reply with ONLY its "
+                  "value, no labels, no extra text.\n"
+                  f"Settled: {context if context else '(none yet)'}\n"
+                  f"Now: {SLOT_ASKS[label]}")
+        try:
+            out, _, _ = query_fn(model_id, prompt, 32, temperature)
+        except Exception:
+            return None
+        val = (out or "").strip().splitlines()
+        val = val[0].strip() if val else ""
+        if not val or len(val) > 16 or not all(
+                ch in "0123456789abcdefABCDEF" for ch in val):
+            return None
+        fills[label] = val
+    return fills
+
+
+def program_from_fills(fills: dict) -> list[str] | None:
+    """Fills dict -> validated DSL program (same gates as assemble_stim)."""
+    text = "\n".join(f"{k}: {fills.get(k, '')}" for k in STIM_SLOT_LABELS)
+    return assemble_stim(text)
+
 
 def assemble_stim(text: str) -> list[str] | None:
     """Slot fills -> validated DSL program (RST, register writes, wait,

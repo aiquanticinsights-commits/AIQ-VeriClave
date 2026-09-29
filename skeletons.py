@@ -176,12 +176,13 @@ ASSIGN_LINE = re.compile(r"^\s*assign\b[^;]*;", re.MULTILINE)
 def extract_assign_line(text: str) -> str | None:
     """First assign statement, or a bare expression promoted to one.
 
-    Tolerant of markdown inline-code backticks around the statement
-    (measured: models wrap the line in `...`); strict about everything
+    Tolerant of markdown inline-code backticks and leading LABEL: prefixes
+    (ASSIGN:) around the statement (measured); strict about everything
     else — the Verilator lint behind this decides, not the extractor.
     """
     for raw in text.splitlines():
-        line = raw.strip().strip("`'\"~").strip()
+        core = re.sub(r"^[A-Za-z_]+:\s*", "", raw)
+        line = core.strip().strip("`'\"~").strip()
         if re.match(r"^assign\b", line) and line.rstrip().endswith(";"):
             return line[:line.index(";") + 1]
     m = re.search(r"^\s*4'b[01]+\s*$", text, re.MULTILINE)

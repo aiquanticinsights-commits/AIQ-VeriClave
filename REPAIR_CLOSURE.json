@@ -1,6 +1,6 @@
 {
   "date": "2026-09-29",
-  "run_id": "rep-20260929-184327",
+  "run_id": "rep-20260929-214330",
   "benchmark": "repair-closure ablation v1",
   "arms": {
     "A": "check-names-only closure (status quo)",
@@ -8,7 +8,7 @@
   },
   "by_arm": {
     "A": {
-      "closed": 3,
+      "closed": 4,
       "tasks": 6
     },
     "B": {
@@ -24,8 +24,8 @@
       "rounds": 2,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 63.9,
-      "tokens": 380,
+      "latency_s": 137.4,
+      "tokens": 573,
       "history": [
         {
           "round": 1,
@@ -44,8 +44,8 @@
       "rounds": 2,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 73.4,
-      "tokens": 553,
+      "latency_s": 164.3,
+      "tokens": 790,
       "history": [
         {
           "round": 1,
@@ -64,8 +64,8 @@
       "rounds": 3,
       "approvals": 0,
       "escalated_to_human": true,
-      "latency_s": 169.7,
-      "tokens": 763,
+      "latency_s": 30.2,
+      "tokens": 506,
       "history": [
         {
           "round": 1,
@@ -88,8 +88,8 @@
       "rounds": 3,
       "approvals": 0,
       "escalated_to_human": true,
-      "latency_s": 118.8,
-      "tokens": 651,
+      "latency_s": 20.9,
+      "tokens": 506,
       "history": [
         {
           "round": 1,
@@ -112,8 +112,8 @@
       "rounds": 2,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 107.0,
-      "tokens": 452,
+      "latency_s": 64.8,
+      "tokens": 363,
       "history": [
         {
           "round": 1,
@@ -132,8 +132,8 @@
       "rounds": 2,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 87.7,
-      "tokens": 585,
+      "latency_s": 93.5,
+      "tokens": 563,
       "history": [
         {
           "round": 1,
@@ -148,36 +148,12 @@
     "R4-reset-value/A": {
       "task": "R4-reset-value",
       "arm": "A",
-      "closed": false,
-      "rounds": 3,
-      "approvals": 0,
-      "escalated_to_human": true,
-      "latency_s": 233.5,
-      "tokens": 909,
-      "history": [
-        {
-          "round": 1,
-          "approvals": 0
-        },
-        {
-          "round": 2,
-          "approvals": 0
-        },
-        {
-          "round": 3,
-          "approvals": 0
-        }
-      ]
-    },
-    "R4-reset-value/B": {
-      "task": "R4-reset-value",
-      "arm": "B",
       "closed": true,
       "rounds": 3,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 220.3,
-      "tokens": 954,
+      "latency_s": 272.7,
+      "tokens": 968,
       "history": [
         {
           "round": 1,
@@ -193,6 +169,30 @@
         }
       ]
     },
+    "R4-reset-value/B": {
+      "task": "R4-reset-value",
+      "arm": "B",
+      "closed": false,
+      "rounds": 3,
+      "approvals": 0,
+      "escalated_to_human": true,
+      "latency_s": 175.5,
+      "tokens": 784,
+      "history": [
+        {
+          "round": 1,
+          "approvals": 0
+        },
+        {
+          "round": 2,
+          "approvals": 0
+        },
+        {
+          "round": 3,
+          "approvals": 0
+        }
+      ]
+    },
     "R5-double/A": {
       "task": "R5-double",
       "arm": "A",
@@ -200,8 +200,8 @@
       "rounds": 3,
       "approvals": 0,
       "escalated_to_human": true,
-      "latency_s": 212.7,
-      "tokens": 989,
+      "latency_s": 51.8,
+      "tokens": 612,
       "history": [
         {
           "round": 1,
@@ -220,12 +220,12 @@
     "R5-double/B": {
       "task": "R5-double",
       "arm": "B",
-      "closed": false,
+      "closed": true,
       "rounds": 3,
-      "approvals": 0,
-      "escalated_to_human": true,
-      "latency_s": 215.6,
-      "tokens": 895,
+      "approvals": 2,
+      "escalated_to_human": false,
+      "latency_s": 43.4,
+      "tokens": 622,
       "history": [
         {
           "round": 1,
@@ -237,7 +237,7 @@
         },
         {
           "round": 3,
-          "approvals": 0
+          "approvals": 2
         }
       ]
     },
@@ -248,8 +248,8 @@
       "rounds": 2,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 102.0,
-      "tokens": 448,
+      "latency_s": 140.8,
+      "tokens": 551,
       "history": [
         {
           "round": 1,
@@ -268,8 +268,8 @@
       "rounds": 2,
       "approvals": 2,
       "escalated_to_human": false,
-      "latency_s": 115.0,
-      "tokens": 646,
+      "latency_s": 97.2,
+      "tokens": 634,
       "history": [
         {
           "round": 1,

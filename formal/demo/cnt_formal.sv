@@ -11,9 +11,10 @@ module cnt_formal(input wire clk);
     wire ovf = (cnt == 2'd3);
     always @(posedge clk) begin
         if (!rst && $past(!rst)) begin
-            A_OVF_ONEHOT: assert($onehot0({cnt == 2'd0, cnt == 2'd1,
-                                           cnt == 2'd2, cnt == 2'd3}));
-            A_OVF_IMPLIES_MAX: assert(!ovf || (cnt == 2'd3));
+            // Unlabeled: Yosys 0.33 (docker image) predates labeled asserts.
+            assert($onehot0({cnt == 2'd0, cnt == 2'd1,
+                             cnt == 2'd2, cnt == 2'd3}));
+            assert(!ovf || (cnt == 2'd3));
         end
     end
 endmodule

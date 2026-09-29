@@ -40,6 +40,15 @@ class TestCompare(unittest.TestCase):
         row = compare(rec("a"), b)["rows"]["sby_demo"]
         self.assertEqual(row["variance"], "UNMEASURED")
 
+    def test_fixture_rows_compare_by_outcome(self):
+        a, b = rec("a"), rec("b")
+        a["checks"]["verilator_lint"] = {"pass": True, "rc": 1,
+                                         "fixture": False, "target": "wb_dma"}
+        b["checks"]["verilator_lint"] = {"pass": True, "rc": 0,
+                                         "fixture": True, "target": "cnt_formal"}
+        row = compare(a, b)["rows"]["verilator_lint"]
+        self.assertEqual(row["variance"], "none")
+
     def test_categories_cover_all_keys(self):
         d = rec("a")
         for k in list(d.keys()) + list(d["checks"].keys()):

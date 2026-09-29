@@ -102,7 +102,17 @@ def collect(env: str) -> dict:
     else:
         toolchain_here = shutil.which("verilator") is not None
     if os.path.isfile(rtl) and toolchain_here:
-        rtl_m = _mnt(rtl)
+        target, rtl_m, fixture = "wb_dma", _mnt(rtl), False
+    elif toolchain_here:
+        # Fixture mode: self-contained demo design already in the repo and
+        # the image. Rows are labeled fixture:true — toolchain parity, not
+        # DUT coverage.
+        target = "cnt_formal"
+        rtl_m = _mnt(os.path.join(HERE, "formal", "demo", "cnt_formal.sv"))
+        fixture = True
+    else:
+        target, rtl_m, fixture = "", "", False
+    if toolchain_here:
         rc, log = _run(_tool("verilator") + ["--lint-only", rtl_m])
         # Same rule as bakeoff.default_lint: the synthetic
         # "%Error: Exiting due to N warning(s)" exit line is noise;
@@ -110,13 +120,15 @@ def collect(env: str) -> dict:
         sys.path.insert(0, HERE)
         from bakeoff import EXIT_NOISE
         c["verilator_lint"] = {"pass": "%Error" not in EXIT_NOISE.sub(
-            "", log), "rc": rc}
-        rc, log = _run(_tool("yosys") + ["-p", f"read_verilog {rtl_m}; "
-                         "hierarchy -check -top wb_dma; synth -top wb_dma"])
-        c["yosys_synth"] = {"pass": rc == 0 and "ERROR" not in log, "rc": rc}
+            "", log), "rc": rc, "fixture": fixture, "target": target}
+        rc, log = _run(_tool("yosys") + ["-p", f"read_verilog -formal {rtl_m}; "
+                         f"hierarchy -check -top {target}; "
+                         f"synth -top {target}"])
+        c["yosys_synth"] = {"pass": rc == 0 and "ERROR" not in log, "rc": rc,
+                            "fixture": fixture, "target": target}
     else:
-        c["verilator_lint"] = {"pass": None, "reason": "no RTL/sibling tree"}
-        c["yosys_synth"] = {"pass": None, "reason": "no RTL/sibling tree"}
+        c["verilator_lint"] = {"pass": None, "reason": "no toolchain here"}
+        c["yosys_synth"] = {"pass": None, "reason": "no toolchain here"}
     demo = os.path.join(HERE, "formal", "demo", "cnt.sby")
     if os.name == "nt":
         sby_here = shutil.which("wsl") is not None

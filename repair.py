@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 import time
 
@@ -34,9 +35,13 @@ REPAIR_TASKS = (
                "assign y = a & b;\nendmodule"),
      "must_contain": ["[3:0] b"], "must_absent": []},
     {"id": "R2-width", "bug": "9-bit literal on 8-bit signal",
+     "verify_mode": "line",
+     "frame": ("module r2(input wire [7:0] a, output wire [7:0] q);\n"
+               "{line}\nendmodule"),
      "buggy": ("module r2(input wire [7:0] a, output wire [7:0] q);\n"
                "assign q = 9'b100000001;\nendmodule"),
-     "must_contain": ["8'b00000001"], "must_absent": ["9'b100000001"]},
+     "must_contain": [], "must_absent": [],
+     "bad": "9'b100000001", "expect_value": 1},
     {"id": "R3-semicolon", "bug": "missing semicolon",
      "buggy": ("module r3(input wire [3:0] a, output wire [3:0] y);\n"
                "assign y = a\nendmodule"),
@@ -45,10 +50,17 @@ REPAIR_TASKS = (
      "buggy": ("module r4(input wire clk, output reg [2:0] status);\n"
                "always @(posedge clk) status <= 4'b1000;\nendmodule"),
      "must_contain": ["3'b000"], "must_absent": ["4'b1000"]},
-    {"id": "R5-double", "bug": "undeclared signal AND width truncation",
+    {"id": "R5-double", "bug": "undeclared signal AND width truncation "
+     "(two faults — fix both, keep the module interface unchanged)",
+     "verify_mode": "declline",
+     "frame": ("module r5(input wire [3:0] a, output wire [3:0] y);\n"
+               "{decl}\n{line}\nendmodule"),
      "buggy": ("module r5(input wire [3:0] a, output wire [3:0] y);\n"
                "assign y = a + c + 4'b11111;\nendmodule"),
-     "must_contain": ["4'b1111"], "must_absent": ["4'b11111"]},
+     "must_contain": [], "must_absent": [],
+     "bad": "4'b11111", "expect_value": 15,
+     "decl_must": ["wire", "[3:0]", "c"],
+     "decl_must_absent": ["input", "output"]},
     {"id": "R6-golden", "bug": "none (already correct — do no harm)",
      "buggy": ("module r6(input wire [3:0] a, output wire [3:0] y);\n"
                "assign y = a;\nendmodule"),
@@ -57,29 +69,118 @@ REPAIR_TASKS = (
 
 PROMPT = ("This Verilog module has a bug ({bug}). Reply with the CORRECTED "
           "full module in a fenced verilog block:\n```verilog\n{buggy}\n```")
+PROMPT_LINE = ("This Verilog assign statement has a width bug ({bug}). "
+               "Reply with ONLY the corrected assign line and nothing else. "
+               "Keep the FULL original value: truncation keeps the LOW bits "
+               "(e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). "
+               "Do not restructure anything:\n{buggy}")
+PROMPT_DECLLINE = ("This Verilog module has two bugs ({bug}). Reply with "
+                   "EXACTLY two lines and nothing else:\n"
+                   "DECL: <declaration line for the missing signal — internal "
+                   "wire only with the SAME width as the other operands "
+                   "([3:0] here), never add ports>\n"
+                   "ASSIGN: <corrected assign line — keep the original "
+                   "expression shape, changing only the wrong literal>\n{buggy}")
+
+
+def task_prompt(task: dict) -> str:
+    mode = task.get("verify_mode", "free")
+    if mode == "line":
+        return PROMPT_LINE.format(bug=task["bug"], buggy=task["buggy"])
+    if mode == "declline":
+        return PROMPT_DECLLINE.format(bug=task["bug"], buggy=task["buggy"])
+    return PROMPT.format(bug=task["bug"], buggy=task["buggy"])
+
+
+DECL_RE = re.compile(r"^\s*(?:input\s+|output\s+)?wire\b[^;]*;\s*$")
+LIT_RE = re.compile(r"(\d+)'([bBdDhH])([0-9a-fA-F_xzZ?]+)|(?<![\w'])(\d+)(?![\w'])")
+
+
+def literal_values(line: str) -> list[tuple[int | None, int]]:
+    """Integer literals in a line -> [(bits or None, value)]. x/z/? digits
+    disqualify the literal (unknown value). Unsized decimals are 32-bit."""
+    out = []
+    for m in LIT_RE.finditer(line):
+        if m.group(1):
+            bits, base, digits = int(m.group(1)), m.group(2).lower(), m.group(3)
+            if re.search(r"[xz?]", digits, re.IGNORECASE):
+                continue
+            out.append((bits, int(digits, {"b": 2, "d": 10, "h": 16}[base])))
+        else:
+            out.append((None, int(m.group(4))))
+    return out
+
+
+def value_gate(line: str, expected: int, bad: str) -> bool:
+    """The line computes the required value with no oversized literal and
+    without the original bug literal. Value truth, not text identity."""
+    if bad in line:
+        return False
+    lits = literal_values(line)
+    if not lits:
+        return False
+    if not any(v == expected for _, v in lits):
+        return False
+    return all(bits is None or v < (1 << bits) for bits, v in lits)
+
+
+def extract_decl(text: str, signal: str = "c") -> str | None:
+    """First internal wire declaration mentioning `signal` (interface adds
+    — lines starting with input/output — are rejected by the caller gate).
+    Leading `LABEL:` prefixes (DECL:) are stripped before matching."""
+    for raw in text.splitlines():
+        core = re.sub(r"^[A-Za-z_]+:\s*", "", raw)
+        line = core.strip().strip("`'\"~").strip()
+        if DECL_RE.match(line) and signal in line:
+            return line[:line.index(";") + 1]
+    return None
 
 
 def verify(task: dict, text: str, lint_fn=None) -> tuple[dict, str]:
-    """Full-module candidate -> (verdicts, lint log). Module extraction is
-    fence-first, whole-text fallback (same rule as the bake-off)."""
+    """Candidate -> (verdicts, lint log), by the task's verify_mode:
+    free      — full module, lint + substring gates (R1/R3/R4/R6).
+    line      — extract ONE assign line, splice into the task frame, lint
+                the spliced module + literal gates (R2).
+    declline  — extract DECL + ASSIGN lines, splice both, lint + gates;
+                interface preservation enforced (no input/output adds) (R5).
+    """
     from bakeoff import extract_fence as _ef
+    from skeletons import extract_assign_line as _eal
     lint = lint_fn or default_lint
-    snippet = _ef(text)
-    if "module" not in snippet:
-        return {"syntax": False, "fix": False}, ""
-    ok, log = lint(snippet, wall=True)
-    gates = all(s in snippet for s in task["must_contain"]) \
-        and not any(s in snippet for s in task["must_absent"])
-    # Width bugs that are hard %Errors fail ok; warning-grade truncations
-    # fail on the explicit marker (same doctrine as the lint gate).
+    mode = task.get("verify_mode", "free")
+    if mode == "line":
+        line = _eal(text)
+        if line is None or not value_gate(line, task["expect_value"],
+                                          task["bad"]):
+            return {"syntax": False, "fix": False}, ""
+        code = task["frame"].format(line=line)
+    elif mode == "declline":
+        decl = extract_decl(text)
+        line = _eal(text)
+        if decl is None or line is None:
+            return {"syntax": False, "fix": False}, ""
+        if any(s in decl for s in task["decl_must_absent"]):
+            return {"syntax": False, "fix": False}, ""
+        if not all(s in decl for s in task["decl_must"]):
+            return {"syntax": False, "fix": False}, ""
+        if not value_gate(line, task["expect_value"], task["bad"]):
+            return {"syntax": False, "fix": False}, ""
+        code = task["frame"].format(decl=decl, line=line)
+    else:
+        code = _ef(text)
+        if "module" not in code:
+            return {"syntax": False, "fix": False}, ""
+    ok, log = lint(code, wall=True)
+    gates = all(s in code for s in task["must_contain"]) \
+        and not any(s in code for s in task["must_absent"])
     clean = ok and "%Warning-WIDTH" not in log
     return {"syntax": clean, "fix": clean and gates}, log
 
 
 def closure_prompt(task: dict, failed: str, arm: str, log: str = "") -> str:
-    base = (PROMPT.format(bug=task["bug"], buggy=task["buggy"]) +
+    base = (task_prompt(task) +
             f"\n\nYour previous answer FAILED ({failed}). "
-            "Fix exactly that failure; reply with the full module again.")
+            "Fix exactly that failure; reply in the same format.")
     if arm == "B" and log.strip():
         sus = format_suspects(localize("", log))
         base += "\nTool output for your previous attempt:\n" + \
@@ -99,7 +200,7 @@ def run_task(task: dict, arm: str, query_fn=query,
     while rounds < MAX_ROUNDS:
         rounds += 1
         if rounds == 1:
-            prompt = PROMPT.format(bug=task["bug"], buggy=task["buggy"])
+            prompt = task_prompt(task)
         else:
             iv = incumbent.verdicts if incumbent is not None else {}
             bad = sorted(k for k, v in iv.items() if not v)
