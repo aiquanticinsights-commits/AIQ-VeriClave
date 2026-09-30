@@ -47,6 +47,11 @@ MIN_ROUNDS, MAX_ROUNDS = 2, 3
 # carry, which rules CDC out — scenario clarification, not answer leaking.
 TASK_OVERLAYS = {
     "T1-sva-ack": {"formal": True, "judge_on": ("formal",)},
+    # Vacuity-checked judging (reviewer SSB's T2 catch, generalized): the
+    # Judge requires the vacuity verdict alongside syntax/proof-shape, so a
+    # lint-clean but vacuous property escalates instead of closing.
+    "T2-sva-irq": {"judge_on": ("syntax", "proof_shape", "vacuity")},
+    "T7-sva-cyc": {"judge_on": ("syntax", "proof_shape", "vacuity")},
     "T4-classify-reset": {
         "prompt": ("Failure: after reset deasserts, dma_state stays S_READ "
                    "forever although m_wb_ack pulses. Waveforms at the slave "
@@ -117,8 +122,11 @@ def verify_output(task: dict, text: str, lint_fn=None,
         res = formal_fn(text) if formal_fn is not None else None
         return {"formal": res is True}
     if preassembled and tid in SKELETONS:
+        from skeletons import find_vacuity as _fv
         ok, _ = lint(text)
-        return {"syntax": ok, "proof_shape": ok}
+        vac = _fv(text)
+        return {"syntax": ok, "proof_shape": ok and not vac,
+                "vacuity": not vac}
     if preassembled and tid in WIDTH_FRAMES:
         spec = WIDTH_FRAMES[tid]
         ok, log = lint(text, wall=True)
@@ -127,12 +135,18 @@ def verify_output(task: dict, text: str, lint_fn=None,
         return {"syntax": ok, "kill": kill}
     if tid in ("T1-sva-ack", "T2-sva-irq"):
         from bakeoff import SVA_PORTS_ACK, SVA_PORTS_IRQ
+        from skeletons import find_vacuity as _fv
         ports = SVA_PORTS_ACK if tid == "T1-sva-ack" else SVA_PORTS_IRQ
         ok = grade_sva(text, ports, lint=lint)
-        return {"syntax": ok, "proof_shape": ok}
+        vac = _fv(text)
+        return {"syntax": ok, "proof_shape": ok and not vac,
+                "vacuity": not vac}
     if tid == "T7-sva-cyc":
+        from skeletons import find_vacuity as _fv
         ok = grade_sva(text, task["ports"], lint=lint)
-        return {"syntax": ok, "proof_shape": ok}
+        vac = _fv(text)
+        return {"syntax": ok, "proof_shape": ok and not vac,
+                "vacuity": not vac}
     if tid in ("T3-localize-bus", "T4-classify-reset"):
         exp = "B" if tid == "T3-localize-bus" else "C"
         ok = grade_mc(text, exp)

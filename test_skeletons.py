@@ -2,8 +2,8 @@
 import unittest
 
 from skeletons import (SKELETONS, WIDTH_FRAMES, assemble, clean_slot,
-                       constrained_prompt, extract_assign_line, parse_int_slot,
-                       parse_slots)
+                       constrained_prompt, extract_assign_line, find_vacuity,
+                       parse_int_slot, parse_slots)
 
 
 class TestSlots(unittest.TestCase):
@@ -42,6 +42,32 @@ class TestSlots(unittest.TestCase):
         self.assertEqual(parse_int_slot("2"), "2")
         self.assertIsNone(parse_int_slot("-1"))
         self.assertIsNone(parse_int_slot("abc"))
+
+
+class TestVacuity(unittest.TestCase):
+    def test_t2_catch(self):
+        # Reviewer SSB's verbatim catch, generalized.
+        t = ("property p; @(posedge clk) $rose(irq) && !irq |-> "
+             "$past(irq_en) == 1'b1; endproperty")
+        found = find_vacuity(t)
+        self.assertEqual(len(found), 1)
+        self.assertIn("vacuous", found[0])
+
+    def test_clean_forms(self):
+        for good in ("property p; @(posedge clk) irq |-> irq_en; endproperty",
+                     "property p; @(posedge clk) $rose(a) |-> b; endproperty",
+                     "property p; @(posedge clk) $fell(a) |-> $past(a); endproperty",
+                     "assert(x == $past(y));"):
+            self.assertEqual(find_vacuity(good), [], good)
+
+    def test_fell_with_bare(self):
+        t = "property p; @(posedge clk) $fell(a) && a |-> b; endproperty"
+        self.assertEqual(len(find_vacuity(t)), 1)
+
+    def test_consequent_not_flagged(self):
+        # $rose in antecedent with !x only in consequent: out of scope.
+        t = "property p; @(posedge clk) $rose(a) |-> !a; endproperty"
+        self.assertEqual(find_vacuity(t), [])
 
 
 class TestAssembleSVA(unittest.TestCase):

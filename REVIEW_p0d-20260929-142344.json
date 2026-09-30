@@ -12,7 +12,7 @@
       "task": "T1-sva-ack",
       "machine": "closed",
       "disposition": "reject",
-      "reason": "test_reject",
+      "reason": "Rejected because the assertion equates s_wb_ack to the previous-cycle request without establishing that this is the required Wishbone ACK timing/behavior, so the machine PASS does not prove the intended protocol requirement.",
       "seconds": 37.6,
       "artifact_shown": true
     },
@@ -20,7 +20,7 @@
       "task": "T2-sva-irq",
       "machine": "closed",
       "disposition": "override",
-      "reason": "test_override",
+      "reason": "Overrode because the antecedent $rose(irq) && !irq is self-contradictory: $rose(irq) denotes a 0-to-1 transition, while !irq requires irq to be 0 in the same sampled cycle, making the property effectively vacuous.",
       "seconds": 32.7,
       "artifact_shown": true
     },

@@ -260,3 +260,28 @@ def constrained_prompt(task_id: str, fallback: str) -> str:
     if task_id in WIDTH_FRAMES:
         return WIDTH_FRAMES[task_id]["prompt"]
     return fallback
+
+
+SAMPLED_RE = re.compile(r"\$(rose|fell)\(\s*([A-Za-z_][\w$]*)\s*\)")
+
+
+def find_vacuity(text: str) -> list[str]:
+    """Self-contradictory sampled-value usage (reviewer SSB's T2 catch,
+    generalized deterministically): $rose(X) asserts X==1 this cycle, so a
+    same-antecedent !X makes the antecedent unsatisfiable (vacuous PASS);
+    symmetrically $fell(X) with bare X. Only the antecedent (left of |->)
+    is examined, and identifiers inside other $functions ($past/$stable)
+    are excluded — those refer to other cycles and are legitimate."""
+    scope = text.split("|->")[0] if "|->" in text else text
+    findings = []
+    for func, sig in SAMPLED_RE.findall(scope):
+        if func == "rose":
+            if re.search(r"(?<![\w$])!\s*%s(?![\w$])" % re.escape(sig), scope):
+                findings.append(f"$rose({sig}) with !{sig} in antecedent: "
+                                "unsatisfiable antecedent (vacuous PASS)")
+        else:
+            bare = re.sub(r"\$[A-Za-z_]+\([^()]*\)", " ", scope)
+            if re.search(r"(?<![\w$!])%s(?![\w$])" % re.escape(sig), bare):
+                findings.append(f"$fell({sig}) with {sig} in antecedent: "
+                                "unsatisfiable antecedent (vacuous PASS)")
+    return findings

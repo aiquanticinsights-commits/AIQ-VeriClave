@@ -281,6 +281,45 @@ class TestSkeletonPath(unittest.TestCase):
         self.assertFalse(v2["kill"])
         self.assertFalse(all(v2.values()))
 
+    def test_vacuous_sva_escalates(self):
+        # Reviewer SSB's T2 catch as a regression test: the exact vacuous
+        # artifact must fail judging (3-key bar) and escalate, never close.
+        t = next(x for x in SUITE if x["id"] == "T2-sva-irq")
+        self.assertEqual(t.get("judge_on"),
+                         ("syntax", "proof_shape", "vacuity"))
+        vacuous = ("module tb_sva(input wire clk, input wire irq, "
+                   "input wire irq_en);\nproperty p_sva_irq;\n"
+                   "  @(posedge clk) $rose(irq) && !irq |-> $past(irq_en)"
+                   " == 1'b1;\nendproperty\n"
+                   "assert property (p_sva_irq);\nendmodule\n")
+
+        def q(model, prompt, max_tokens):
+            return ("ANTECEDENT: $rose(irq) && !irq\nCONSEQUENT: irq_en",
+                    {}, 0.1)
+
+        v = verify_output(t, vacuous, lint_fn=fake_clean, preassembled=True)
+        self.assertTrue(v["syntax"])
+        self.assertFalse(v["proof_shape"])
+        self.assertFalse(v["vacuity"])
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        self.assertFalse(r["closed"])
+        self.assertTrue(r["escalated_to_human"])
+
+    def test_clean_sva_still_closes(self):
+        t = next(x for x in SUITE if x["id"] == "T2-sva-irq")
+        clean = ("module tb_sva(input wire clk, input wire irq, "
+                 "input wire irq_en);\nproperty p_sva_irq;\n"
+                 "  @(posedge clk) irq |-> irq_en;\nendproperty\n"
+                 "assert property (p_sva_irq);\nendmodule\n")
+
+        def q(model, prompt, max_tokens):
+            return "ANTECEDENT: irq\nCONSEQUENT: irq_en", {}, 0.1
+
+        v = verify_output(t, clean, lint_fn=fake_clean, preassembled=True)
+        self.assertTrue(all(v.values()))
+        r = run_one(t, 1, query_fn=q, lint_fn=fake_clean, constrained=True)
+        self.assertTrue(r["closed"])
+
     def test_ledger_records_both_outcomes(self):
         ok = run_one(SUITE[2], 1, query_fn=self._query("B"))
         bad = run_one(SUITE[0], 1, query_fn=self._query("garbage"))
