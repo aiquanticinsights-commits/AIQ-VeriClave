@@ -1,0 +1,18 @@
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 15
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -formal gate_b_wdog.sv
+read_verilog -formal gate_b_top.sv
+prep -top gate_b_top
+
+[files]
+gate_b_wdog.sv
+gate_b_top.sv

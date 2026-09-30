@@ -1,0 +1,100 @@
+{
+  "date": "2026-09-30",
+  "run_id": "gates-20260930-110229",
+  "design": "gates_demo (synthetic reference, NOT RideProtect IP)",
+  "gates": {
+    "A": {
+      "ok": {
+        "expected": "PASS",
+        "got": "PASS",
+        "asserts": {
+          "A_STOP_EXACT": "PASS"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_a]: PASS (1 asserts, 1s)"
+      },
+      "buggy": {
+        "expected": "FAIL",
+        "got": "FAIL",
+        "asserts": {
+          "A_STOP_EXACT": "FAIL"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_a]: FAIL (1 asserts, 1s)"
+      }
+    },
+    "B": {
+      "ok": {
+        "expected": "PASS",
+        "got": "PASS",
+        "asserts": {
+          "B_SYNC0": "PASS",
+          "B_SYNC1": "PASS",
+          "B_RST": "PASS"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_b]: PASS (3 asserts, 1s)"
+      },
+      "buggy": {
+        "expected": "FAIL",
+        "got": "FAIL",
+        "asserts": {
+          "B_SYNC1": "FAIL",
+          "B_SYNC0": "UNKNOWN",
+          "B_RST": "UNKNOWN"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_b]: FAIL (3 asserts, 1s)"
+      }
+    },
+    "D": {
+      "ok": {
+        "expected": "PASS",
+        "got": "PASS",
+        "asserts": {
+          "D_SYNC1": "PASS",
+          "D_LOCK": "PASS"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_d]: PASS (2 asserts, 1s)"
+      },
+      "buggy": {
+        "expected": "FAIL",
+        "got": "FAIL",
+        "asserts": {
+          "D_SYNC1": "FAIL",
+          "D_LOCK": "UNKNOWN"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_d]: FAIL (2 asserts, 1s)"
+      }
+    },
+    "E": {
+      "ok": {
+        "expected": "PASS",
+        "got": "PASS",
+        "asserts": {
+          "E_LIMIT": "PASS"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_e]: PASS (1 asserts, 1s)"
+      },
+      "buggy": {
+        "expected": "FAIL",
+        "got": "FAIL",
+        "asserts": {
+          "E_LIMIT": "FAIL"
+        },
+        "gate_works": true,
+        "report": "symbiyosys v0.68 [gate_e]: FAIL (1 asserts, 1s)"
+      }
+    }
+  },
+  "checklist": {
+    "Gate A stop timing": "PASS",
+    "Gate B watchdog reset": "PASS",
+    "Gate D brake interlock": "PASS",
+    "Gate E speed comparator": "PASS"
+  },
+  "signoff": "PENDING"
+}

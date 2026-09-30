@@ -1,0 +1,119 @@
+{
+  "date": "2026-09-30",
+  "run_id": "realblk-20260930-110514",
+  "blocks": {
+    "wb_watchdog": {
+      "report": "symbiyosys v0.68 [wb_watchdog]: PASS (2 asserts, 1s)",
+      "evidence": {
+        "tool": "SymbiYosys",
+        "tool_version": "v0.68",
+        "target_device": "wb_watchdog",
+        "rtl_commit": "",
+        "run_id": "realblk-20260930-110514",
+        "requirement_ids": [
+          "REQ-WDT-ACK",
+          "REQ-WDT-PULSE"
+        ],
+        "formal": {
+          "status": "PASS",
+          "asserts": {
+            "W_ACK": "PASS",
+            "W_PULSE": "PASS"
+          },
+          "duration_s": 1.1,
+          "reason": ""
+        },
+        "artifacts": [
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\config.sby",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\logfile.txt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\PASS",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\status",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\status.sqlite",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\wb_watchdog_prove.xml",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\engine_0\\logfile.txt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design.il",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design.json",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design.log",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design.ys",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_prep.il",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_prep.log",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_prep.ys",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_smt2.log",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_smt2.smt2",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_smt2.ys",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\src\\wb_watchdog.v",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\src\\wb_watchdog_formal.sv"
+        ],
+        "artifact_hashes": {
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\config.sby": "fe8fd4556553706f",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\wb_watchdog_prove.xml": "e4da51e2788f0d1f",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design.log": "8aa7ade32541add1",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_prep.log": "e73320f18571dfca",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_watchdog_proof\\model\\design_smt2.log": "57d78f9097199ad5"
+        },
+        "evidence_hash": "0298edb1bdfb7f95"
+      }
+    },
+    "wb_safety": {
+      "report": "symbiyosys v0.68 [wb_safety]: PASS (4 asserts, 1s)",
+      "evidence": {
+        "tool": "SymbiYosys",
+        "tool_version": "v0.68",
+        "target_device": "wb_safety",
+        "rtl_commit": "",
+        "run_id": "realblk-20260930-110514",
+        "requirement_ids": [
+          "REQ-SAFE-RST"
+        ],
+        "formal": {
+          "status": "PASS",
+          "asserts": {
+            "S_SAFE_RST": "PASS",
+            "S_FATAL_RST": "PASS",
+            "S_FAULT_RST": "PASS",
+            "S_ACK_IDLE": "PASS"
+          },
+          "duration_s": 0.8,
+          "reason": ""
+        },
+        "artifacts": [
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\config.sby",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\logfile.txt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\PASS",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\status",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\status.sqlite",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\wb_safety_prove.xml",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\engine_0\\logfile.txt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design.il",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design.json",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design.log",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design.ys",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_prep.il",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_prep.log",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_prep.ys",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_smt2.log",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_smt2.smt2",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_smt2.ys",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\src\\wb_safety.v",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\src\\wb_safety_formal.sv"
+        ],
+        "artifact_hashes": {
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\config.sby": "aa438218fb7da56e",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\wb_safety_prove.xml": "49ce77c18c0ccb6b",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design.log": "34769080354091c9",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_prep.log": "3ec2601f70f4a2b6",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave\\formal\\wb_safety_proof\\model\\design_smt2.log": "77164cf90e0ae371"
+        },
+        "evidence_hash": "7dd6b1e2fb9b9eba"
+      }
+    }
+  },
+  "wb_safety_timeout_entry": {
+    "policy_verdict": "ABSTRACT",
+    "engine": "sby-abc",
+    "depth_k": 16,
+    "abstraction": "blackbox-dp",
+    "rationale": "~2^200 states: blackbox datapaths, prove control"
+  },
+  "signoff": "PENDING"
+}

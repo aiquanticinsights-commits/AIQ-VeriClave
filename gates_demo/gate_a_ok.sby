@@ -1,0 +1,18 @@
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 15
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -formal gate_a_stop.sv
+read_verilog -formal gate_a_top.sv
+prep -top gate_a_top
+
+[files]
+gate_a_stop.sv
+gate_a_top.sv

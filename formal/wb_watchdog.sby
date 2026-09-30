@@ -1,0 +1,19 @@
+# REAL wb_watchdog programmed proof (dev-machine: sibling RTL tree).
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 30
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -formal /mnt/c/Projects/ChipDesign/rideprotect-rv/rtl/wb_watchdog.v
+read_verilog -formal wb_watchdog_formal.sv
+prep -top wb_watchdog_formal
+
+[files]
+/mnt/c/Projects/ChipDesign/rideprotect-rv/rtl/wb_watchdog.v
+wb_watchdog_formal.sv

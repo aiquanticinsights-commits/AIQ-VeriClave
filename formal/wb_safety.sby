@@ -1,0 +1,20 @@
+# REAL wb_safety reset-value proof (dev-machine: sibling RTL tree).
+# Timeout-entry path intentionally NOT here (UNPROVABLE-AT-BUDGET, 50M depth).
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 8
+
+[engines]
+smtbmc z3
+
+[script]
+read_verilog -formal /mnt/c/Projects/ChipDesign/rideprotect-rv/rtl/wb_safety.v
+read_verilog -formal wb_safety_formal.sv
+prep -top wb_safety_formal
+
+[files]
+/mnt/c/Projects/ChipDesign/rideprotect-rv/rtl/wb_safety.v
+wb_safety_formal.sv
