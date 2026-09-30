@@ -44,7 +44,7 @@ def _literal_spans(line: str):
         yield m.group(0), k
 
 def _nth_number(line: str, digits: str, index: int, new: str) -> str | None:
-    """Replace the index-th `\d+` match with `new` iff that match's digits
+    r"""Replace the index-th `\d+` match with `new` iff that match's digits
     equal `digits`. Returns None on any mismatch (fail-closed seeding)."""
     seen = -1
 

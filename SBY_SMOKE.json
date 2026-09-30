@@ -1,0 +1,25 @@
+{
+  "environment": "docker-sby-smoke",
+  "status": "PASS",
+  "os": "ubuntu:24.04",
+  "python": "Python 3.12.3",
+  "yosys": "Yosys 0.69+156 (git sha1 9d0c91b23-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+  "sby": "SBY v0.69",
+  "solver": "boolector 3.2.4",
+  "git_commit": "6285169",
+  "image_digest": "sha256:c5bd3f0f9970",
+  "test": "counter_sby_smoke",
+  "formal_result": "PASS",
+  "artifacts": [
+    "counter.sv",
+    "counter.sby",
+    "out/logfile.txt"
+  ],
+  "rtl_sha16": "9f93df1b1c029fce",
+  "excluded_with_reasons": {
+    "full-oss-cad-suite": "745MB; rejected (size + version-mismatch risk)",
+    "bundled-python": "sby imports stdlib only; system python3 used",
+    "z3/yices/cvc5": "boolector suffices for the smoke proof",
+    "ghdl/nextpnr/gui-libs": "out of scope for a formal smoke proof"
+  }
+}

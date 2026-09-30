@@ -1,0 +1,86 @@
+{
+  "benchmark": "E2-BENCH-001",
+  "date": "2026-09-30",
+  "git_commit": "6285169",
+  "wsl": {
+    "unittest": {
+      "pass": true,
+      "tests": [
+        "320"
+      ]
+    },
+    "frm_sha": "22b84d4eb8e9dc32",
+    "sby_demo": {
+      "pass": true,
+      "status": "PASS"
+    },
+    "mut_spot": {
+      "M001": "KILLED",
+      "M002": "KILLED",
+      "M003": "KILLED",
+      "M004": "SURVIVED",
+      "M005": "KILLED"
+    }
+  },
+  "docker": {
+    "unittest": {
+      "pass": true,
+      "tests": [
+        "320"
+      ]
+    },
+    "frm_sha": "22b84d4eb8e9dc32",
+    "mut_spot": {
+      "M001": "KILLED",
+      "M002": "KILLED",
+      "M003": "KILLED",
+      "M004": "SURVIVED",
+      "M005": "KILLED"
+    },
+    "smoke": {
+      "formal_result": "PASS",
+      "yosys": "Yosys 0.69+156 (git sha1 9d0c91b23-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
+      "sby": "SBY v0.69",
+      "solver": "boolector 3.2.4"
+    }
+  },
+  "comparison": {
+    "functional/lint": {
+      "category": "functional",
+      "variance": "none",
+      "detail": "both=True"
+    },
+    "functional/frm-traces": {
+      "category": "functional",
+      "variance": "none",
+      "detail": "both='22b84d4eb8e9dc32'"
+    },
+    "functional/unittest": {
+      "category": "functional",
+      "variance": "none",
+      "detail": "both=True"
+    },
+    "formal/sby-demo": {
+      "category": "formal",
+      "variance": "none",
+      "detail": "both=True"
+    },
+    "traceability/frm-sha": {
+      "category": "traceability",
+      "variance": "none",
+      "detail": "both='22b84d4eb8e9dc32'"
+    },
+    "evidence/audit-present": {
+      "category": "evidence",
+      "variance": "none",
+      "detail": "both=True"
+    },
+    "mutation/spot": {
+      "category": "mutation",
+      "variance": "none",
+      "detail": "5 mutants agree"
+    }
+  },
+  "overall": "PASS",
+  "signoff": "PENDING"
+}

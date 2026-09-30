@@ -10,6 +10,7 @@ P0D_PARTIAL.json
 BAKEOFF_PARTIAL_*.json
 REPAIR_PARTIAL.json
 MUTATION_PARTIAL.json
+PORTABILITY_e2*.json
 mutants/
 formal/*_proof/
 formal/*_work/

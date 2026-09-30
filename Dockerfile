@@ -11,16 +11,17 @@ ENV DEBIAN_FRONTEND=noninteractive \
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 python3-venv python3-pip \
-    verilator yosys sby \
+    verilator yosys sby g++ \
     git make curl ca-certificates \
  && rm -rf /var/lib/apt/lists/* \
- || (apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-venv python3-pip \
-    verilator yosys \
-    git make curl ca-certificates \
- && rm -rf /var/lib/apt/lists/*)
+  || (apt-get update && apt-get install -y --no-install-recommends \
+     python3 python3-venv python3-pip \
+     verilator yosys g++ \
+     git make curl ca-certificates \
+  && rm -rf /var/lib/apt/lists/*)
 # (sby is absent from some Ubuntu apt pools — CI treats it as non-blocking P0;
-# WSL host carries SBY 0.68 as the reference formal runner.)
+# WSL host carries SBY 0.68 as the reference formal runner. g++ enables
+# --cc simulation builds inside the image for the E2 benchmark.)
 WORKDIR /work
 COPY requirements.txt /work/requirements.txt
 RUN python3 -m venv /opt/vericlave-venv \

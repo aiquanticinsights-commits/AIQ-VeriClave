@@ -1,0 +1,19 @@
+# Smoke proof config: boolector engine (static, ships in the subset).
+[tasks]
+prove
+
+[options]
+mode bmc
+depth 10
+
+[engines]
+smtbmc boolector
+
+[script]
+read_verilog -formal counter.sv
+read_verilog -formal counter_top.sv
+prep -top counter_top
+
+[files]
+counter.sv
+counter_top.sv
