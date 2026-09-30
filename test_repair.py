@@ -144,6 +144,24 @@ class TestLoop(unittest.TestCase):
         # round-1 output has no module -> no lint detail; check names only
         self.assertTrue(any("failed checks" in p for p in self.calls[1:]))
 
+    def test_no_fourth_round_ever(self):
+        # Hard closure-controller invariant (frozen §11, our 3-round form):
+        # all-FAIL forever -> exactly MAX_ROUNDS generations, escalation,
+        # and NO fourth round under any circumstance.
+        from repair import MAX_ROUNDS
+        calls = []
+
+        def q(model, prompt, max_tokens):
+            calls.append(prompt)
+            return "garbage", {}, 0.1
+
+        r = run_task(REPAIR_TASKS[0], "B", query_fn=q,
+                     lint_fn=lambda v, wall=False: (False, "e"))
+        self.assertEqual(r["rounds"], MAX_ROUNDS)
+        self.assertEqual(len(calls), MAX_ROUNDS)  # width=1: 1 call/round
+        self.assertTrue(r["escalated_to_human"])
+        self.assertFalse(r["closed"])
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

@@ -387,6 +387,31 @@ def lms_unload(model_id: str) -> None:
                    text=True, timeout=120)
 
 
+def server_ready(timeout_s: int = 30) -> bool:
+    """Is the LMStudio OpenAI-compatible endpoint actually serving?
+    lms_load succeeding does NOT imply servability (measured: a full 0/12
+    repair run burned on a down server). Call after every load; FATAL out
+    instead of recording garbage verdicts."""
+    try:
+        with urllib.request.urlopen(
+                ENDPOINT.replace("/chat/completions", "/models"),
+                timeout=timeout_s) as r:
+            return r.status == 200
+    except Exception:
+        return False
+
+
+def require_server() -> bool:
+    """Print the actionable FATAL when the server is down. Returns True if
+    serving."""
+    if server_ready():
+        return True
+    print("FATAL: LMStudio server not serving at " + ENDPOINT +
+          " (run `lms server start` first; `lms load` alone is not enough).",
+          flush=True)
+    return False
+
+
 def partial_path(suite: str) -> str:
     here = os.path.dirname(os.path.abspath(__file__))
     return os.path.join(here, f"BAKEOFF_PARTIAL_{suite}.json")
@@ -409,10 +434,18 @@ def run_candidate(api_id: str, tasks: tuple = TASKS,
                   done: dict | None = None, suite: str = "") -> dict:
     """Load one model, run all tasks, unload. Never raises: failures recorded.
     `done` maps task id -> recorded row (resume support); with `suite` set,
-    every row is checkpointed to BAKEOFF_PARTIAL_<suite>.json immediately."""
+    every row is checkpointed to BAKEOFF_PARTIAL_<suite>.json immediately.
+    Callers MUST check require_server() first (a loaded-but-not-serving
+    model records garbage, never signal)."""
     loaded, note = lms_load(api_id)
     if not loaded:
         return {"loaded": False, "skip_reason": note, "tasks": []}
+    if not require_server():
+        lms_unload(api_id)
+        return {"loaded": False,
+                "skip_reason": "loaded but not serving; recorded as skip, "
+                               "never as failure",
+                "tasks": []}
     done = done or {}
     rows = []
     try:

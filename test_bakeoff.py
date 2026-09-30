@@ -6,6 +6,7 @@ no Verilator is reachable.
 """
 import shutil
 import unittest
+import unittest.mock
 
 from bakeoff import (SLATE, TASKS, TASKS_V2, default_lint, extract_fence,
                      grade_mc, grade_req_ids, grade_sva, grade_width,
@@ -104,6 +105,34 @@ class TestSelection(unittest.TestCase):
         from router import BAKEOFF_CANDIDATES
         for _, name in SLATE:
             self.assertIn(name, BAKEOFF_CANDIDATES)
+
+
+class TestServerReady(unittest.TestCase):
+    def test_ready_true(self):
+        from bakeoff import server_ready
+        import urllib.request
+
+        class Resp:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *a):
+                return False
+
+        with unittest.mock.patch.object(urllib.request, "urlopen",
+                                        return_value=Resp()):
+            self.assertTrue(server_ready())
+
+    def test_ready_false(self):
+        from bakeoff import require_server, server_ready
+        import urllib.request
+        with unittest.mock.patch.object(
+                urllib.request, "urlopen",
+                side_effect=ConnectionError("down")):
+            self.assertFalse(server_ready())
+            self.assertFalse(require_server())
 
 
 class TestV2Bank(unittest.TestCase):

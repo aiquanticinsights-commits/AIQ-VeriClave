@@ -78,7 +78,8 @@ def run_review(tasks: list[dict], input_fn=input,
         items.append({"task": t.get("task"), "machine": "escalated"
                       if t.get("escalated_to_human") else "closed",
                       "disposition": NAMES[ans], "reason": reason,
-                      "seconds": round(dt, 1)})
+                      "seconds": round(dt, 1),
+                      "artifact_shown": bool((t.get("artifact") or "").strip())})
         print(f"  recorded {NAMES[ans]} in {dt:.1f}s", flush=True)
     return {"items": items}
 

@@ -25,7 +25,8 @@ import time
 from dataclasses import dataclass, field
 
 EDA_STATUS = ("EXECUTED", "NOT_EXECUTED", "PASS", "FAIL", "UNPROVEN",
-              "UNAVAILABLE", "SKIPPED_BY_POLICY")
+              "UNAVAILABLE", "SKIPPED_BY_POLICY", "SIM_COVERED",
+              "NOT_APPLICABLE", "PROVEN", "REFUTED")
 
 SBY_TIMEOUT_S = 900
 
@@ -154,14 +155,35 @@ def normalize_evidence(run: FormalRun) -> dict:
 def to_ledger(ledger, requirement_id: str, evidence: dict,
               artifact: str):
     """Evidence -> ledger record. UNPROVEN/PASS/FAIL carry the run as checks;
-    anything else becomes an explicit NOT_EXECUTED (never a silent PASS)."""
+    PROVEN/REFUTED normalize to PASS/FAIL (same truth, formal vocabulary).
+    SIM_COVERED ledgers with its simulation evidence attached. Anything else
+    becomes an explicit NOT_EXECUTED (never a silent PASS)."""
     from evidence import EvidenceRecord
     status = evidence["formal"]["status"]
     checks = {"formal_proof": evidence["formal"]["asserts"],
               "evidence_hash": evidence["evidence_hash"]}
-    if status in ("PASS", "FAIL", "UNPROVEN"):
+    if status in ("PASS", "PROVEN"):
         return ledger.append(EvidenceRecord(
-            requirement_id, artifact, checks, status,
+            requirement_id, artifact, checks, "PASS",
+            tool=evidence["tool"], tool_version=evidence["tool_version"],
+            rtl_commit=evidence["rtl_commit"], run_id=evidence["run_id"],
+            artifact_hashes=evidence["artifact_hashes"]))
+    if status in ("FAIL", "REFUTED"):
+        return ledger.append(EvidenceRecord(
+            requirement_id, artifact, checks, "FAIL",
+            tool=evidence["tool"], tool_version=evidence["tool_version"],
+            rtl_commit=evidence["rtl_commit"], run_id=evidence["run_id"],
+            artifact_hashes=evidence["artifact_hashes"]))
+    if status == "UNPROVEN":
+        return ledger.append(EvidenceRecord(
+            requirement_id, artifact, checks, "UNPROVEN",
+            tool=evidence["tool"], tool_version=evidence["tool_version"],
+            rtl_commit=evidence["rtl_commit"], run_id=evidence["run_id"],
+            artifact_hashes=evidence["artifact_hashes"]))
+    if status == "SIM_COVERED":
+        checks["sim_evidence"] = evidence["formal"].get("sim_ref", "")
+        return ledger.append(EvidenceRecord(
+            requirement_id, artifact, checks, "SIM_COVERED",
             tool=evidence["tool"], tool_version=evidence["tool_version"],
             rtl_commit=evidence["rtl_commit"], run_id=evidence["run_id"],
             artifact_hashes=evidence["artifact_hashes"]))

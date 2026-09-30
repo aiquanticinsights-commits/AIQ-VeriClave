@@ -264,6 +264,10 @@ def main() -> int:
     if not ok:
         print(f"FATAL: cannot load baseline: {note}")
         return 1
+    from bakeoff import require_server
+    if not require_server():
+        lms_unload(BASELINE_API_ID)
+        return 1
     live = lambda m, p, n: query(m, p, n, GEN_TEMPERATURE)
     try:
         for task in tasks:

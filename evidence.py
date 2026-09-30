@@ -15,16 +15,19 @@ import hashlib
 import json
 from dataclasses import dataclass, field
 
-# Frozen verdict set (architecture addendum: evidence-ledger states).
+# Frozen verdict set (architecture addendum: evidence-ledger states, plus
+# the V6 formal-disposition taxonomy: SIM_COVERED / NOT_APPLICABLE).
 KNOWN_VERDICTS = frozenset({
     "PASS", "FAIL", "DISPOSITIONED", "EXECUTED",
     "NOT_EXECUTED", "UNPROVEN", "UNAVAILABLE", "SKIPPED_BY_POLICY",
+    "SIM_COVERED", "NOT_APPLICABLE",
 })
 
 # Verdicts that are complete without per-check evidence because the record
 # itself IS the disposition (explicitly recorded, never silent).
 EVIDENCE_OPTIONAL = frozenset({
     "DISPOSITIONED", "NOT_EXECUTED", "SKIPPED_BY_POLICY", "UNAVAILABLE",
+    "NOT_APPLICABLE",
 })
 
 

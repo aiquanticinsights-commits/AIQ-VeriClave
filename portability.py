@@ -55,6 +55,22 @@ def _tool(name: str) -> list[str]:
     return [found] if found else [name]
 
 
+def _git_commit() -> str:
+    """Repo commit under test (empty outside a worktree — recorded)."""
+    rc, log = _run(["git", "rev-parse", "--short", "HEAD"], timeout_s=30)
+    return log.strip()[:12] if rc == 0 and log.strip() else ""
+
+
+def _image_tag() -> str:
+    """Container identity when inside Docker (hostname ~= container id)."""
+    if not os.path.isfile("/.dockerenv"):
+        return ""
+    try:
+        return os.uname().nodename[:12]
+    except OSError:
+        return "docker-unknown"
+
+
 def ver(cmd: list[str]) -> str:
     rc, log = _run(cmd, timeout_s=60)
     if rc == 127:
@@ -70,7 +86,8 @@ def collect(env: str) -> dict:
     import time as _time
     out: dict = {"env": env, "date": _time.strftime("%Y-%m-%d"),
                  "os": f"{platform.system()} {platform.release()}",
-                 "python": platform.python_version(), "checks": {}}
+                 "python": platform.python_version(), "checks": {},
+                 "git_commit": _git_commit(), "image": _image_tag()}
     c = out["checks"]
     out["tools"] = {
         "verilator": ver(_tool("verilator") + ["--version"]),

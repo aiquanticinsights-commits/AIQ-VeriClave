@@ -1,13 +1,13 @@
 {
   "env": "docker",
-  "date": "2026-09-29",
+  "date": "2026-09-30",
   "os": "Linux 6.18.33.1-microsoft-standard-WSL2",
   "python": "3.12.3",
   "checks": {
     "unittest": {
       "pass": true,
       "tests": [
-        "243"
+        "301"
       ]
     },
     "frm_traces": {
@@ -32,6 +32,8 @@
       "reason": "UNAVAILABLE here"
     }
   },
+  "git_commit": "",
+  "image": "63b26e5e0447",
   "tools": {
     "verilator": "Verilator 5.020 2024-01-01 rev (Debian 5.020-1)",
     "yosys": "Yosys 0.33 (git sha1 2584903a060)",

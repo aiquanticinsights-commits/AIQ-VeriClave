@@ -37,7 +37,6 @@ jobs:
           /tmp/vv/bin/pip install --no-cache-dir -r requirements.txt
           /tmp/vv/bin/cocotb-config --version
           /tmp/vv/bin/pytest --version
-          /tmp/vv/bin/sby --version || echo "sby from pip ok-or-missing (non-blocking P0)"
 
       - name: Build (import check)
         run: |
@@ -46,6 +45,18 @@ jobs:
       - name: Verilator / Yosys / FRM / cocotb / SVA gates (P0 contract)
         run: |
           /tmp/vv/bin/python -m unittest discover -s . -p "test_*.py" -v
+
+      - name: Formal smoke (sby demo iff present, else recorded UNAVAILABLE)
+        run: |
+          if command -v sby >/dev/null 2>&1; then cd formal/demo && sby -f cnt.sby || exit 1; else echo "sby absent -> UNAVAILABLE (non-blocking, dev-machine gate)"; fi
+
+      - name: Mutation smoke (seeder selftest, no RTL needed)
+        run: |
+          /tmp/vv/bin/python run_mutants.py --selftest
+
+      - name: Evidence schema check
+        run: |
+          /tmp/vv/bin/python check_evidence.py
 
       - name: Evidence ledger placeholder
         run: |

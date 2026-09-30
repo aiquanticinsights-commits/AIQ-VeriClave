@@ -9,6 +9,8 @@ runs/
 P0D_PARTIAL.json
 BAKEOFF_PARTIAL_*.json
 REPAIR_PARTIAL.json
+MUTATION_PARTIAL.json
+mutants/
 formal/*_proof/
 formal/*_work/
 formal/demo/*_work/

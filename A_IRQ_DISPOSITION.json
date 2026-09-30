@@ -1,0 +1,6 @@
+{"alternative": "SIM_COVERED via irq-lifecycle vector (SIM_FRM_WB_DMA.json): enable, transfer, IRQ asserted, flag cleared, IRQ deasserted, status read — FRM identical to RTL on every event",
+ "disposition": "POLICY_PROPOSED (accept sim coverage in place of formal proof for this requirement)",
+ "formal": "UNPROVEN",
+ "human_signoff": "PENDING (named human required)",
+ "reason": "irq_en is DUT-internal and this toolchain resolves no hierarchical references (proven by formal/demo/hier.sby); bind is ignored; no observable reformulation exists without changing the requirement",
+ "requirement_id": "REQ-DMA-IRQ"}

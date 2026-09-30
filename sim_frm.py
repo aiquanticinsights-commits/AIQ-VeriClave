@@ -19,6 +19,10 @@ either the RTL or the FRM (diagnose, never average away).
 Stimulus DSL (constrained, LLM-fillable; validated by STIM_RE before use):
   RST                  reset pulse (2 cycles high, then low)
   W <adr> <dat>        wishbone write transaction (byte hex, sel=0xF)
+  WS <adr> <dat> <sel> write with explicit byte-select nibble (coverage)
+  H                    half-cycle: cyc=1, stb=0 (must NOT ack)
+  HW <adr> <dat>       cyc=1, stb=0, we=1 write attempt (must be ignored)
+  Q                    query: one idle cycle sampling ack/dat/irq
   R <adr>              wishbone read transaction (captures dat_r)
   TICK <n>             idle cycles (1..1000)
 
@@ -45,7 +49,9 @@ RUN_TIMEOUT_S = 300
 
 STIM_RE = re.compile(r"^(rst|tick ([1-9][0-9]{0,2}|1000)|"
                      r"w [0-9a-f]{1,8} [0-9a-f]{1,8}|"
-                     r"r [0-9a-f]{1,8})$")
+                     r"ws [0-9a-f]{1,8} [0-9a-f]{1,8} [0-9a-f]{1}|"
+                     r"hw [0-9a-f]{1,8} [0-9a-f]{1,8}|"
+                     r"h|q|r [0-9a-f]{1,8})$")
 
 S_IDLE, S_READ, S_WRITE = 0, 1, 2
 
@@ -121,7 +127,10 @@ class WbDmaFrm:
             src_shdw=self.src_shdw, dst_shdw=self.dst_shdw,
             cnt_shdw=self.cnt_shdw, data_buf=self.data_buf,
             dma_state=self.dma_state, irq_flag=self.irq_flag,
-            irq_en=self.irq_en, s_wb_ack=False, s_wb_dat_r=0,
+            irq_en=self.irq_en, s_wb_ack=False,
+            # NOTE: s_wb_dat_r is DELIBERATELY absent: the RTL has no else
+            # branch, so the register HOLDS on idle (a forced 0 here caused
+            # a golden-vs-golden divergence on idle sampling — measured).
         )
         if self._start_xfer() and self.dma_state == S_IDLE:
             n["src_shdw"] = self.src_addr
@@ -227,16 +236,39 @@ class WbDmaFrm:
                 for _ in range(int(parts[1])):
                     cycle()
                 emit_irq()
-            elif parts[0] == "w":
+            elif parts[0] == "w" or parts[0] == "ws":
                 # Classic Wishbone: hold the request through the sample
                 # cycle (slave ack is registered), then idle one cycle.
                 adr, dat = int(parts[1], 16), int(parts[2], 16)
+                sel = int(parts[3], 16) if parts[0] == "ws" else 0xF
                 cycle(cyc=True, stb=True, we=True, adr=adr, dat_w=dat,
-                      sel=0xF)
+                      sel=sel)
                 out = cycle(cyc=True, stb=True, we=True, adr=adr,
-                            dat_w=dat, sel=0xF)
+                            dat_w=dat, sel=sel)
                 trace.append(f"W {adr:08x} {dat:08x} ack={int(out['ack'])}")
                 cycle()
+                emit_irq()
+            elif parts[0] == "h":
+                # Deasserted strobe: the slave must NOT acknowledge.
+                out = cycle(cyc=True)
+                trace.append(f"H ack={int(out['ack'])}")
+                cycle()
+                emit_irq()
+            elif parts[0] == "hw":
+                # Write attempt without strobe: must be ignored entirely.
+                adr, dat = int(parts[1], 16), int(parts[2], 16)
+                cycle(cyc=True, stb=False, we=True, adr=adr, dat_w=dat,
+                      sel=0xF)
+                out = cycle(cyc=True, stb=False, we=True, adr=adr,
+                            dat_w=dat, sel=0xF)
+                trace.append(f"HW {adr:08x} {dat:08x} ack={int(out['ack'])}")
+                cycle()
+                emit_irq()
+            elif parts[0] == "q":
+                # Idle sample: catches stuck-ack and reset-value faults.
+                out = cycle()
+                trace.append(f"Q {int(out['ack'])} {out['dat_r']:08x} "
+                             f"{int(out['irq'])}")
                 emit_irq()
             elif parts[0] == "r":
                 adr = int(parts[1], 16)
@@ -296,16 +328,21 @@ def tool_ok() -> bool:
 def build_sim(rtl_path: str = DEFAULT_RTL, workdir: str = "",
               timeout_s: int = BUILD_TIMEOUT_S) -> str:
     """Verilate + compile the C++ driver. Returns binary path. Rebuilds only
-    when the RTL hash changes (obj dir keyed by hash). Raises on failure."""
+    when the RTL hash changes (obj dir keyed by hash). Top module is parsed
+    from the RTL (never assumed). Raises on failure."""
+    import re as _re
     workdir = workdir or tempfile.mkdtemp(prefix="wbsim_")
     os.makedirs(workdir, exist_ok=True)
     tag = rtl_hash(rtl_path)
     obj = os.path.join(workdir, f"obj_{tag}")
-    binary = os.path.join(obj, "Vwb_dma")
+    with open(rtl_path, encoding="utf-8") as f:
+        m = _re.search(r"^\s*module\s+(\w+)", f.read(), _re.MULTILINE)
+    top = m.group(1) if m else "wb_dma"
+    binary = os.path.join(obj, f"V{top}")
     if os.path.isfile(binary):
         return binary
     cmd = _wsl(["verilator", "--cc", "--exe", "--build", "-j", "4",
-                "--top-module", "wb_dma", "-Mdir", _mnt(obj),
+                "--top-module", top, "-Mdir", _mnt(obj),
                 # Known-benign RTL properties (recorded by lint, unchanged
                 # here): WIDTHEXPAND on reg_sel slice, CASEINCOMPLETE on the
                 # register case (default arm covers the rest). Every OTHER

@@ -424,6 +424,10 @@ def main() -> int:
     if not ok:
         print(f"FATAL: cannot load baseline: {note}")
         return 1
+    from bakeoff import require_server
+    if not require_server():
+        lms_unload(BASELINE_API_ID)
+        return 1
     # Live calls carry GEN_TEMPERATURE for BoN diversity (bake-off default
     # temp 0 is for comparability; the loop needs diverse candidates).
     live_query = lambda m, p, n: query(m, p, n, GEN_TEMPERATURE)

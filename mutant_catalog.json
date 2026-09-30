@@ -1,0 +1,902 @@
+[
+  {
+    "id": "M001",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 105,
+    "line_human": 106,
+    "op": "ARITH_MINUS1",
+    "detail": "15@3"
+  },
+  {
+    "id": "M002",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 74,
+    "line_human": 75,
+    "op": "ARITH_PLUS1",
+    "detail": "1@2"
+  },
+  {
+    "id": "M003",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 106,
+    "line_human": 107,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M004",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 104,
+    "line_human": 105,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M005",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 44,
+    "line_human": 45,
+    "op": "BIT_NEG_TOGGLE",
+    "detail": ""
+  },
+  {
+    "id": "M006",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 90,
+    "line_human": 91,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M007",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 65,
+    "line_human": 66,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M008",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 70,
+    "line_human": 71,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M009",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 41,
+    "line_human": 42,
+    "op": "REL_GT_GE",
+    "detail": ""
+  },
+  {
+    "id": "M010",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 101,
+    "line_human": 102,
+    "op": "SEQ_ENABLE_REMOVE",
+    "detail": ""
+  },
+  {
+    "id": "M011",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 92,
+    "line_human": 93,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M012",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 56,
+    "line_human": 57,
+    "op": "ARITH_MINUS1",
+    "detail": "32@0"
+  },
+  {
+    "id": "M013",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 46,
+    "line_human": 47,
+    "op": "ARITH_PLUS1",
+    "detail": "0@0"
+  },
+  {
+    "id": "M014",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 111,
+    "line_human": 112,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M015",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 10,
+    "line_human": 11,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M016",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 52,
+    "line_human": 53,
+    "op": "BIT_NEG_TOGGLE",
+    "detail": ""
+  },
+  {
+    "id": "M017",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 88,
+    "line_human": 89,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M018",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 93,
+    "line_human": 94,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M019",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 51,
+    "line_human": 52,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M020",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 130,
+    "line_human": 131,
+    "op": "SEQ_ENABLE_REMOVE",
+    "detail": ""
+  },
+  {
+    "id": "M021",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 62,
+    "line_human": 63,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M022",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 49,
+    "line_human": 50,
+    "op": "ARITH_MINUS1",
+    "detail": "1@0"
+  },
+  {
+    "id": "M023",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 106,
+    "line_human": 107,
+    "op": "ARITH_PLUS1",
+    "detail": "16@2"
+  },
+  {
+    "id": "M024",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 117,
+    "line_human": 118,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M025",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 26,
+    "line_human": 27,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M026",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 120,
+    "line_human": 121,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M027",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 81,
+    "line_human": 82,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M028",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 131,
+    "line_human": 132,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M029",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 70,
+    "line_human": 71,
+    "op": "SEQ_ENABLE_REMOVE",
+    "detail": ""
+  },
+  {
+    "id": "M030",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 94,
+    "line_human": 95,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M031",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 139,
+    "line_human": 140,
+    "op": "ARITH_MINUS1",
+    "detail": "101@1"
+  },
+  {
+    "id": "M032",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 67,
+    "line_human": 68,
+    "op": "ARITH_PLUS1",
+    "detail": "00000000@1"
+  },
+  {
+    "id": "M033",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 105,
+    "line_human": 106,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M034",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 16,
+    "line_human": 17,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M035",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 113,
+    "line_human": 114,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M036",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 152,
+    "line_human": 153,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M037",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 101,
+    "line_human": 102,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M038",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 144,
+    "line_human": 145,
+    "op": "SEQ_ENABLE_REMOVE",
+    "detail": ""
+  },
+  {
+    "id": "M039",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 93,
+    "line_human": 94,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M040",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 33,
+    "line_human": 34,
+    "op": "ARITH_MINUS1",
+    "detail": "15@0"
+  },
+  {
+    "id": "M041",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 139,
+    "line_human": 140,
+    "op": "ARITH_PLUS1",
+    "detail": "101@1"
+  },
+  {
+    "id": "M042",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 107,
+    "line_human": 108,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M043",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 31,
+    "line_human": 32,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M044",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 144,
+    "line_human": 145,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M045",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 149,
+    "line_human": 150,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M046",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 85,
+    "line_human": 86,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M047",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 135,
+    "line_human": 136,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M048",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 154,
+    "line_human": 155,
+    "op": "ARITH_MINUS1",
+    "detail": "1@1"
+  },
+  {
+    "id": "M049",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 43,
+    "line_human": 44,
+    "op": "ARITH_PLUS1",
+    "detail": "4@0"
+  },
+  {
+    "id": "M050",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 112,
+    "line_human": 113,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M051",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 112,
+    "line_human": 113,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M052",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 135,
+    "line_human": 136,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M053",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 89,
+    "line_human": 90,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M054",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 78,
+    "line_human": 79,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M055",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 74,
+    "line_human": 75,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M056",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 111,
+    "line_human": 112,
+    "op": "ARITH_MINUS1",
+    "detail": "1@0"
+  },
+  {
+    "id": "M057",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 112,
+    "line_human": 113,
+    "op": "ARITH_PLUS1",
+    "detail": "23@3"
+  },
+  {
+    "id": "M058",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 113,
+    "line_human": 114,
+    "op": "BIT_IDX_M1",
+    "detail": ""
+  },
+  {
+    "id": "M059",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 107,
+    "line_human": 108,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M060",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 87,
+    "line_human": 88,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M061",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 92,
+    "line_human": 93,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M062",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 139,
+    "line_human": 140,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M063",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 134,
+    "line_human": 135,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M064",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 61,
+    "line_human": 62,
+    "op": "ARITH_MINUS1",
+    "detail": "1@0"
+  },
+  {
+    "id": "M065",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 112,
+    "line_human": 113,
+    "op": "ARITH_PLUS1",
+    "detail": "16@4"
+  },
+  {
+    "id": "M066",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 40,
+    "line_human": 41,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M067",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 117,
+    "line_human": 118,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M068",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 148,
+    "line_human": 149,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M069",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 49,
+    "line_human": 50,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M070",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 61,
+    "line_human": 62,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M071",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 148,
+    "line_human": 149,
+    "op": "ARITH_MINUS1",
+    "detail": "16@2"
+  },
+  {
+    "id": "M072",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 50,
+    "line_human": 51,
+    "op": "ARITH_PLUS1",
+    "detail": "1@2"
+  },
+  {
+    "id": "M073",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 36,
+    "line_human": 37,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M074",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 106,
+    "line_human": 107,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M075",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 72,
+    "line_human": 73,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M076",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 50,
+    "line_human": 51,
+    "op": "REL_EQ_NE",
+    "detail": ""
+  },
+  {
+    "id": "M077",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 133,
+    "line_human": 134,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M078",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 136,
+    "line_human": 137,
+    "op": "ARITH_MINUS1",
+    "detail": "1@1"
+  },
+  {
+    "id": "M079",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 113,
+    "line_human": 114,
+    "op": "ARITH_PLUS1",
+    "detail": "24@4"
+  },
+  {
+    "id": "M080",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 34,
+    "line_human": 35,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M081",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 107,
+    "line_human": 108,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M082",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 74,
+    "line_human": 75,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M083",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 154,
+    "line_human": 155,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M084",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 115,
+    "line_human": 116,
+    "op": "ARITH_MINUS1",
+    "detail": "010@1"
+  },
+  {
+    "id": "M085",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 154,
+    "line_human": 155,
+    "op": "ARITH_PLUS1",
+    "detail": "1@0"
+  },
+  {
+    "id": "M086",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 117,
+    "line_human": 118,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M087",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 104,
+    "line_human": 105,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M088",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 156,
+    "line_human": 157,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M089",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 68,
+    "line_human": 69,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M090",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 43,
+    "line_human": 44,
+    "op": "ARITH_MINUS1",
+    "detail": "4@0"
+  },
+  {
+    "id": "M091",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 48,
+    "line_human": 49,
+    "op": "ARITH_PLUS1",
+    "detail": "1@1"
+  },
+  {
+    "id": "M092",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 25,
+    "line_human": 26,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M093",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 79,
+    "line_human": 80,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M094",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 61,
+    "line_human": 62,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  },
+  {
+    "id": "M095",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 156,
+    "line_human": 157,
+    "op": "SEQ_RESET_FLIP",
+    "detail": ""
+  },
+  {
+    "id": "M096",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 147,
+    "line_human": 148,
+    "op": "ARITH_MINUS1",
+    "detail": "001@1"
+  },
+  {
+    "id": "M097",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 17,
+    "line_human": 18,
+    "op": "ARITH_PLUS1",
+    "detail": "31@0"
+  },
+  {
+    "id": "M098",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 110,
+    "line_human": 111,
+    "op": "BIT_IDX_P1",
+    "detail": ""
+  },
+  {
+    "id": "M099",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 140,
+    "line_human": 141,
+    "op": "CTRL_COND_INVERT",
+    "detail": ""
+  },
+  {
+    "id": "M100",
+    "file": "wb_dma.v",
+    "path": "C:\\Projects\\ChipDesign\\rideprotect-rv\\rtl\\wb_dma.v",
+    "line": 56,
+    "line_human": 57,
+    "op": "CTRL_STMT_DELETE",
+    "detail": ""
+  }
+]

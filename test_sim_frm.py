@@ -20,8 +20,9 @@ XFER = ["rst",
 
 class TestDSL(unittest.TestCase):
     def test_valid(self):
-        self.assertEqual(validate_stim(["RST", "W 0 A0", "R 10", "TICK 5"]),
-                         ["rst", "w 0 a0", "r 10", "tick 5"])
+        self.assertEqual(validate_stim(["RST", "W 0 A0", "R 10", "TICK 5",
+                                        "WS 8 ff 2"]),
+                         ["rst", "w 0 a0", "r 10", "tick 5", "ws 8 ff 2"])
 
     def test_rejects(self):
         for bad in (["W 0"], ["X 1"], ["w 0 1 2"], ["TICK 0"],
@@ -63,6 +64,32 @@ class TestFRM(unittest.TestCase):
         f = WbDmaFrm()
         tr = f.run_stim(XFER + ["w 10 0000000f", "r 10"])
         self.assertIn("R 00000010 00000000", tr)
+
+    def test_ws_partial_write(self):
+        f = WbDmaFrm()
+        tr = f.run_stim(["rst", "w 0 12345678", "ws 0 aabb 2", "r 0"])
+        # sel bit 1 -> byte 1 (bits[15:8]) = 0xaa: 0x12345678 -> 0x1234aa78
+        self.assertIn("R 00000000 1234aa78", tr)
+
+    def test_half_cycle_never_acks(self):
+        tr = WbDmaFrm().run_stim(["rst", "h"])
+        self.assertIn("H ack=0", tr)
+
+    def test_hw_write_ignored(self):
+        tr = WbDmaFrm().run_stim(["rst", "w 0 11223344", "hw 0 55667788",
+                                  "r 0"])
+        self.assertIn("HW 00000000 55667788 ack=0", tr)
+        self.assertIn("R 00000000 11223344", tr)
+
+    def test_query_samples_idle(self):
+        tr = WbDmaFrm().run_stim(["rst", "q"])
+        self.assertTrue(tr[0].startswith("Q 0 "))
+
+    def test_dat_r_holds_on_idle(self):
+        # Regression (golden self-check): the RTL register holds without an
+        # else branch, so the FRM must hold too — never force 0 on idle.
+        tr = WbDmaFrm().run_stim(["rst", "w 0 1", "tick 3", "q"])
+        self.assertIn("Q 0 00000001 0", tr)
 
 
 class TestCompare(unittest.TestCase):

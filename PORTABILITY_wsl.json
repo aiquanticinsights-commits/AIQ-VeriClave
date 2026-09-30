@@ -1,13 +1,13 @@
 {
   "env": "wsl",
-  "date": "2026-09-29",
+  "date": "2026-09-30",
   "os": "Linux 6.18.33.1-microsoft-standard-WSL2",
   "python": "3.14.4",
   "checks": {
     "unittest": {
       "pass": true,
       "tests": [
-        "206"
+        "301"
       ]
     },
     "frm_traces": {
@@ -17,17 +17,23 @@
     },
     "verilator_lint": {
       "pass": true,
-      "rc": 1
+      "rc": 1,
+      "fixture": false,
+      "target": "wb_dma"
     },
     "yosys_synth": {
       "pass": true,
-      "rc": 0
+      "rc": 0,
+      "fixture": false,
+      "target": "wb_dma"
     },
     "sby_demo": {
       "pass": true,
       "status": "PASS"
     }
   },
+  "git_commit": "f7017fe",
+  "image": "",
   "tools": {
     "verilator": "Verilator 5.032 2025-01-01 rev (Debian 5.032-1)",
     "yosys": "Yosys 0.52 (git sha1 fee39a3284c90249e1d9684cf6944ffbbcbb8f90)",

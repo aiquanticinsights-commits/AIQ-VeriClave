@@ -79,13 +79,31 @@ int main(int argc, char **argv) {
             int n = std::stoi(s.substr(5));
             for (int i = 0; i < n; i++) cycle();
             emit_irq();
-        } else if (s.rfind("w ", 0) == 0) {
-            uint32_t a, d;
-            sscanf(s.c_str() + 2, "%x %x", &a, &d);
-            cycle(false, true, true, true, a, d, 0xF);   // present
-            Out o = cycle(false, true, true, true, a, d, 0xF);  // sample held
+        } else if (s.rfind("w ", 0) == 0 || s.rfind("ws ", 0) == 0) {
+            uint32_t a, d, sl = 0xF;
+            if (s.rfind("ws ", 0) == 0) sscanf(s.c_str() + 3, "%x %x %x", &a, &d, &sl);
+            else sscanf(s.c_str() + 2, "%x %x", &a, &d);
+            cycle(false, true, true, true, a, d, sl);   // present
+            Out o = cycle(false, true, true, true, a, d, sl);  // sample held
             printf("W %08x %08x ack=%d\n", a, d, (int)o.ack);
             cycle();  // deassert / idle
+            emit_irq();
+        } else if (s == "h") {
+            Out o = cycle(false, true, false, false, 0, 0, 0);
+            printf("H ack=%d\n", (int)o.ack);
+            cycle();
+            emit_irq();
+        } else if (s.rfind("hw ", 0) == 0) {
+            uint32_t a, d;
+            sscanf(s.c_str() + 3, "%x %x", &a, &d);
+            cycle(false, true, false, true, a, d, 0xF);
+            Out o = cycle(false, true, false, true, a, d, 0xF);
+            printf("HW %08x %08x ack=%d\n", a, d, (int)o.ack);
+            cycle();
+            emit_irq();
+        } else if (s == "q") {
+            Out o = cycle();
+            printf("Q %d %08x %d\n", (int)o.ack, o.dat_r, (int)o.irq);
             emit_irq();
         } else if (s.rfind("r ", 0) == 0) {
             uint32_t a;

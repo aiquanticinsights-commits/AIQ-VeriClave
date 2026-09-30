@@ -110,6 +110,20 @@ class TestLedgerMapping(unittest.TestCase):
             self.assertEqual(L.records[0].verdict, status)
             self.assertAlmostEqual(L.audit_completeness(), 1.0)
 
+    def test_proven_refuted_normalize(self):
+        for formal, ledger_v in (("PROVEN", "PASS"), ("REFUTED", "FAIL")):
+            L = EvidenceLedger()
+            to_ledger(L, "R-1", self._ev(formal), "formal/A")
+            self.assertEqual(L.records[0].verdict, ledger_v)
+
+    def test_sim_covered_ledgered(self):
+        ev = self._ev("SIM_COVERED")
+        ev["formal"]["sim_ref"] = "SIM_FRM_WB_DMA.json#irq-lifecycle"
+        L = EvidenceLedger()
+        to_ledger(L, "R-IRQ", ev, "formal/A_IRQ")
+        self.assertEqual(L.records[0].verdict, "SIM_COVERED")
+        self.assertAlmostEqual(L.audit_completeness(), 1.0)
+
     def test_unavailable_becomes_not_executed(self):
         L = EvidenceLedger()
         to_ledger(L, "R-1", self._ev("UNAVAILABLE"), "formal/A")

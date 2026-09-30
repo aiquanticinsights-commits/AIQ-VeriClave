@@ -67,7 +67,8 @@ class TestLedger(unittest.TestCase):
 
     def test_frozen_verdict_states_known(self):
         for v in ("EXECUTED", "NOT_EXECUTED", "PASS", "FAIL", "UNPROVEN",
-                  "UNAVAILABLE", "SKIPPED_BY_POLICY", "DISPOSITIONED"):
+                  "UNAVAILABLE", "SKIPPED_BY_POLICY", "DISPOSITIONED",
+                  "SIM_COVERED", "NOT_APPLICABLE"):
             self.assertIn(v, KNOWN_VERDICTS)
         self.assertNotIn("PENDING", KNOWN_VERDICTS)
 
