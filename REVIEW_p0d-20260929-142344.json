@@ -1,0 +1,57 @@
+{
+  "items": [
+    {
+      "task": "T9-status-fix",
+      "machine": "escalated",
+      "disposition": "accept",
+      "reason": "",
+      "seconds": 4.7,
+      "artifact_shown": false
+    },
+    {
+      "task": "T1-sva-ack",
+      "machine": "closed",
+      "disposition": "reject",
+      "reason": "test_reject",
+      "seconds": 37.6,
+      "artifact_shown": true
+    },
+    {
+      "task": "T2-sva-irq",
+      "machine": "closed",
+      "disposition": "override",
+      "reason": "test_override",
+      "seconds": 32.7,
+      "artifact_shown": true
+    },
+    {
+      "task": "T6-width-fix",
+      "machine": "closed",
+      "disposition": "skip",
+      "reason": "",
+      "seconds": 7.9,
+      "artifact_shown": true
+    },
+    {
+      "task": "T7-sva-cyc",
+      "machine": "closed",
+      "disposition": "accept",
+      "reason": "",
+      "seconds": 4.7,
+      "artifact_shown": true
+    }
+  ],
+  "tasks_presented": 5,
+  "tasks_dispositioned": 4,
+  "evidence_items_reviewed": 4,
+  "engineer_review_time_s": 79.7,
+  "engineer_review_time_per_task_s": 19.9,
+  "human_rejection_rate": 0.25,
+  "human_override_rate": 0.25,
+  "unreviewed": 1,
+  "reviewer": "SSB",
+  "run_id": "p0d-20260929-142344",
+  "report": "P0D_SKELETON.json",
+  "exceptions_only": false,
+  "signoff": "PENDING"
+}

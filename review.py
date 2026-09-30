@@ -56,9 +56,13 @@ def describe(task: dict) -> str:
     return "\n".join(lines)
 
 
-def run_review(tasks: list[dict], input_fn=input,
+def run_review(tasks: list[dict], input_fn=None,
                clock=time.perf_counter) -> dict:
-    """Interactive review. Returns the dispositions record (times measured)."""
+    """Interactive review. Returns the dispositions record (times measured).
+    input_fn defaults to console input (resolved lazily so tests can patch
+    builtins.input)."""
+    if input_fn is None:
+        input_fn = input
     items = []
     for t in tasks:
         print(describe(t), flush=True)
@@ -129,9 +133,19 @@ def main() -> int:
     args = sys.argv[1:]
     if not args or "--help" in args:
         print("usage: review.py REPORT.json [--exceptions-only] "
-              "[--reviewer NAME]", flush=True)
+              "[--reviewer NAME] [--resume REVIEW.json]", flush=True)
         return 2
-    report_path = args[0]
+    resume_path = ""
+    for i, a in enumerate(args):
+        if a == "--resume" and i + 1 < len(args):
+            resume_path = args[i + 1]
+    positional = [a for n, a in enumerate(args)
+                  if a.endswith(".json") and a != resume_path
+                  and not (n > 0 and args[n - 1] == "--resume")]
+    report_path = positional[0] if positional else ""
+    if not report_path:
+        print("FATAL: provide REPORT.json", flush=True)
+        return 2
     exceptions_only = "--exceptions-only" in args
     reviewer = ""
     for i, a in enumerate(args):
@@ -143,9 +157,34 @@ def main() -> int:
             reviewer = input("reviewer name (required): ").strip()
     tasks, rep = load_tasks(report_path)
     ordered = order_review(tasks, exceptions_only)
+    prior_items: dict[str, dict] = {}
+    if resume_path:
+        try:
+            with open(resume_path, encoding="utf-8") as f:
+                prior = json.load(f)
+            if prior.get("run_id") and prior.get("run_id") != rep.get("run_id"):
+                print(f"WARNING: resume record is for run "
+                      f"{prior.get('run_id')}, report is "
+                      f"{rep.get('run_id')} — continuing anyway, tasks "
+                      f"matched by id", flush=True)
+            for it in prior.get("items", []):
+                if it.get("disposition") != "skip":
+                    prior_items[it.get("task", "")] = it
+            if prior.get("reviewer") and not any(
+                    a == "--reviewer" for a in args):
+                reviewer = prior["reviewer"]
+        except (OSError, ValueError) as exc:
+            print(f"FATAL: cannot read resume file: {exc}", flush=True)
+            return 2
+    fresh = [t for t in ordered if t.get("task") not in prior_items]
     print(f"{len(ordered)} items ({len(tasks)} total, "
-          f"exceptions_only={exceptions_only})", flush=True)
-    record = run_review(ordered)
+          f"exceptions_only={exceptions_only}, "
+          f"resumed={len(prior_items)})", flush=True)
+    fresh_items = run_review(fresh)["items"]
+    merged = {it["task"]: it for it in fresh_items}
+    merged.update(prior_items)  # prior dispositions preserved verbatim
+    record = {"items": [merged[t["task"]] for t in ordered
+                        if t["task"] in merged]}
     record.update(summarize(record["items"]))
     record.update({"reviewer": reviewer, "run_id": rep.get("run_id", ""),
                    "report": os.path.basename(report_path),

@@ -4,7 +4,12 @@ Interaction and timing are injected (scripted answers, stepped clock), so
 the measurement math is tested deterministically. Real measurements come
 only from live interactive runs (REVIEW_*.json).
 """
+import json
+import os
+import sys
+import tempfile
 import unittest
+import unittest.mock
 
 from review import NAMES, VALID, describe, order_review, run_review, summarize
 
@@ -75,6 +80,48 @@ class TestRun(unittest.TestCase):
         rec = run_review(TASKS[:1], input_fn=scripted(["x", "bogus", "a"]),
                          clock=stepped_clock())
         self.assertEqual(rec["items"][0]["disposition"], "accept")
+
+
+class TestResume(unittest.TestCase):
+    def _report(self, d):
+        rep = {"run_id": "r1", "tasks_detail": [
+            {"task": "T1", "kind": "k", "rounds": 2, "approvals": 2,
+             "escalated_to_human": False, "artifact": "a1"},
+            {"task": "T2", "kind": "k", "rounds": 3, "approvals": 0,
+             "escalated_to_human": True, "artifact": ""}]}
+        p = os.path.join(d, "rep.json")
+        json.dump(rep, open(p, "w"))
+        return p
+
+    def test_resume_skips_decided(self):
+        import review
+        d = tempfile.mkdtemp()
+        rep = self._report(d)
+        prior = {"run_id": "r1", "reviewer": "qa", "items": [
+            {"task": "T1", "machine": "closed", "disposition": "accept",
+             "reason": "", "seconds": 5.0, "artifact_shown": True}]}
+        rp = os.path.join(d, "rev.json")
+        json.dump(prior, open(rp, "w"))
+        seen = []
+
+        def fake_input(prompt=""):
+            seen.append(prompt)
+            return "s"  # skip the only remaining item (T2)
+
+        with unittest.mock.patch("builtins.input", fake_input):
+            with unittest.mock.patch.object(
+                    sys, "argv", ["review.py", rep, "--resume", rp]):
+                self.assertEqual(review.main(), 0)
+        out_path = os.path.join(os.path.dirname(os.path.abspath(
+            review.__file__)), "REVIEW_r1.json")
+        try:
+            out = json.load(open(out_path))
+        finally:
+            if os.path.isfile(out_path):
+                os.unlink(out_path)
+        by_task = {i["task"]: i["disposition"] for i in out["items"]}
+        self.assertEqual(by_task, {"T2": "skip", "T1": "accept"})
+        self.assertEqual(out["reviewer"], "qa")
 
 
 class TestSummarize(unittest.TestCase):
