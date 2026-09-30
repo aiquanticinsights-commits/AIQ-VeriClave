@@ -16,6 +16,7 @@ formal/wb_dma_dbg*/
 formal/wb_dma_last.log
 gates_demo/*_proof/
 gates_demo/*_work/
+viv_work/
 *.vcd
 *.fst
 *.bit
