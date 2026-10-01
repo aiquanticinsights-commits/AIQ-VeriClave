@@ -49,7 +49,7 @@ contradiction found: nothing built violates a MUST in the baseline.
 
 - C1 ≥95% mutant kill: **95.12% measured** (was a target, now evidence).
 - FPR <1%: 0.0 measured (20-seed fuzz + lint).
-- Cost ≤$0.50/task: $0.00018 nominal + wall-clock recorded.
+- Cost ≤$0.50/task: $0.00018 nominal + wall-clock recorded (`P0D_REPORT_V2.json`).
 - Audit 100%: computed on every ledger, every run.
 - Supported Vivado versions "only after integration testing": **2026.1 measured**.
 - Bake-off then baseline (not Qwen-pinned): executed twice, frozen.

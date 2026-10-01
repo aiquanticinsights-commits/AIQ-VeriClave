@@ -13,6 +13,8 @@ SCHEMA = {
     "P0B_BASELINE.json": ("benchmark", "winner", "candidates", "signoff"),
     "P0B_V2_BASELINE.json": ("benchmark", "winner", "candidates", "signoff"),
     "P0D_REPORT.json": ("tasks", "closed", "audit_completeness", "signoff"),
+    "P0D_REPORT_V1.json": ("tasks", "closed", "signoff"),
+    "P0D_REPORT_V2.json": ("tasks", "closed", "audit_completeness", "signoff"),
     "P0D_SKELETON.json": ("tasks", "closed", "strategy", "signoff"),
     "P0D_T1FORMAL.json": ("tasks", "closed", "signoff"),
     "P0D_T9RERUN.json": ("tasks", "closed", "signoff"),
