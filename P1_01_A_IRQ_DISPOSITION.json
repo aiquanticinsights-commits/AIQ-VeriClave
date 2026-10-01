@@ -22,7 +22,7 @@
                        "reason": "irq_en is DUT-internal and this toolchain resolves no hierarchical references; bind is ignored; no observable reformulation exists without changing the requirement"},
  "human_approval": {"basis": "Reviewed formal limitation, alternative evidence, traceability, and explicit non-equivalence claim.",
                    "date": "2026-10-01",
-                   "decision": "APPROVED",
+                   "decision": "APPROVED — P1-01 A_IRQ Formal Disposition Closure. The formal property remains explicitly UNPROVEN due to the documented toolchain limitation. The alternative simulation/FRM evidence is accepted as the documented alternative evidence for this P1 disposition. This approval does not claim simulation equivalence to formal proof and has no effect on the V8 P0 GO decision.",
                    "reviewer": "SSB"},
  "item": "P1-01",
  "p0_gate_effect": "none — V8 P0 GATE GO stands; tracked in P1 per P0_SIGNOFF_V8.md",
