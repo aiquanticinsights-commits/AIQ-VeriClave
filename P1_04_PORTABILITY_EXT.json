@@ -1,0 +1,19 @@
+{
+  "extension": "P1-04-EXT",
+  "date": "2026-10-01",
+  "elapsed_s": 1268.3,
+  "rows": {
+    "mutation/full": {
+      "category": "mutation",
+      "variance": "none",
+      "detail": "100/100 mutant verdicts agree cross-env"
+    },
+    "image/rebuild": {
+      "category": "reproducibility",
+      "variance": "none",
+      "detail": "rebuild formal=PASS frozen=PASS"
+    }
+  },
+  "overall": "PASS",
+  "scope_note": "Same-machine legs (WSL vs Docker); cross-host portability out of scope. Frozen E2 report untouched."
+}

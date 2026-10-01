@@ -1,0 +1,12 @@
+{"explicit_scope": "Same-machine legs (WSL vs Docker on one host), as in P0 E2. Cross-host portability remains out of scope — stated, not silent.",
+ "extensions": {"image_rebuild": {"basis": "docker build --no-cache of docker/sby-smoke + rerun; formal_result PASS reproduces frozen SBY_SMOKE.json PASS",
+                                 "status": "PASS — Dockerfile reproducibly rebuilds the proving image"},
+                "mutation_full": {"basis": "P1_04_PORTABILITY_EXT.json (2026-10-01, elapsed 1268.3 s): full seed-7 campaign both envs via scripts/e2_docker_full.py + frozen catalog",
+                                  "status": "PASS — 100/100 mutant verdicts agree cross-env (5-mutant spot generalized to full campaign)"}},
+ "frozen_untouched": "E2_PORTABILITY_REPORT.json, SBY_SMOKE.json, MUTATION_WB_DMA.json unchanged; WSL leg used isolated partial + temp workdir",
+ "human_approval": "PENDING",
+ "item": "P1-04",
+ "p0_gate_effect": "NONE — additive extension; P0 E1/E2 evidence unchanged",
+ "process_note": "First EXT-A attempt failed on a stale image (new container script not baked in); fixed by rebuilding before running, mirroring E2 docker_leg. Failure was harness-sequencing, not a portability divergence — recorded, not hidden.",
+ "status": "PENDING_APPROVAL",
+ "title": "Extended portability beyond smoke — finding"}
