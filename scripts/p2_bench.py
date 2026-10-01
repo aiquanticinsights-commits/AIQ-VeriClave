@@ -22,7 +22,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "scripts"))
 
 from bakeoff import query, require_server  # noqa: E402
-from bakeoff import lms_load, lms_unload  # noqa: E402
+from bakeoff import lms_load, lms_unload, LMS  # noqa: E402
 from p102_t4_reason_probe import (  # noqa: E402
     PROMPT as T4_PROMPT, TEMPERATURE as T4_TEMP,
     MAX_TOKENS as T4_TOKENS, grade_reasoned)
@@ -181,8 +181,19 @@ def main() -> int:
     print(f"loading {model_id} ...", flush=True)
     ok, note = lms_load(model_id)
     if not ok:
-        print(f"FATAL: cannot load model: {note}", flush=True)
-        return 1
+        # Guardrail can refuse a load while the same model is already
+        # resident (measured P2: IDLE 5.73 GB). Proceed only if OUR model
+        # is the resident one; never run against the wrong model.
+        import subprocess as _sp
+        try:
+            ps = _sp.run([LMS, "ps"], capture_output=True, text=True,
+                         timeout=60).stdout or ""
+        except Exception:  # noqa: BLE001
+            ps = ""
+        if model_id not in ps:
+            print(f"FATAL: cannot load model: {note}", flush=True)
+            return 1
+        print("model already resident, proceeding", flush=True)
     if not require_server():
         lms_unload(model_id)
         return 1

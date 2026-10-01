@@ -1,0 +1,1085 @@
+{
+  "benchmark": "P2 capability benchmark (frozen M1 spec)",
+  "date": "2026-10-01",
+  "model": "llama",
+  "model_id": "meta-llama-3.1-8b-instruct",
+  "elapsed_s": 2447.1,
+  "t4": {
+    "n": 20,
+    "hits": 14,
+    "accuracy": 0.7,
+    "samples": [
+      {
+        "i": 0,
+        "ok": false,
+        "picked": "last:D",
+        "latency_s": 62.6,
+        "tokens": 391,
+        "text": "To troubleshoot this issue, let's analyze each possible root cause:\n\nA. Reset Sequencing:\nSince m_wb_ack pulses correctly every cycle and the design has a single clock domain (no clock-domain crossings), it's less likely that reset sequencing is the primary issue.\n\nB. Timeout Counter:\nIf there was an issue with the timeout counter not being reset properly, we might expect to see more symptoms, such as a stuck state or an incorrect sequence of events. However, the fact that m_wb_ack pulses every cycle suggests the DMA controller is receiving the master's clock cycles correctly.\n\nC. State-machine Ack Handling:\nThe key detail in this problem is that dma_state stays S_READ forever despite m_wb_ack pulses being observed at the slave pads. This indicates a possible issue with how the state machine acknowledges the master's write transactions and transitions to the next state (i.e., from S_READ). A faulty or stuck state-machine ack handling mechanism could cause the DMA controller to fail transitioning out of the S_READ state.\n\nD. Clock-domain crossing:\nWe've already established that this is not a valid concern due to the single-clock domain design.\n\nGiven these considerations, the most likely root cause for the issue described appears to be an error in how the state machine"
+      },
+      {
+        "i": 1,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 91.1,
+        "tokens": 378,
+        "text": "To troubleshoot this issue, let's consider each option step by step:\n\n1. **Reset Sequencing (Option A):** Since the design is single-clock and there are no clock-domain crossings, reset sequencing seems less likely to be a root cause. However, it's still worth considering.\n\n2. **Timeout Counter (Option B):** If the timeout counter is causing issues, we would expect the DMA state machine to transition out of S_READ eventually after m_wb_ack is asserted. Since this isn't happening, a timeout-related issue seems unlikely.\n\n3. **State-Machine Ack Handling (Option C):** Given that m_wb_ack pulses cleanly every cycle and there are no clock-domain crossings, it's possible that the state-machine ack handling is stuck in S_READ. This could be due to an incorrect or missing transition from S_READ when m_wb_ack is asserted.\n\n4. **Clock-Domain Crossing (Option D):** Since we've established that the design is single-clock and there are no clock-domain crossings, this option can likely be ruled out.\n\nBased on these considerations, the most likely root cause appears to be an issue with the state-machine ack handling.\n\nAnswer: C"
+      },
+      {
+        "i": 2,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 93.4,
+        "tokens": 365,
+        "text": "Let's analyze this step-by-step:\n\n1. **Reset Sequencing (A)**: This issue persists even after reset deasserts, indicating that the problem lies in the behavior of the design post-reset, rather than incorrect reset sequencing.\n\n2. **Timeout Counter (B)**: If a timeout counter were the root cause, we would expect to see some sort of timer overflow or wraparound, which doesn't seem to be indicated by the description.\n\n3. **Clock-Domain Crossing (D)**: This is explicitly ruled out in the problem statement, so it can be eliminated as a possible cause.\n\n4. **State-Machine Ack Handling (C)**: Since `m_wb_ack` pulses cleanly every cycle and we're dealing with a single-clock design, this suggests that there might be an issue with how the state machine handles acknowledgments. The fact that `dma_state` stays in `S_READ` indicates that some part of the state machine is not transitioning as expected.\n\nGiven these considerations, it's likely that the root cause lies in how the state machine handles acknowledgments (`m_wb_ack`). \n\nAnswer: C"
+      },
+      {
+        "i": 3,
+        "ok": true,
+        "picked": "last:C",
+        "latency_s": 98.5,
+        "tokens": 391,
+        "text": "To troubleshoot this issue, let's break down the given information and analyze it step by step:\n\n1. **Failure description**: The DMA state stays in S_READ forever after a reset is deasserted, even though m_wb_ack pulses are observed.\n2. **Waveforms observation**: Cleanly arriving m_wb_ack signals every cycle at slave pads indicate that there's no issue with the clock or signal timing.\n3. **Single-clock design**: The absence of clock-domain crossings eliminates any potential issues related to synchronization between different clock domains.\n\nConsidering these points, let's examine each possible root cause:\n\nA. **Reset sequencing**: This could be a plausible explanation since the DMA state is stuck in S_READ after reset deassertion. However, it would typically manifest as an issue with reaching the correct reset state or failing to transition out of it due to incorrect reset logic.\n\nB. **Timeout counter**: A timeout counter might get stuck if its clock signal is not properly synchronized or if there's a glitch in the reset sequence affecting the counter's initial value or operation. Given the single-clock design, this seems less likely unless there are internal timing issues or additional clock domains involved indirectly.\n\nC. **State-machine ack handling**: This option is highly probable given that m"
+      },
+      {
+        "i": 4,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 76.6,
+        "tokens": 348,
+        "text": "Let's break down the issue step by step:\n\n1. The design is single-clock, so a clock-domain crossing (D) can be ruled out as the root cause.\n\n2. Waveforms show that m_wb_ack arrives cleanly every cycle, which suggests that there are no issues with the reset signal or its sequencing. Therefore, A can likely be eliminated.\n\n3. Since the issue occurs after reset deasserts, it's possible that a timeout counter (B) is being triggered due to an incomplete or incorrect sequence of events. However, if m_wb_ack pulses every cycle and dma_state stays in S_READ forever, this might not directly point to a timeout issue.\n\n4. The most plausible explanation seems to be related to the state-machine ack handling (C). Given that dma_state stays in S_READ despite m_wb_ack pulsing, it suggests that the state machine is not properly acknowledging or advancing due to some condition or sequence of events after reset deassertion.\n\nConsidering these points, the most likely root cause is:\n\nAnswer: C"
+      },
+      {
+        "i": 5,
+        "ok": false,
+        "picked": "last:D",
+        "latency_s": 98.6,
+        "tokens": 391,
+        "text": "To troubleshoot this issue, let's consider each option:\n\nA. Reset Sequencing:\nSince the design is single-clock and there are no clock-domain crossings, reset sequencing might be a likely cause. The deassertion of the reset signal could potentially leave some internal states in an inconsistent state, causing issues with the DMA controller.\n\nB. Timeout Counter:\nTimeout counters are typically used to handle situations where a transfer takes longer than expected. However, if m_wb_ack is pulsing cleanly every cycle and there's no indication of a timeout issue, this might not be the primary cause.\n\nC. State-Machine Ack Handling:\nThe problem description suggests that the DMA controller fails to move from S_READ state after reset deassertion. The issue could be with how the state machine handles acknowledgments (m_wb_ack) or the sequence of states it traverses during a transaction. However, since m_wb_ack arrives cleanly every cycle and there's no indication of an incorrect state transition due to this signal, this option seems less likely.\n\nD. Clock-Domain Crossing:\nGiven that the design is single-clock with no clock-domain crossings, this option can be ruled out.\n\nConsidering these points, the most likely root cause appears to be related to reset sequencing or the internal"
+      },
+      {
+        "i": 6,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 95.5,
+        "tokens": 389,
+        "text": "To troubleshoot this issue, let's break down each option:\n\nA. **Reset Sequencing**: \n- If there are issues with the reset sequence, it might be causing the state machine to not transition correctly.\n- However, since m_wb_ack pulses every cycle and deasserts after reset, it suggests that the WB bus is working properly.\n\nB. **Timeout Counter**:\n- The timeout counter would typically cause a failure in DMA transfers if the transfer doesn't complete within a certain time frame.\n- But since we're observing consistent behavior with m_wb_ack arriving cleanly every cycle, this seems unlikely to be the root cause.\n\nC. **State-machine ack handling**:\n- Given that the design is single-clock and there are no clock-domain crossings, the issue likely lies in how the state machine handles acknowledgments.\n- The fact that dma_state stays S_READ forever suggests a problem with transitioning out of this state due to missing or incorrect acknowledgment.\n\nD. **Clock-domain crossing**:\n- Since it's explicitly mentioned that the design is single-clock and there are no clock-domain crossings, we can safely rule this option out.\n\nConsidering these points, the most likely root cause of this issue is how the state machine handles acknowledgments.\n\nAnswer: C"
+      },
+      {
+        "i": 7,
+        "ok": true,
+        "picked": "last:C",
+        "latency_s": 113.4,
+        "tokens": 391,
+        "text": "To identify the root cause of the issue, let's analyze each option step by step:\n\nA. Reset Sequencing: \n- The issue persists after reset deassertion, which suggests a problem in the reset sequencing or incorrect timing of the signals.\n- However, the waveforms show m_wb_ack arriving cleanly every cycle, indicating that the clock is stable.\n\nB. Timeout Counter:\n- A timeout counter could cause the dma_state to stay in S_READ if it times out before receiving an acknowledgement (m_wb_ack).\n- But since m_wb_ack pulses cleanly every cycle, a timing issue with the timeout counter seems unlikely.\n\nC. State-Machine Ack Handling:\n- The state machine is not properly handling the acknowledgement signal (m_wb_ack), causing the dma_state to stay in S_READ.\n- This could be due to a bug in the state-machine logic or incorrect synchronization between the state-machine and the external signals.\n\nD. Clock-Domain Crossing:\n- Since you mentioned there are no clock-domain crossings, this option can be ruled out.\n\nConsidering these points, the most likely root cause of the issue is incorrect state-machine ack handling (C). The dma_state stays in S_READ due to a bug or misconfiguration in the state machine's logic for"
+      },
+      {
+        "i": 8,
+        "ok": false,
+        "picked": "last:D",
+        "latency_s": 104.2,
+        "tokens": 391,
+        "text": "To determine the root cause of the issue, let's analyze each option step by step:\n\nA. Reset Sequencing:\n- Given that m_wb_ack pulses after a reset, it suggests that the reset sequencing is not directly related to the problem.\n- However, incorrect or missing reset sequencing could potentially lead to unexpected behavior in the state machine.\n\nB. Timeout Counter:\n- A timeout counter would typically be involved in handling incomplete transactions (e.g., when a master doesn't acknowledge a transfer within a certain time).\n- Since the issue occurs after deassertion of reset and m_wb_ack is pulsing, it's less likely to be related to a timeout.\n\nC. State-Machine Ack Handling:\n- The description suggests that the state machine is getting stuck in S_READ forever.\n- Given that m_wb_ack pulses correctly and there are no clock-domain crossings, this makes a strong case for an issue with how the state machine handles acks or transitions between states after reset.\n\nD. Clock-Domain Crossing (CDC):\n- The problem statement explicitly mentions that the design is single-clock, which rules out any issues related to CDC.\n\nConsidering these points, the most likely root cause of the issue seems to be related to how the state machine handles acknowledgments and state"
+      },
+      {
+        "i": 9,
+        "ok": false,
+        "picked": "last:A",
+        "latency_s": 119.6,
+        "tokens": 391,
+        "text": "To approach this problem step-by-step:\n\n1. **Eliminate incorrect options**: The design is single-clock and there are no clock-domain crossings, so we can rule out option D.\n\n2. **Understand the symptoms**: Despite m_wb_ack pulses being received correctly every cycle, dma_state stays at S_READ forever. This suggests a problem with how the state machine is handling the ack signal.\n\n3. **Consider possible causes**:\n   - **Reset sequencing (A)**: Incorrect reset sequencing can indeed cause issues like this, but in this case, the fact that m_wb_ack pulses are being received correctly every cycle makes it less likely.\n   - **Timeout counter (B)**: A timeout issue could be a possible root cause. However, if m_wb_ack is being received every cycle, it's unlikely to be related to a timeout counter.\n\n4. **Most likely root cause**: Given that the state machine stays in S_READ forever despite receiving correct ack signals, I would lean towards an issue with how the state-machine is handling the ack signal. This could be due to incorrect or missing logic for transitioning out of S_READ when an ack signal is received.\n\n5. **Conclusion**: The most likely root cause is an issue with the state-machine's"
+      },
+      {
+        "i": 10,
+        "ok": false,
+        "picked": "last:D",
+        "latency_s": 105.3,
+        "tokens": 391,
+        "text": "To troubleshoot this issue, let's analyze each option step by step:\n\nA. Reset Sequencing:\nIf the reset sequence is incorrect or not properly handled in the design, it can cause issues with state machines and DMA operations. However, since m_wb_ack pulses correctly every cycle, it suggests that the WB (Write Back) stage of the Wishbone protocol is functioning properly.\n\nB. Timeout Counter:\nA timeout counter issue would typically manifest as an inability to complete a transaction within a certain time limit, which doesn't seem to be the case here given the proper m_wb_ack pulses.\n\nC. State-machine Ack Handling:\nGiven that DMA_state stays S_READ forever and m_wb_ack arrives cleanly every cycle, it's possible that there is a problem with state machine acknowledgment handling in the design. The state machine might not be correctly transitioning from one state to another after receiving an acknowledgement signal (m_wb_ack) during reset deassertion.\n\nD. Clock-domain Crossing:\nAs per the description, clock-domain crossings are ruled out since the design is single-clock. This eliminates this option as a potential root cause for the issue at hand.\n\nConsidering these points, the most likely root cause of the issue seems to be an incorrect state machine acknowledgment handling during reset de"
+      },
+      {
+        "i": 11,
+        "ok": false,
+        "picked": "last:D",
+        "latency_s": 106.2,
+        "tokens": 391,
+        "text": "To troubleshoot this issue, let's break down the steps and analyze each possibility.\n\n1. **Reset Sequencing (A):** Given that the design is single-clock and there are no clock-domain crossings, reset sequencing seems unlikely to be the root cause. Reset deassertion should not affect the DMA state machine if it's properly synchronized with the clock.\n\n2. **Timeout Counter (B):** If a timeout counter were involved in the DMA state machine, its behavior would likely depend on both clock cycles and/or external events like interrupt signals. Since the design is single-clock, this option appears less probable unless there's an unobvious dependency on another signal that could reset the timeout counter.\n\n3. **State-machine Ack Handling (C):** This seems to be a more plausible explanation. The DMA state machine might not properly handle acknowledgments from the master when it transitions back to S_READ after a reset deassertion. If m_wb_ack pulses, but the state machine doesn't advance correctly due to some logic error or incorrect handling of the acknowledgment signal, dma_state would indeed stay in S_READ.\n\n4. **Clock-Domain Crossing (D):** As mentioned earlier, this option can be ruled out because there are no clock-domain crossings present in the"
+      },
+      {
+        "i": 12,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 92.3,
+        "tokens": 379,
+        "text": "To troubleshoot this issue, let's analyze each option:\n\nA. Reset Sequencing:  If there's an issue with the reset sequencing, it could potentially cause problems in the design. However, since m_wb_ack is arriving cleanly every cycle and there are no clock-domain crossings, it's less likely to be the primary cause.\n\nB. Timeout Counter: A timeout counter might seem like a potential culprit, but if m_wb_ack pulses are received correctly every cycle, it's unlikely that the issue lies with the timeout counter itself. This option seems less probable given the information provided.\n\nC. State-Machine Ack Handling: Given that dma_state stays S_READ forever despite receiving m_wb_ack, this suggests an issue with how the state machine handles acknowledgments. It might be stuck in a certain state due to incorrect logic or a bug in handling the acknowledgment signal. This is a strong candidate for the root cause.\n\nD. Clock-Domain Crossing: We've already established that there are no clock-domain crossings in the design, making this option highly unlikely.\n\nConsidering these options and the given information, the most likely root cause seems to be related to how the state machine handles acknowledgments.\n\nAnswer: C"
+      },
+      {
+        "i": 13,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 81.9,
+        "tokens": 351,
+        "text": "Let's break down the situation and potential causes.\n\n1. **Reset deasserts**: This indicates that the reset signal has been released, allowing the design to operate normally.\n2. **dma_state stays S_READ forever**: This suggests a problem with the state machine or its control logic.\n3. **m_wb_ack pulses every cycle**: The master is correctly acknowledging the slave's responses.\n4. **Single-clock design (no clock-domain crossings)**: This eliminates issues related to synchronization between multiple clocks.\n\nGiven these points, we can consider the following potential causes:\n\n- **A. Reset sequencing**: Although the reset signal has deasserted, there could be a problem with how the state machine is being reset or sequenced.\n- **B. Timeout counter**: A stuck timeout counter might prevent the state machine from transitioning out of S_READ.\n- **C. State-machine ack handling**: This seems like the most likely cause since m_wb_ack is being asserted correctly, but the dma_state is not updating as expected.\n\nConsidering these options, **Answer: C**"
+      },
+      {
+        "i": 14,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 100.3,
+        "tokens": 382,
+        "text": "To troubleshoot this issue, let's consider each option given:\n\nA. Reset sequencing: If the reset sequencing is incorrect, it might cause the DMA controller to get stuck in an infinite loop or not transition out of a certain state after reset deassertion. However, since m_wb_ack pulses every cycle, it suggests that there's some activity happening.\n\nB. Timeout counter: A timeout issue could cause the DMA controller to get stuck if it times out waiting for something. But again, with clean waveforms at the slave pads showing m_wb_ack arriving every cycle, this seems less likely.\n\nC. State-machine ack handling: This option looks promising because if there's an issue in how the state machine handles acknowledgments (m_wb_ack), it could prevent the DMA controller from transitioning out of the S_READ state even though it sees clean WB_ACK signals.\n\nD. Clock-domain crossing: Since you mentioned the design is single-clock and no clock-domain crossings exist, this option can be ruled out.\n\nConsidering these points, the most likely root cause seems to be related to how the state machine handles acknowledgments (m_wb_ack). This could lead to an infinite loop in the S_READ state.\n\nAnswer: C"
+      },
+      {
+        "i": 15,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 86.7,
+        "tokens": 365,
+        "text": "Given that there are no clock-domain crossings and the design is single-clock, let's consider each option:\n\nA. **reset sequencing**: \nIf the reset sequencing is incorrect or not properly implemented, it might cause issues with the state machine after a reset. This could potentially keep the state in S_READ forever.\n\nB. **timeout counter**:\nA timeout counter is used to handle situations where an acknowledgement is expected but never received. However, if m_wb_ack pulses every cycle and there are no clock-domain crossings, this seems unlikely to be the root cause.\n\nC. **state-machine ack handling**: \nThis option seems most plausible. If the state machine does not properly acknowledge (m_wb_ack) a transaction or misinterprets it as an acknowledgement in its current state, it could result in the dma_state staying S_READ forever despite m_wb_ack pulses.\n\nD. **clock-domain crossing**:\nSince we've already established that there are no clock-domain crossings in this single-clock design, this option can be ruled out.\n\nConsidering these options, the most likely root cause is an issue with state-machine ack handling.\n\nAnswer: C"
+      },
+      {
+        "i": 16,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 106.4,
+        "tokens": 379,
+        "text": "Let's break down the problem and analyze each possible cause:\n\n1. **Reset Sequencing (A)**: The fact that m_wb_ack pulses after a reset deasserts suggests that the reset sequencing is not the root cause of the issue.\n\n2. **Timeout Counter (B)**: If there was an issue with the timeout counter, we would expect to see some indication of it timing out or taking longer than expected. Since m_wb_ack pulses cleanly every cycle, it's unlikely to be related to a timeout counter.\n\n3. **State-Machine Ack Handling (C)**: Given that dma_state stays in S_READ forever and there are no clock-domain crossings, this suggests an issue with how the state machine handles acknowledgments (m_wb_ack). The problem might be that the ack is being processed incorrectly or not at all, causing the state machine to get stuck.\n\n4. **Clock-Domain Crossing (D)**: As mentioned in the problem statement, there are no clock-domain crossings, which makes this option unlikely.\n\nBased on these steps and eliminating other options as possible causes, the most likely root cause of the issue is related to how the state machine handles acknowledgments.\n\nAnswer: C"
+      },
+      {
+        "i": 17,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 96.9,
+        "tokens": 383,
+        "text": "To approach this problem systematically:\n\n1. **Reset Sequencing (A)**:  Since the design is single-clock and there are no clock-domain crossings, a missequenced reset is unlikely to be the root cause.\n\n2. **Timeout Counter (B)**: A timeout counter could potentially get stuck if its counters are not being incremented or decremented correctly. However, in this case, m_wb_ack pulses every cycle, which suggests that the timing aspect of the system is correct and the timeout counter might still be functioning as expected.\n\n3. **State-machine Ack Handling (C)**: In a state machine, handling acknowledgement signals like m_wb_ack can get complex if not implemented correctly. This seems to be the most plausible explanation since dma_state stays S_READ forever even though m_wb_ack pulses every cycle. A potential issue could be that the state machine is not properly updating its internal states when it receives an acknowledgement.\n\n4. **Clock-domain crossing (D)**: As mentioned earlier, there are no clock-domain crossings in this design, making this option less likely to be the root cause.\n\nConsidering these points, the most likely root cause of the problem seems to be with the state-machine ack handling.\n\nAnswer: C"
+      },
+      {
+        "i": 18,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 56.8,
+        "tokens": 287,
+        "text": "Given that there are no clock-domain crossings in this single-clock design, and the waveforms at the slave pads show m_wb_ack arriving cleanly every cycle, we can rule out options D and possibly B.\n\nThe fact that dma_state stays S_READ forever after reset deasserts suggests a potential issue with state transitions or acknowledgement handling. Since m_wb_ack pulses are being received correctly, it's likely not an issue with receiving the signals, but rather how they're being processed within the state machine.\n\nThis points towards option C: state-machine ack handling as the most likely root cause. The DMA controller might be incorrectly handling the acknowledgements or not transitioning out of the S_READ state due to a faulty implementation in the state machine logic.\n\nAnswer: C"
+      },
+      {
+        "i": 19,
+        "ok": true,
+        "picked": "marked:C",
+        "latency_s": 80.1,
+        "tokens": 343,
+        "text": "Let's analyze the situation:\n\n1. The design is single-clock, so clock-domain crossings can be ruled out (option D).\n2. The waveforms show that m_wb_ack is arriving cleanly every cycle, which means it's not an issue with the acknowledgement signal itself.\n3. The DMA state stays in S_READ forever even after reset deasserts and m_wb_ack pulses. This suggests a problem with handling the acknowledgement or managing the state transition.\n\nGiven these points:\n\n- Option A (reset sequencing) might be related to the fact that the DMA state is stuck, but it's not directly related to the acknowledgement signal.\n- Option D has already been ruled out because of the single-clock design.\n- Option C (state-machine ack handling) seems like a plausible cause. If there's an issue with how the state machine handles acknowledgements, it could prevent the state from transitioning out of S_READ.\n\nConsidering these factors, the most likely root cause is related to the acknowledgement handling in the state machine.\n\nAnswer: C"
+      }
+    ]
+  },
+  "r2": {
+    "n": 20,
+    "closed": 0,
+    "first_pass": 0,
+    "false_acceptances": 0,
+    "mean_rounds": 3.0,
+    "rows": {
+      "P2-R2-00": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 31.4,
+        "tokens": 528,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-01": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 29.9,
+        "tokens": 537,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-02": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 27.3,
+        "tokens": 533,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-03": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 31.2,
+        "tokens": 525,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-04": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 32.1,
+        "tokens": 539,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-05": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 34.2,
+        "tokens": 544,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-06": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 19.8,
+        "tokens": 524,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-07": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 23.8,
+        "tokens": 532,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-08": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 40.8,
+        "tokens": 560,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-09": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 29.5,
+        "tokens": 530,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-10": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 31.3,
+        "tokens": 536,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-11": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 24.3,
+        "tokens": 536,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-12": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 24.3,
+        "tokens": 535,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-13": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 27.7,
+        "tokens": 537,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-14": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 27.3,
+        "tokens": 544,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-15": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 32.5,
+        "tokens": 547,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-16": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 27.8,
+        "tokens": 547,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-17": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 25.2,
+        "tokens": 539,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-18": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 30.7,
+        "tokens": 543,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-19": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 28.2,
+        "tokens": 548,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      }
+    }
+  },
+  "corpus": [
+    {
+      "case": "P2-R2-00",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r00(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10000;\nendmodule",
+      "output": "assign q = 5'b10000 >> 1;",
+      "tokens": 161
+    },
+    {
+      "case": "P2-R2-00",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r00(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10000 >> 1;",
+      "tokens": 183
+    },
+    {
+      "case": "P2-R2-00",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r00(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10000[3:0];",
+      "tokens": 184
+    },
+    {
+      "case": "P2-R2-01",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r01(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b11111;\nendmodule",
+      "output": "assign q = 5'b11111; // truncated to 4'b1111",
+      "tokens": 166
+    },
+    {
+      "case": "P2-R2-01",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r01(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b11111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b11111 & 5'b11111;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-01",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r01(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b11111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b11111 & 16'hFFFF;",
+      "tokens": 185
+    },
+    {
+      "case": "P2-R2-02",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r02(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10001;\nendmodule",
+      "output": "assign q = 5'b10001; // becomes 5'b00001 after truncation to 4-bit signal",
+      "tokens": 173
+    },
+    {
+      "case": "P2-R2-02",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r02(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10000;",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-02",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r02(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10000;",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-03",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (6-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r03(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b100101;\nendmodule",
+      "output": "assign q = {q[3:0], 5'b00000};",
+      "tokens": 165
+    },
+    {
+      "case": "P2-R2-03",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (6-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r03(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b100101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10010;",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-03",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (6-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r03(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b100101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b00101;",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-04",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r04(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule",
+      "output": "assign q = 5'b10110; // truncated to lower 4 bits. (q will be 4'b1011)",
+      "tokens": 176
+    },
+    {
+      "case": "P2-R2-04",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r04(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b00110;",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-04",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r04(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10110 >> 1;",
+      "tokens": 183
+    },
+    {
+      "case": "P2-R2-05",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r05(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000000;\nendmodule",
+      "output": "assign q = 9'b100000000; // becomes \nassign q = 9'b1000000 ;",
+      "tokens": 173
+    },
+    {
+      "case": "P2-R2-05",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r05(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b100000000;",
+      "tokens": 182
+    },
+    {
+      "case": "P2-R2-05",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r05(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b100000000 & 8'd11111111;",
+      "tokens": 189
+    },
+    {
+      "case": "P2-R2-06",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r06(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b111111111;\nendmodule",
+      "output": "assign q = 9'b111111110;",
+      "tokens": 160
+    },
+    {
+      "case": "P2-R2-06",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r06(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b111111110;",
+      "tokens": 182
+    },
+    {
+      "case": "P2-R2-06",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r06(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b111111110;",
+      "tokens": 182
+    },
+    {
+      "case": "P2-R2-07",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r07(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000001;\nendmodule",
+      "output": "assign q = 9'b1000000001;",
+      "tokens": 161
+    },
+    {
+      "case": "P2-R2-07",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r07(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b100000001 >> 1;",
+      "tokens": 185
+    },
+    {
+      "case": "P2-R2-07",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r07(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b100000001[7:0];",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-08",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (10-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r08(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1000000101;\nendmodule",
+      "output": "`assign q = 9'b10000001;`",
+      "tokens": 163
+    },
+    {
+      "case": "P2-R2-08",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (10-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r08(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b100000010;\n\nHowever since you wanted to keep the original value, I will provide a revised version of your request:\n\n assign q = 10'b10000000101;",
+      "tokens": 214
+    },
+    {
+      "case": "P2-R2-08",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (10-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r08(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b100000010;",
+      "tokens": 183
+    },
+    {
+      "case": "P2-R2-09",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r09(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b110000110;\nendmodule",
+      "output": "assign q = 9'b110000110[8-1:0];",
+      "tokens": 166
+    },
+    {
+      "case": "P2-R2-09",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r09(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b110000110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'b11000110;",
+      "tokens": 182
+    },
+    {
+      "case": "P2-R2-09",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r09(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b110000110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 9'b011000011;",
+      "tokens": 182
+    },
+    {
+      "case": "P2-R2-10",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r10(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000000;\nendmodule",
+      "output": "assign q = 13'b10000000000000;",
+      "tokens": 164
+    },
+    {
+      "case": "P2-R2-10",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r10(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b10000000000_0;",
+      "tokens": 187
+    },
+    {
+      "case": "P2-R2-10",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r10(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b10000000000;",
+      "tokens": 185
+    },
+    {
+      "case": "P2-R2-11",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r11(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1111111111111;\nendmodule",
+      "output": "assign q = 13'b11111111111110;",
+      "tokens": 164
+    },
+    {
+      "case": "P2-R2-11",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r11(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1111111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b1111111111011;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-11",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r11(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1111111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b0111111111111;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-12",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r12(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000001;\nendmodule",
+      "output": "assign q = 13'b10000000001000;",
+      "tokens": 164
+    },
+    {
+      "case": "P2-R2-12",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r12(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b100000000001;",
+      "tokens": 185
+    },
+    {
+      "case": "P2-R2-12",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r12(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b1000000000100;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-13",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (14-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r13(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 14'b10000000001101;\nendmodule",
+      "output": "assign q = 14'b10000000001101000;",
+      "tokens": 165
+    },
+    {
+      "case": "P2-R2-13",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (14-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r13(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 14'b10000000001101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b10000000001101;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-13",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (14-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r13(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 14'b10000000001101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b10000000001101;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-14",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r14(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1010101010101;\nendmodule",
+      "output": "`assign q = 13'b1010101010101000;`",
+      "tokens": 167
+    },
+    {
+      "case": "P2-R2-14",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r14(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1010101010101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = {q[11], 13'b1010101010101};",
+      "tokens": 191
+    },
+    {
+      "case": "P2-R2-14",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r14(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1010101010101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 13'b10101010101010;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-15",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r15(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000000;\nendmodule",
+      "output": "assign q = 17'b10000000000000010;",
+      "tokens": 166
+    },
+    {
+      "case": "P2-R2-15",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r15(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = {a[15], 17'b10000000000000000};",
+      "tokens": 193
+    },
+    {
+      "case": "P2-R2-15",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r15(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b1000000000000000;",
+      "tokens": 188
+    },
+    {
+      "case": "P2-R2-16",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r16(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11111111111111111;\nendmodule",
+      "output": "assign q = 17'b1111111111111111100000;",
+      "tokens": 168
+    },
+    {
+      "case": "P2-R2-16",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r16(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11111111111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b11111111111111111000000;",
+      "tokens": 190
+    },
+    {
+      "case": "P2-R2-16",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r16(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11111111111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b11111111111111111000;",
+      "tokens": 189
+    },
+    {
+      "case": "P2-R2-17",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r17(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000001;\nendmodule",
+      "output": "assign q = 16'b1000000000000001;",
+      "tokens": 166
+    },
+    {
+      "case": "P2-R2-17",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r17(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'd16777217;",
+      "tokens": 185
+    },
+    {
+      "case": "P2-R2-17",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r17(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b100000000000000010;",
+      "tokens": 188
+    },
+    {
+      "case": "P2-R2-18",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (18-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r18(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 18'b100000000000000101;\nendmodule",
+      "output": "assign q = 18'b1000000000000000101;",
+      "tokens": 167
+    },
+    {
+      "case": "P2-R2-18",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (18-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r18(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 18'b100000000000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b10000000000000101;",
+      "tokens": 188
+    },
+    {
+      "case": "P2-R2-18",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (18-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r18(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 18'b100000000000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b10000000000000101;",
+      "tokens": 188
+    },
+    {
+      "case": "P2-R2-19",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r19(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11001100110011001;\nendmodule",
+      "output": "assign q = 16'b11001100110011;",
+      "tokens": 165
+    },
+    {
+      "case": "P2-R2-19",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r19(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11001100110011001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 17'b11001100110011100;",
+      "tokens": 188
+    },
+    {
+      "case": "P2-R2-19",
+      "model": "meta-llama-3.1-8b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r19(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11001100110011001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = {17{a[15]}, 17'b11001100110011001};",
+      "tokens": 195
+    }
+  ]
+}
