@@ -1,0 +1,25 @@
+initial
+assume (= [$auto$async2sync.cc:101:execute$23] false)
+assume (= [$auto$async2sync.cc:110:execute$27] true)
+assume (= [_witness_.anyinit_procdff_20] false)
+assume (= [rcnt] #b00)
+
+state 0
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 1
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 2
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 3
+assume (= [clk] false)
+assume (= [rst] false)
+
+state 4
+assume (= [clk] false)
+assume (= [rst] false)

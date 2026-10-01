@@ -1,0 +1,8 @@
+# running in hier_prove/src/
+read_verilog -formal hier.sv
+prep -top tiny_top
+
+hierarchy -smtcheck
+rename -witness
+write_jny -no-connections ../model/design.json
+write_rtlil ../model/design.il
