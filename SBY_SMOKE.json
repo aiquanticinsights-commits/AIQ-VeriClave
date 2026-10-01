@@ -6,8 +6,8 @@
   "yosys": "Yosys 0.69+156 (git sha1 9d0c91b23-dirty, Release, Clang /usr/bin/clang++ 21.1.8)",
   "sby": "SBY v0.69",
   "solver": "boolector 3.2.4",
-  "git_commit": "6285169",
-  "image_digest": "sha256:c5bd3f0f9970",
+  "git_commit": "e427ce1",
+  "image_digest": "sha256:6f3f54e1a3c9",
   "test": "counter_sby_smoke",
   "formal_result": "PASS",
   "artifacts": [
