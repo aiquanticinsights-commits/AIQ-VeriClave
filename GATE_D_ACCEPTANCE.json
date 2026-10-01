@@ -1,0 +1,5 @@
+{"approved_evidence": ["REVIEW_p0d-20260929-142344.json (reviewer SSB, 5 items, run ID matches P0D_SKELETON.json)", "20% human review rate (1 exception / 5 tasks, recomputed)", "18.7s median decision time over dispositioned items (recomputed; 19.9s mean also on record)", "25% reject + 25% override with verbatim grounds; T6 skip counted as unreviewed", "policy guard re-executed 2026-10-01 (6 protected actions, auto-merge denied, sign-off still PENDING)"],
+ "decision": "ACCEPTED",
+ "gate": "D",
+ "human_signoff": "SSB, 2026-10-01 — Gate D accepted (live review measurements verified 2026-10-01)",
+ "scope": "human review scalable and measured: exception-first workflow, timing, reject/override discipline, sign-off as real control"}
