@@ -32,3 +32,7 @@ viv_work/
 formal/demo/hier/
 formal/demo/*_prove/
 
+
+mutant_catalog_s*.json
+MUTATION_PARTIAL_S*.json
+

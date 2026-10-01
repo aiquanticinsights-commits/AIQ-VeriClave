@@ -201,6 +201,23 @@ def save_partial(data: dict) -> None:
         json.dump(data, f, indent=2)
 
 
+def load_dispositions(seed: int) -> dict:
+    """Human dispositions apply ONLY to the seed-7 frozen campaign: mutant
+    IDs are positional (M001..), so a different seed reuses IDs for
+    DIFFERENT mutations (measured P1-03: all 19 seed-7 dispositions
+    mismatched seed-8 mutants). Applying them cross-seed manufactures
+    false EQUIVALENTs. Fresh seeds start undispositioned."""
+    if seed != 7:
+        return {}
+    disp_path = os.path.join(HERE, "mutation_dispositions.json")
+    try:
+        with open(disp_path, encoding="utf-8") as f:
+            return {k: v for k, v in json.load(f).items()
+                    if not k.startswith("_")}
+    except (OSError, ValueError):
+        return {}
+
+
 def campaign(catalog: list[dict], workdir: str = "",
              limit: int = 0, resume: bool = False,
              lint_fn=None, sim_fn=None, fuzz_fn=None) -> dict:
@@ -232,6 +249,7 @@ def campaign(catalog: list[dict], workdir: str = "",
 
 def main() -> int:
     limit, resume, selftest = 0, False, False
+    seed = 7  # P0 frozen campaign seed; P1 loop-scale uses --seed for fresh draws
     out = os.path.join(HERE, "MUTATION_WB_DMA.json")
     args = sys.argv[1:]
     for i, a in enumerate(args):
@@ -239,6 +257,10 @@ def main() -> int:
             limit = int(a.split("=", 1)[1])
         elif a == "--limit" and i + 1 < len(args):
             limit = int(args[i + 1])
+        elif a.startswith("--seed="):
+            seed = int(a.split("=", 1)[1])
+        elif a == "--seed" and i + 1 < len(args):
+            seed = int(args[i + 1])
         elif a == "--resume":
             resume = True
         elif a == "--selftest":
@@ -249,6 +271,12 @@ def main() -> int:
             out = args[i + 1]
     if selftest:
         return _selftest()
+    if seed != 7:
+        # Isolate checkpoints: a fresh-seed campaign must never resume from
+        # (or clobber) the frozen seed-7 partial.
+        def _seeded_partial(_s=seed):
+            return os.path.join(HERE, f"MUTATION_PARTIAL_S{_s}.json")
+        globals()["partial_path"] = _seeded_partial
     sys.path.insert(0, HERE)
     import mutate
     from classify import classify, write_report
@@ -261,19 +289,15 @@ def main() -> int:
     if not files:
         print("FATAL: no RTL sources found", flush=True)
         return 1
-    pool = mutate.seed_catalog(files, 100000, seed=7)
-    catalog = mutate.stratify(pool, 100, seed=7)
-    mutate.write_catalog(catalog, os.path.join(HERE, "mutant_catalog.json"))
+    pool = mutate.seed_catalog(files, 100000, seed=seed)
+    catalog = mutate.stratify(pool, 100, seed=seed)
+    cat_name = ("mutant_catalog.json" if seed == 7
+                else f"mutant_catalog_s{seed}.json")
+    mutate.write_catalog(catalog, os.path.join(HERE, cat_name))
     print(f"pool={len(pool)} campaign={len(catalog)}", flush=True)
     t0 = time.perf_counter()
     results = campaign(catalog, resume=resume, limit=limit)
-    disp_path = os.path.join(HERE, "mutation_dispositions.json")
-    try:
-        with open(disp_path, encoding="utf-8") as f:
-            dispositions = {k: v for k, v in json.load(f).items()
-                            if not k.startswith("_")}
-    except (OSError, ValueError):
-        dispositions = {}
+    dispositions = load_dispositions(seed)
     report = classify(results, catalog, dispositions)
     report["elapsed_s"] = round(time.perf_counter() - t0, 1)
     report["benchmark"] = "mutation-c1 v1"

@@ -1,0 +1,818 @@
+{
+  "total": 100,
+  "killed": 74,
+  "survived": 26,
+  "equivalent": 0,
+  "invalid": 0,
+  "infra_failures": 0,
+  "executable": 100,
+  "score": 0.74,
+  "c1_target": 0.95,
+  "c1_met": false,
+  "rows": [
+    {
+      "id": "M001",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M002",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M003",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 4 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M004",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M005",
+      "op": "BIT_NEG_TOGGLE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M006",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmp3xjs58f0/wb_dma.sv:132:42: syntax error, unexpected begin",
+      "disposition": ""
+    },
+    {
+      "id": "M007",
+      "op": "CTRL_STMT_DELETE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M008",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M009",
+      "op": "REL_GT_GE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M010",
+      "op": "SEQ_ENABLE_REMOVE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 5 div@12",
+      "disposition": ""
+    },
+    {
+      "id": "M011",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fuzz seed 11 div@2",
+      "disposition": ""
+    },
+    {
+      "id": "M012",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@4",
+      "disposition": ""
+    },
+    {
+      "id": "M013",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M014",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M015",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M016",
+      "op": "BIT_NEG_TOGGLE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M017",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpn0vcekvx/wb_dma.sv:108:44: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M018",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M019",
+      "op": "REL_EQ_NE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M020",
+      "op": "SEQ_ENABLE_REMOVE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M021",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M022",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M023",
+      "op": "ARITH_PLUS1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M024",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M025",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M026",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpkqxqg7x3/wb_dma.sv:87:33: syntax error, unexpected begin",
+      "disposition": ""
+    },
+    {
+      "id": "M027",
+      "op": "CTRL_STMT_DELETE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M028",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M029",
+      "op": "SEQ_ENABLE_REMOVE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 5 div@8",
+      "disposition": ""
+    },
+    {
+      "id": "M030",
+      "op": "SEQ_RESET_FLIP",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M031",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M032",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M033",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@4",
+      "disposition": ""
+    },
+    {
+      "id": "M034",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M035",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpyxctnx1z/wb_dma.sv:89:36: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M036",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fuzz seed 55 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M037",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fuzz seed 55 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M038",
+      "op": "SEQ_ENABLE_REMOVE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 5 div@10",
+      "disposition": ""
+    },
+    {
+      "id": "M039",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 2 div@9",
+      "disposition": ""
+    },
+    {
+      "id": "M040",
+      "op": "ARITH_MINUS1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M041",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M042",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M043",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M044",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpq6de8onz/wb_dma.sv:79:40: syntax error, unexpected begin",
+      "disposition": ""
+    },
+    {
+      "id": "M045",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M046",
+      "op": "REL_EQ_NE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M047",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 5 div@8",
+      "disposition": ""
+    },
+    {
+      "id": "M048",
+      "op": "ARITH_MINUS1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M049",
+      "op": "ARITH_PLUS1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M050",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@4",
+      "disposition": ""
+    },
+    {
+      "id": "M051",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M052",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpoo5prkks/wb_dma.sv:136:46: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M053",
+      "op": "CTRL_STMT_DELETE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M054",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M055",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@9",
+      "disposition": ""
+    },
+    {
+      "id": "M056",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M057",
+      "op": "ARITH_PLUS1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M058",
+      "op": "BIT_IDX_M1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@4",
+      "disposition": ""
+    },
+    {
+      "id": "M059",
+      "op": "BIT_IDX_P1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M060",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmp3p06r2_s/wb_dma.sv:105:44: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M061",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M062",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@8",
+      "disposition": ""
+    },
+    {
+      "id": "M063",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M064",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M065",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M066",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M067",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpbyae6tzk/wb_dma.sv:141:40: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M068",
+      "op": "CTRL_STMT_DELETE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M069",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M070",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@0",
+      "disposition": ""
+    },
+    {
+      "id": "M071",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 4 div@2",
+      "disposition": ""
+    },
+    {
+      "id": "M072",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpkq52ixgx/wb_dma.sv:150:21: Illegal character in binary constant: 2",
+      "disposition": ""
+    },
+    {
+      "id": "M073",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M074",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpdu7m64t_/wb_dma.sv:113:44: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M075",
+      "op": "CTRL_STMT_DELETE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M076",
+      "op": "REL_EQ_NE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M077",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 2 div@8",
+      "disposition": ""
+    },
+    {
+      "id": "M078",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M079",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@8",
+      "disposition": ""
+    },
+    {
+      "id": "M080",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M081",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpf78e6jn_/wb_dma.sv:102:75: syntax error, unexpected begin",
+      "disposition": ""
+    },
+    {
+      "id": "M082",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@7",
+      "disposition": ""
+    },
+    {
+      "id": "M083",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 2 div@9",
+      "disposition": ""
+    },
+    {
+      "id": "M084",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M085",
+      "op": "ARITH_PLUS1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M086",
+      "op": "BIT_IDX_P1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M087",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmphax5ni30/wb_dma.sv:80:33: syntax error, unexpected begin",
+      "disposition": ""
+    },
+    {
+      "id": "M088",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@6",
+      "disposition": ""
+    },
+    {
+      "id": "M089",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 0 div@5",
+      "disposition": ""
+    },
+    {
+      "id": "M090",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M091",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M092",
+      "op": "BIT_IDX_P1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M093",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpuu84aps3/wb_dma.sv:88:36: syntax error, unexpected IDENTIFIER",
+      "disposition": ""
+    },
+    {
+      "id": "M094",
+      "op": "CTRL_STMT_DELETE",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 5 div@10",
+      "disposition": ""
+    },
+    {
+      "id": "M095",
+      "op": "SEQ_RESET_FLIP",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "fixed-vector 1 div@8",
+      "disposition": ""
+    },
+    {
+      "id": "M096",
+      "op": "ARITH_MINUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M097",
+      "op": "ARITH_PLUS1",
+      "status": "KILLED",
+      "by": "sim",
+      "detail": "build-gate",
+      "disposition": ""
+    },
+    {
+      "id": "M098",
+      "op": "BIT_IDX_P1",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    },
+    {
+      "id": "M099",
+      "op": "CTRL_COND_INVERT",
+      "status": "KILLED",
+      "by": "syntax",
+      "detail": "%Error: /tmp/tmpm6bxx_tn/wb_dma.sv:71:54: syntax error, unexpected begin",
+      "disposition": ""
+    },
+    {
+      "id": "M100",
+      "op": "CTRL_STMT_DELETE",
+      "status": "SURVIVED",
+      "by": "fixed+fuzz-vectors",
+      "detail": "",
+      "disposition": ""
+    }
+  ],
+  "benchmark": "mutation-c1 v1 seed-8 (P1-03 loop-scale draw 2)",
+  "note": "Recomputed with seed-pinned dispositions (empty for seed!=7); 2026-10-01 P1-03 correction of cross-seed false EQUIVALENTs.",
+  "elapsed_s": 264.5,
+  "elapsed_provenance": "campaign wall-clock from the 2026-10-01 seed-8 run (classification-independent; recompute changed only dispositions)"
+}

@@ -55,6 +55,16 @@ class TestClassify(unittest.TestCase):
         self.assertEqual(rep["score"], 0.0)
         self.assertFalse(rep["c1_met"])
 
+    def test_dispositions_are_seed_pinned(self):
+        # P1-03 tripwire: mutant IDs are positional, so seed-7 dispositions
+        # must never apply to another seed's catalog (false EQUIVALENTs).
+        from run_mutants import load_dispositions
+        self.assertEqual(load_dispositions(8), {})
+        self.assertEqual(load_dispositions(12345), {})
+        seed7 = load_dispositions(7)
+        self.assertIsInstance(seed7, dict)
+        self.assertTrue(all(not k.startswith("_") for k in seed7))
+
 
 class TestGateA(unittest.TestCase):
     def _ev(self, **kw):
