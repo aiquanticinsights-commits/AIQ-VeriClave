@@ -35,6 +35,8 @@ SCHEMA = {
                        "sby", "solver"),
     "A_IRQ_DISPOSITION.json": ("requirement_id", "formal", "alternative",
                                "disposition", "human_signoff"),
+    "GATE_B_ACCEPTANCE.json": ("gate", "decision", "human_signoff",
+                               "approved_evidence"),
     "mutation_gap_report.json": (),
     "mutation_dispositions.json": (),
 }

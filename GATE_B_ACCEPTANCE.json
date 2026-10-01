@@ -1,0 +1,5 @@
+{"approved_evidence": ["REPAIR_CLOSURE_V1.json (R4-reset-value/B approvals [0,0,2], round 3)", "REPAIR_CLOSURE.json (R5-double/B approvals [0,2], round 2)", "test_no_fourth_round_ever (unit, green)", "max rounds 3 observed across all committed run files, zero violations"],
+ "decision": "ACCEPTED",
+ "gate": "B",
+ "human_signoff": "SSB, 2026-10-01 — Gate B accepted (2 genuine in-run rescues verified 2026-10-01, iteration limit + invariant verified)",
+ "scope": "closure works: elitist bounded loop, fault-hinted regen with ranked suspects, hard 3-round boundary"}
