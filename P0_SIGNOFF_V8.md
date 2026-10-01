@@ -57,5 +57,9 @@ Signature/Approval: Approved
 
 ## Notes
 
-________________________________________
-________________________________________
+1. I have reviewed the P0 evidence, understand the remaining P1 limitations, and approve the P0 system release under the defined P0 scope.
+2. P0 GO is accepted with the documented P1 limitations remaining open.
+
+Not:
+
+"Everything is completely solved."
