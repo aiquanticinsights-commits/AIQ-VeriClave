@@ -1,0 +1,5 @@
+{"approved_evidence": ["E1 verifier 9/9 live at HEAD (image builds, sby/yosys/solver launch, proof PROVEN, artifacts + versions + provenance, no host toolchain)", "E2_PORTABILITY_REPORT.json overall PASS (7/7 rows none/agree, same commit e427ce1 both envs)", "SBY_SMOKE.json (formal PASS, git + image digest match HEAD)", "M004 SURVIVED identically both sides (shared negative reproduced)", "evidence schema PASS"],
+ "decision": "ACCEPTED",
+ "gate": "E",
+ "human_signoff": "SSB, 2026-10-01 — Gate E accepted (E1+E2 re-verified live at HEAD 2026-10-01)",
+ "scope": "reproducibility proven: sby-smoke container + Docker-WSL normalized equivalence"}

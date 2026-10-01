@@ -43,6 +43,8 @@ SCHEMA = {
                                "approved_evidence"),
     "GATE_D_ACCEPTANCE.json": ("gate", "decision", "human_signoff",
                                "approved_evidence"),
+    "GATE_E_ACCEPTANCE.json": ("gate", "decision", "human_signoff",
+                               "approved_evidence"),
     "mutation_gap_report.json": (),
     "mutation_dispositions.json": (),
 }
