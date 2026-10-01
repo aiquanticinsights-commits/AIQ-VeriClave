@@ -28,3 +28,7 @@ viv_work/
 .vscode/
 .idea/
 *.tmp
+
+formal/demo/hier/
+formal/demo/*_prove/
+
