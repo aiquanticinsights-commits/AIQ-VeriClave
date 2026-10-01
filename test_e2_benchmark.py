@@ -54,7 +54,64 @@ class TestLegParsing(unittest.TestCase):
             parse_leg_output("@@PORTABILITY@@\n{bad\n@@MUT@@\n{}")
 
 
-class TestSpotSkip(unittest.TestCase):
+class TestOverall(unittest.TestCase):
+    def test_pass_requires_all_clean(self):
+        from scripts.run_portability_benchmark import overall_pass
+        good = {"a": {"variance": "none"}, "b": {"variance": "none"}}
+        self.assertTrue(overall_pass(good))
+
+    def test_unmeasured_fails(self):
+        from scripts.run_portability_benchmark import overall_pass
+        self.assertFalse(overall_pass({"a": {"variance": "none"},
+                                       "b": {"variance": "UNMEASURED"}}))
+
+    def test_diverged_fails(self):
+        from scripts.run_portability_benchmark import overall_pass
+        self.assertFalse(overall_pass({"a": {"variance": "DIVERGED"}}))
+
+    def test_drift_fails(self):
+        from scripts.run_portability_benchmark import overall_pass
+        self.assertFalse(overall_pass({"a": {"variance": "version-drift"}}))
+
+    def test_empty_fails(self):
+        from scripts.run_portability_benchmark import overall_pass
+        self.assertFalse(overall_pass({}))
+
+
+class TestDockerMountContract(unittest.TestCase):
+    def test_mounts_parent_not_rtl_dir(self):
+        # Regression for the wrong-tree mount: docker_leg must mount the
+        # rideprotect-rv PARENT (so /work/rideprotect-rv/rtl/... resolves),
+        # never a deeper dir. Captured from the sh() call args.
+        import unittest.mock
+        import scripts.run_portability_benchmark as bench
+        seen = {}
+
+        def fake_sh(cmd, timeout_s=0, cwd=""):
+            seen["cmd"] = cmd
+            if cmd[0] == "docker" and "build" in cmd:
+                return 0, ""
+            if cmd[0] == "docker" and "run" in cmd:
+                vols = [cmd[i + 1] for i, c in enumerate(cmd)
+                        if c == "-v"]
+                seen["vols"] = vols
+                return 0, ("@@PORTABILITY@@\n"
+                           '{"checks": {"unittest": {"pass": true}}}'
+                           "\n@@MUT@@\n{}"
+                           "\nmutant spot done:\n")
+            return 0, ""
+
+        with unittest.mock.patch.object(bench, "sh", side_effect=fake_sh):
+            out = bench.docker_leg("/tmp/never",
+                                   "/r/rideprotect-rv/rtl/wb_dma.v")
+        mnt = [v for v in seen["vols"] if "/work/rideprotect-rv:" in v]
+        self.assertEqual(len(mnt), 1)
+        # source must be the rideprotect-rv PARENT (so that
+        # /work/rideprotect-rv/rtl/wb_dma.v resolves), never the rtl dir
+        # itself (the measured wrong-tree bug) nor the .v file.
+        self.assertIn("rideprotect-rv:/work/rideprotect-rv", mnt[0])
+        self.assertNotIn("wb_dma.v", mnt[0])
+        self.assertIn("_mut_spot", out)
     def test_skip_without_rtl(self):
         import sim_frm
         from scripts.run_portability_benchmark import mutant_spot

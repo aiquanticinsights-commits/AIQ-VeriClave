@@ -81,6 +81,10 @@ def parse_leg_output(log: str) -> tuple[dict, dict]:
 
 
 def docker_leg(tmp: str, rtl_host: str) -> dict:
+    # CONTRACT (measured 2026-09-30): rtl_host is the RTL FILE; the mount
+    # source is derived inside via dirname×2. Passing the file's DIRECTORY
+    # here once mounted the wrong tree (UNMEASURED everywhere) — the
+    # tripwire below caught it, and test_docker_mounts_parent pins it.
     image = "aiq-vericlave:p0"
     rc, log = sh(["docker", "build", "-t", image, "."], timeout_s=1200)
     if rc != 0:
@@ -178,6 +182,13 @@ def compare(wsl: dict, docker: dict, smoke: dict) -> dict:
     return rows
 
 
+def overall_pass(rows: dict) -> bool:
+    """Gate rule, isolated for unit testing: PASS iff every row is clean —
+    UNMEASURED, DIVERGED, and version-drift all fail. No silent passes."""
+    return all(r.get("variance") == "none" for r in rows.values()) \
+        and bool(rows)
+
+
 def main() -> int:
     t0 = time.perf_counter()
     commit = git_commit()
@@ -202,7 +213,7 @@ def main() -> int:
     smoke = smoke_leg(tmp)
     print("smoke:", smoke.get("formal_result"), flush=True)
     rows = compare(wsl, docker, smoke)
-    overall = all(r["variance"] in ("none",) for r in rows.values())
+    overall = overall_pass(rows)
     doc = {"benchmark": "E2-BENCH-001", "date": time.strftime("%Y-%m-%d"),
            "git_commit": commit,
            "wsl": {"unittest": wsl["checks"]["unittest"],
@@ -222,7 +233,7 @@ def main() -> int:
         json.dump(doc, f, indent=2)
     for k, r in rows.items():
         print(f"  {r['variance']:10s} {k}: {r['detail'][:80]}", flush=True)
-    print("overall:", doc["overall"], flush=True)
+    print("overall:", "PASS" if overall_pass(rows) else "FAIL", flush=True)
     # interim artifacts stay out of git (report + evidence JSONs only)
     for fn in ("PORTABILITY_e2wsl.json", "PORTABILITY_e2docker.json"):
         try:
