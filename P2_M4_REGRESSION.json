@@ -1,0 +1,4 @@
+{"checks": {"deepseek_r5_control": "CLOSED round 2, approvals 2 (temp script, not committed; resolved wall holds under candidate)", "frozen_files_unchanged": true, "full_suite": "331 green", "r5_baseline": "closes in both V-runs (unchanged)"},
+ "item": "P2-M4",
+ "status": "PASS — no regression in P0 guarantees",
+ "title": "P2-M4 regression guard"}

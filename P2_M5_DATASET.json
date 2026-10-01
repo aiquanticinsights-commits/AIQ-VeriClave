@@ -1,0 +1,7 @@
+{"contamination_notes": "Benchmark prompts are authorship of this repo (no web text); model outputs are fresh generations. No train/test split exists yet — corpus is a BASELINE, not a training set.",
+ "corpus": {"r2_turns": 118, "sources": ["P2_M2_LLAMA.json.corpus (60 turns, 20 cases x 3 rounds)", "P2_M2_DEEPSEEK.json.corpus (58 turns)", "T4 full texts in P2_M2_*.t4.samples (40 samples)"], "t4_samples": 40},
+ "dedup": "21 distinct prompts (20 R2 + 1 T4); outputs not deduplicated (verbatim record)",
+ "item": "P2-M5",
+ "labels": "deterministic verifiers only (reason-aware grader; value_gate + lint wall) — no human labels, no model-graded labels",
+ "status": "BASELINE ESTABLISHED — collected and characterized; no trainability claimed",
+ "title": "P2-M5 proprietary training dataset baseline"}

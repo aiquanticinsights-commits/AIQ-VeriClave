@@ -1,0 +1,6 @@
+{"citations": ["P2_M3_VERDICT.json (candidate worse-or-under-bar on both walls)", "P2_M5_DATASET.json (~158 turns, 21 prompts, mostly-failure, single design family)", "P0B_V2_BASELINE.json (candidate sva-validity 0.0; won nothing)", "Standing rule: no training without measured justification"],
+ "decision": "NO-GO on domain-specific training (SFT or otherwise) on current evidence.",
+ "item": "P2-M6",
+ "reason": "Scale (~10^2 turns vs SFT scale), diversity (2 task families, 1 design), success density (mostly negative examples), and candidate quality (alternative underperforms baseline) all point the same way. Revisit only on materially new evidence (larger diverse corpus with positive density, or a candidate that clears M3).",
+ "status": "DECIDED on measured evidence",
+ "title": "P2-M6 training decision"}
