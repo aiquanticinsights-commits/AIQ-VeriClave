@@ -4,6 +4,26 @@ Date: 2026-10-01
 Milestone set: `P2-M1` … `P2-M6` (frozen before any model run in `P2_BENCH.json`)
 Reviewer: SSB (Satish Sura, Founder & CEO)
 
+## Formal status
+
+```
+P2-M1  Frozen benchmark established          COMPLETE
+P2-M2  Alternative model evaluated           COMPLETE
+P2-M3  Meaningful improvement on T4/R2       CLOSED — FINDING APPROVED (verdict FAIL)
+P2-M4  No regression in P0 guarantees        COMPLETE — PASS
+P2-M5  Proprietary training dataset baseline COMPLETE — PASS
+P2-M6  Training decision on measured evidence COMPLETE — NO-GO
+
+TRAINING: NOT AUTHORIZED
+P2 STATUS: CLOSED
+```
+
+Closure authority: human-directed formal closure (2026-10-01), on the
+dispositions recorded above. P2-M3 is approved as a finding/verdict
+integrity item only; it is **not** a pass. The T4 and R2 capability walls
+remain open as carried-forward capability limits, dispositioned as
+documented findings rather than as closed defects.
+
 ## Final state
 
 **P2-M3: CLOSED — FINDING APPROVED**
