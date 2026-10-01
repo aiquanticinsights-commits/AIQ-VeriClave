@@ -1,0 +1,5 @@
+{"approved_evidence": ["P0D_REPORT_V2.json (v0.3.1-pinned: 2822.6s / 13,798 tok / $0.001654, $0.000184/task)", "P0D_REPORT.json (current: 3303.6s / 16,410 tok / $0.001935, $0.000215/task)", "P0D_SKELETON.json + P0D_T1FORMAL.json + P0D_T9RERUN.json (per-task cost/latency/tokens present)", "correspondence audit 2026-10-01 (cited numbers traced file-by-file; overwrite versioned as V2)"],
+ "decision": "ACCEPTED",
+ "gate": "C",
+ "human_signoff": "SSB, 2026-10-01 — Gate C accepted (all five correspondence boxes verified 2026-10-01)",
+ "scope": "efficiency measured: nominal cost far under $0.50/task band, wall-clock recorded as the true budget"}
