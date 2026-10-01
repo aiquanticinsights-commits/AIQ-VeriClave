@@ -1,7 +1,7 @@
 {"bars": {"r2": "deepseek closed >= llama(0) + 4 with zero false acceptances", "t4": "deepseek accuracy >= llama-N20 (0.70) + 0.20 = 0.90"},
  "human_approval": "PENDING",
  "item": "P2-M3",
- "results": {"r2": {"bar": 4, "closed": {"deepseek": 3, "llama": 0}, "false_acceptances": 0, "first_pass": {"deepseek": 1, "llama": 0}, "note": "Genuine signal (3 closes where baseline has 0, incl. first-pass on P2-R2-00) but below the pre-registered +4 bar; single-rescue-class noise not excluded.", "pass": false},
-             "t4": {"accuracy": {"deepseek": 0.55, "llama": 0.7}, "bar": 0.9, "hits": {"deepseek": 11, "llama": 14}, "n": 20, "note": "Directionally worse, not better. The n=5 probe (1/5) understated llama; N=20 re-baseline is the valid anchor.", "pass": false}},
+ "results": {"r2": {"bar": 4, "closed": {"deepseek": 3, "llama": 0}, "false_acceptances": 0, "first_pass": {"deepseek": 1, "llama": 0}, "note": "DeepSeek closed 3 R2 cases that llama did not close, providing evidence of a narrow model-specific capability difference on this R2 set; the sample is too small to generalize. Below the pre-registered +4 bar; single-rescue-class noise not excluded.", "pass": false},
+             "t4": {"accuracy": {"deepseek": 0.55, "llama": 0.7}, "bar": 0.9, "hits": {"deepseek": 11, "llama": 14}, "n": 20, "note": "Directionally worse, not better. The earlier 5-case probe overstated the apparent severity of the T4 wall; the N=20 benchmark provides the more reliable baseline.", "pass": false}},
  "status": "FAIL — walls stand",
  "title": "P2-M3 capability verdict"}
