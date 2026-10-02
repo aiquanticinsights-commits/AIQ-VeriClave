@@ -1,0 +1,29 @@
+{
+  "method": "Derived from frozen P2 artifacts only. No new model runs, no download, zero cost.",
+  "track": "P3-B",
+  "r2": {
+    "cases": 20,
+    "llama_closed": 0,
+    "deepseek_closed": 3,
+    "union_oracle_ceiling": 3,
+    "both_closed": 0,
+    "only_deepseek": ["P2-R2-00", "P2-R2-01", "P2-R2-16"],
+    "bar": 4,
+    "verdict": "FAIL — the ensemble CANNOT clear the R2 bar. The union of what both models close is 3/20, below the frozen bar of 4. This is an upper bound assuming a perfect per-case selector, so no selector quality can close the wall.",
+    "implication": "The R2 gap is not a selection problem; it is a capability problem. The two models fail the SAME 17 cases. Complementarity exists but is confined to 3 cases and does not reach the bar."
+  },
+  "t4": {
+    "paired_samples": 20,
+    "both_correct": 6,
+    "both_wrong": 1,
+    "disagree": 13,
+    "consensus_correct_rate": 0.3,
+    "disagreement_rate": 0.65,
+    "bar": 0.9,
+    "verdict": "FAIL as a two-model ensemble. Two models cannot form a majority; the guaranteed consensus floor is 30%, far below the 90% bar. Reaching the bar would require a third vote or a tiebreak that outperforms the stronger single model on 65% of samples — an unmeasured assumption, not a result.",
+    "implication": "T4 is not an ensemble problem either at this model scale."
+  },
+  "overall_verdict": "P3-B FAIL on both tracks",
+  "honest_note": "The complementarity the plan anticipated IS real and measurable (deepseek closes 3 cases llama never touches, 0 overlap). It is simply too small to clear the bars. Recorded as a measured negative, not suppressed.",
+  "next": "A 3rd model or the P3-C system pipeline is required for ensembling to have headroom. Neither is assumed here."
+}

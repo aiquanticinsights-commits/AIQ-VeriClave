@@ -1,0 +1,53 @@
+{
+  "track": "P3-B",
+  "method": "frozen P2 artifacts only \u2014 no new model runs",
+  "sources": [
+    "P2_M2_LLAMA.json",
+    "P2_M2_DEEPSEEK.json"
+  ],
+  "t4": {
+    "n_paired": 20,
+    "both_correct": 6,
+    "both_wrong": 1,
+    "disagree": 13,
+    "consensus_correct_rate": 0.3,
+    "consensus_wrong_rate": 0.05,
+    "disagreement_rate": 0.65,
+    "note": "Two models cannot form a majority. Consensus-correct is the ensemble's guaranteed floor; disagreement rate is the fraction needing a tiebreak, where an 8B tiebreak must beat the stronger single model to add value."
+  },
+  "r2": {
+    "n_cases": 20,
+    "llama_closed": 0,
+    "deepseek_closed": 3,
+    "union_closed_oracle_ceiling": 3,
+    "both_closed": 0,
+    "only_llama": [],
+    "only_deepseek": [
+      "P2-R2-00",
+      "P2-R2-01",
+      "P2-R2-16"
+    ],
+    "neither": [
+      "P2-R2-02",
+      "P2-R2-03",
+      "P2-R2-04",
+      "P2-R2-05",
+      "P2-R2-06",
+      "P2-R2-07",
+      "P2-R2-08",
+      "P2-R2-09",
+      "P2-R2-10",
+      "P2-R2-11",
+      "P2-R2-12",
+      "P2-R2-13",
+      "P2-R2-14",
+      "P2-R2-15",
+      "P2-R2-17",
+      "P2-R2-18",
+      "P2-R2-19"
+    ],
+    "complementary": true,
+    "note": "union_closed_oracle_ceiling assumes a perfect per-case selector. A verifier-guided selector can reach it only if it can identify WHICH model is right per case \u2014 that is the whole difficulty of this track."
+  },
+  "date": "2026-10-02"
+}

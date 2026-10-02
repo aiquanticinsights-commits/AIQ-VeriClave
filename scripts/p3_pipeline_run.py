@@ -41,8 +41,23 @@ def main() -> int:
             partial = json.load(f)
     except (OSError, ValueError):
         partial = {}
-    if partial.get("spec_commit_tag") != "p3-pipeline-bench-frozen":
-        raise SystemExit("FATAL: partial file predates the frozen spec")
+    spec_tag = "p3-pipeline-bench-v2"
+    stale = os.path.join(HERE, "P3_PIPELINE_PARTIAL_STALE.json")
+    if partial.get("spec_commit_tag") != spec_tag:
+        # A partial from a superseded spec must never be mixed into a run.
+        # Preserve it as evidence and start clean rather than silently
+        # reusing or silently discarding it.
+        if partial:
+            try:
+                with open(stale, "w", encoding="utf-8") as f:
+                    json.dump(partial, f, indent=2)
+                print(f"partial predates {spec_tag}; archived to "
+                      f"{os.path.basename(stale)}", flush=True)
+            except OSError:
+                pass
+        partial = {"spec_commit_tag": spec_tag}
+        with open(PARTIAL_PATH, "w", encoding="utf-8") as f:
+            json.dump(partial, f, indent=2)
 
     print(f"loading {MODEL_ID} ...", flush=True)
     ok, note = lms_load(MODEL_ID)
@@ -177,7 +192,7 @@ def main() -> int:
         save(partial)
 
         doc = {"benchmark": spec["title"], "spec_tag":
-               "p3-pipeline-bench-frozen", "model": "llama-3.1-8b",
+               "p3-pipeline-bench-v2", "model": "llama-3.1-8b",
                "model_id": MODEL_ID, "date": time.strftime("%Y-%m-%d"),
                "elapsed_s": round(time.perf_counter() - t0, 1),
                "t4": t4, "r2": r2, "signoff": "PENDING"}
