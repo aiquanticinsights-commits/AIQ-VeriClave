@@ -8,7 +8,7 @@
   },
   "integrity": {
     "bars_frozen_before_execution": true,
-    "gold_label_use": "gold (C) is used ONLY to score a selection; it never influences selection. Enforced by test_select_answer_is_gold_independent.",
+    "gold_label_use": "gold (C) is used ONLY to score an already-selected answer, never to choose it. Enforced by regression tests in test_p3_pipelines.py::TestGoldLeakRegression, which drive the full generate_candidates path with a stub model.",
     "no_post_hoc_relaxation": true,
     "no_training": true,
     "no_model_download": true,
@@ -34,16 +34,19 @@
   "r2_track": {
     "cases": "P2 frozen 20-case set (P2_BENCH.json) — unchanged",
     "grader": "Frozen repair.verify (value_gate + splice + lint wall) — unchanged",
-    "metrics": ["closes", "first_pass", "mean_rounds", "false_acceptances", "abstentions"],
-    "pipeline": "scripts/r2_pipeline.py"
+    "metrics": ["closes", "first_pass", "mean_rounds", "false_acceptances", "abstentions", "sim_gate"],
+    "pipeline": "scripts/r2_pipeline.py",
+    "stage4_check": "Frozen repair.verify (value_gate + splice + lint wall). The pipeline's own emitted answers are independently re-derived against value_gate; a disagreement is recorded as a false acceptance."
   },
-  "status": "FROZEN — no spec change after this tag",
+  "status": "FROZEN (v2) — bars unchanged from v1; v1 run VOIDED for a gold-leak defect (P3_C_VOID_RUN.json) and re-frozen after the fix. No spec change after the v2 tag.",
+  "supersedes": {"void_run": "P3_C_VOID_RUN.json", "voided_tag": "p3-pipeline-bench-frozen", "why": "stage-5 reused the frozen gold-graded grader as a verifier, leaking the answer into selection", "bars_changed": false},
   "t4_track": {
     "grader": "Frozen scripts/p102_t4_reason_probe.py grade_reasoned — unchanged",
-    "metrics": ["accuracy", "abstentions", "marked_vs_last_branch", "fact_consistency_jaccard", "tokens", "latency_s"],
+    "metrics": ["accuracy", "abstentions", "false_acceptances", "scoring_disagreements", "fact_consistency_jaccard", "tokens", "latency_s"],
     "n": 20,
     "pipeline": "scripts/t4_pipeline.py",
     "prompt": "Frozen T4 requirement, byte-identical",
+    "stage5_check": "Gold-free structural check: letter parses and is one of the offered options A-D. NOT grade_reasoned(), which answers 'is this C' and is a scoring function, not a verifier.",
     "temperature": 0.7
   },
   "title": "P3 pipeline benchmark — frozen spec (system-level intervention)",

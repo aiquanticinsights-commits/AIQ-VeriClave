@@ -1,9 +1,40 @@
 # P3 Scope and Model Evaluation Plan
 
-Date: 2026-10-01
-Status: **DRAFT — awaiting human approval, and blocked on one resource decision (see §6)**
+Date: 2026-10-01 (four-track restructure approved 2026-10-02)
+Status: **Scope frozen; tracks execute independently; P3-A requires one model download (authorized)**
 Predecessors: P0 (V8 GO), P1 (CLOSED), P2 (CLOSED, `P2_COMPLETION_REVIEW.md`)
 Reviewer: SSB (Satish Sura, Founder & CEO)
+
+## 0. Track structure (approved)
+
+P3 is executed as **four controlled tracks**, not one broad iteration:
+
+```
+P2 CLOSED
+   │
+   ▼
+P3 experimental scope frozen
+   │
+   ├──► P3-A: 14B local model (model track)
+   ├──► P3-B: llama + DeepSeek ensemble (model track)
+   ├──► P3-C: structured / verifier-guided generation (system track)
+   └──► P3-D: training readiness (data track)
+             │
+             ▼
+       P3 decision gate
+             │
+       ┌─────┼─────┐
+       ▼     ▼     ▼
+    model  system  data
+   works   works   ready
+```
+
+Two decisions are explicitly **rejected** by this scope:
+
+- **Option A (provision RAM to load gpt-oss-20b) is NOT taken.** It changes the experimental hardware environment and still would not establish that a larger model solves the walls. It is not the cleanest comparison.
+- **SFT/LoRA is NOT started merely because the corpus was baselined.** Training remains conditional on measured evidence (§11).
+
+Every track keeps the same **host, prompts, benchmark, verifier, judge, closure rules, and acceptance bars**. That invariance is what makes the tracks comparable and is the reason P3-A is a download on this host rather than a hardware change.
 
 ## 1. P2 findings carried forward
 
@@ -24,12 +55,20 @@ Carried-forward findings:
 
 ## 2. P3 objective
 
-P3 is specifically about **candidate-quality / model-capability improvement**, not another broad architecture iteration. Two tracks:
+P3 is specifically about **candidate-quality / model-capability improvement**, not another broad architecture iteration. Four tracks, three of which are model-free or model-agnostic:
 
-| Track | Purpose |
-|---|---|
-| **P3-A — Stronger local model evaluation** | Determine whether a stronger open/local model materially improves T4/R2 under the identical frozen verification system. |
-| **P3-B — Dataset / training readiness** | Determine whether the existing corpus could support SFT/LoRA later. Readiness assessment only — **no training in P3**. |
+| Track | Purpose | Needs a new model? |
+|---|---|---|
+| **P3-A — Stronger local model** | Determine whether a 14B-class local model materially improves T4/R2 on this same host. | Yes (one authorized download) |
+| **P3-B — Ensemble / complementary models** | Exploit the measured candidate diversity of llama + DeepSeek. No new model required. | No |
+| **P3-C — Structured candidate generation** | Attack the known T4/R2 failure mechanisms with constrained generation, decomposition, candidate extraction, and verifier-guided ranking. System-level, not training. | No |
+| **P3-D — Training readiness** | Determine whether the existing corpus can support SFT/LoRA later. **No training.** | No |
+
+**P3-B rationale.** The R2 data already indicates complementary behaviour: llama closes 0/20, DeepSeek closes 3/20, and they close *different* cases. Exploiting that complementarity costs nothing and needs no new model, which makes it the cheapest available test of "does the gap close without scaling the model?"
+
+**P3-C rationale.** T4 failures are instruction-following/format failures and R2 failures are arithmetic/truncation failures. Both are attackable by structure (decompose, constrain, verify, rank) rather than by scale, so P3-C is a system-level lever that is independent of model size.
+
+**P3-D rationale.** Dataset readiness is assessed on measured properties (size, diversity, success/failure balance, verifier labels, contamination, held-out separation, trajectory quality, failure-mode coverage) — not assumed. It proposes, never performs, training.
 
 Sequencing is strict: scope → freeze the experiment → stronger local-model evaluation → only then decide whether training or another intervention is justified.
 
@@ -62,36 +101,34 @@ The following are frozen and reused as-is. No re-measurement, no re-grading, no 
 
 ## 5. Candidate local models
 
-P3-A candidate must be **materially stronger** than the 8B/6.7B class, on disk, and open/local. No cloud APIs, no paid endpoints, no hosted inference.
+**Invariant across all four tracks:** same host, same prompts, same benchmark, same verifier, same judge, same closure rules, same acceptance bars. Only the model (P3-A), the candidate set (P3-B), or the generation structure (P3-C) changes.
 
 Assessed inventory (measured 2026-10-01, `lms ls`):
 
-| Model | Params | Quant | Size on disk | Runnable here? |
+| Model | Params | Quant | Size on disk | Role in P3 |
 |---|---|---|---|---|
-| `meta-llama-3.1-8b-instruct` | 8B | Q5_K_M | 5.73 GB | Yes (P2 baseline) |
-| `deepseek-coder-6.7b-instruct` | 6.7B | Q4_K_S | 3.86 GB | Yes (P2 candidate) |
-| `openai/gpt-oss-20b` | 20B | MXFP4 | 12.11 GB | **No — see §6** |
+| `meta-llama-3.1-8b-instruct` | 8B | Q5_K_M | 5.73 GB | Frozen baseline (both tracks) |
+| `deepseek-coder-6.7b-instruct` | 6.7B | Q4_K_S | 3.86 GB | P2 candidate / P3-B ensemble member |
+| `openai/gpt-oss-20b` | 20B | MXFP4 | 12.11 GB | **Excluded** — see §6 |
 
-`gpt-oss-20b` is the only stronger model present. Any additional candidate (e.g. a 14B-class code model) would require a **new download**, which is outside the current standing constraints (zero spend, no downloads) and therefore needs explicit human authorization.
+**P3-A candidate: one 14B-class Q4 model (~9 GB), downloaded to this host.** It is the largest credible fit in the ~11 GB usable budget and therefore preserves same-host comparability, which is precisely what loading gpt-oss-20b on new hardware would destroy. Spend is zero (open weights); the only requirement is that the download be explicitly authorized (it is). The exact model and quantization must be recorded in the P3-A spec before its first sample — no post-hoc model swap.
 
-## 6. Hardware / resource constraints  ⚠ BLOCKER
+## 6. Hardware / resource constraints
 
 Measured on this host:
 
-- Total physical RAM: **13.3 GB**; free with no model resident: **~2.7 GB** (OS + WSL + LM Studio + tooling occupy the rest).
-- Usable-for-model budget measured earlier: **~11 GB**.
-- GPU: AMD Radeon 680M, **2 GB** adapter RAM — not a viable offload target for a 12 GB model.
-- `openai/gpt-oss-20b` weights alone are **12.11 GB**, before KV cache, context buffers, and the OS.
+- Total physical RAM: **13.3 GB**; usable-for-model budget **~11 GB**.
+- GPU: AMD Radeon 680M, **2 GB** adapter RAM — not a viable offload target.
+- Free disk: **42.2 GB** — sufficient for one 14B-class Q4 (~9 GB).
+- `openai/gpt-oss-20b` weights alone are **12.11 GB**, so it cannot load here.
 
-Conclusion: `gpt-oss-20b` **cannot** be loaded on this host. The LM Studio load guardrail refuses it, and the arithmetic agrees — this is a genuine physical limit, not a misconfiguration. Attempting to force it would risk system instability and would violate the standing resource guardrail.
+**Decisions:**
 
-**This is a human decision, not an engineering choice. P3-A cannot start until one of the following is authorized:**
+- **Rejected: provision RAM to load gpt-oss-20b.** Changing the host would break same-host comparability with the frozen P2 anchors without establishing that scale solves the walls.
+- **Adopted: P3-A = one 14B-class Q4 download onto this host.** Same host, same benchmark, frozen protocol transfers unchanged. Zero spend, ~9 GB disk, fits the ~11 GB budget.
+- **P3-B/C/D require no new model and no new hardware** — they run on the models already present.
 
-- **Option A — Provision RAM.** Run P3-A on a host with ≥ 24 GB usable RAM (32 GB physical recommended). No code or data change; the frozen protocol transfers unchanged. Requires hardware authorization.
-- **Option B — Authorize one model download** of a stronger model that fits the ~11 GB budget (a 14B-class Q4 model is ~9 GB and is the largest credible fit). Spend is zero (open weights); only the download needs authorization. Smallest change to the current host.
-- **Option C — Defer P3-A; run P3-B only.** Proceed with dataset/training-readiness assessment now, and schedule P3-A when a suitable host or model is available.
-
-Recommended: **Option B** — it keeps the scientific value of P2 intact (same host, same frozen benchmark, same verifiers) with the least deviation. Option A is cleaner on paper but changes the host, which weakens same-host comparability with the P2 anchors.
+**Standing guardrail unchanged:** the LM Studio load guardrail is not disabled or bypassed. A model that cannot load within budget is recorded as not-runnable, never forced.
 
 ## 7. Controlled experiment protocol
 

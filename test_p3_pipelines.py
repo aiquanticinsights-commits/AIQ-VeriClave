@@ -9,6 +9,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "scripts"))
 
+import t4_pipeline  # noqa: E402
 from p2_bench import r2_cases  # noqa: E402
 from r2_pipeline import (numeric_constraint, parse_target_width, rank,  # noqa: E402
                          stage_localize)
@@ -37,28 +38,29 @@ class TestT4Selection(unittest.TestCase):
         self.assertIsNone(parse_letter("no letter here"))
         self.assertIsNone(parse_letter(""))
 
-    def test_majority_of_passing(self):
-        cands = [{"letter": "C", "verifier_ok": True},
-                 {"letter": "C", "verifier_ok": True},
-                 {"letter": "A", "verifier_ok": True},
-                 {"letter": "B", "verifier_ok": False}]
+    def test_majority_of_valid(self):
+        cands = [{"letter": "C", "structurally_valid": True},
+                 {"letter": "C", "structurally_valid": True},
+                 {"letter": "A", "structurally_valid": True},
+                 {"letter": "B", "structurally_valid": False}]
         r = select_answer(cands, GOLD)
         self.assertEqual(r["answer"], "C")
         self.assertTrue(r["correct"])
         self.assertFalse(r["abstained"])
 
-    def test_abstain_when_none_pass(self):
-        cands = [{"letter": "A", "verifier_ok": False},
-                 {"letter": "B", "verifier_ok": False}]
+    def test_abstain_when_none_valid(self):
+        cands = [{"letter": "A", "structurally_valid": False},
+                 {"letter": "B", "structurally_valid": False}]
         r = select_answer(cands, GOLD)
         self.assertTrue(r["abstained"])
         self.assertIsNone(r["answer"])
         self.assertFalse(r["correct"])
 
     def test_no_false_acceptance_on_wrong_majority(self):
-        """A wrong but verifier-passing majority must be reported as a MISS,
-        never as correct. This is the structural no-false-accept guard."""
-        cands = [{"letter": "A", "verifier_ok": True} for _ in range(5)]
+        """A wrong but valid majority must be reported as a MISS, never as
+        correct. This is the structural no-false-accept guard."""
+        cands = [{"letter": "A", "structurally_valid": True}
+                 for _ in range(5)]
         r = select_answer(cands, GOLD)
         self.assertEqual(r["answer"], "A")
         self.assertFalse(r["correct"])
@@ -66,8 +68,8 @@ class TestT4Selection(unittest.TestCase):
     def test_select_answer_is_gold_independent(self):
         """Gold must not steer selection — only score it. A selection that
         changed with gold would be grading its own homework."""
-        cands = [{"letter": "A", "verifier_ok": True},
-                 {"letter": "C", "verifier_ok": True}]
+        cands = [{"letter": "A", "structurally_valid": True},
+                 {"letter": "C", "structurally_valid": True}]
         for g in ("A", "B", "C", "D"):
             r = select_answer(cands, g)
             self.assertEqual(r["answer"], "A")
@@ -158,6 +160,58 @@ class TestR2DeterministicStages(unittest.TestCase):
         r = r2_pipeline.run_once(stub([good] * 8), case)
         self.assertFalse(r["stage_rank"]["abstained"])
         self.assertEqual(r["stage_rank"]["n_passing"], 5)
+
+
+class TestGoldLeakRegression(unittest.TestCase):
+    """Regression tests for the defect that voided the first P3-C run:
+    stage-5 reused grade_reasoned(text, 'C') as if it were a verifier, so
+    the gold label leaked into selection and only C could ever win."""
+
+    def test_structural_check_is_gold_free(self):
+        for letter in ("A", "B", "D"):
+            self.assertTrue(t4_pipeline.structurally_valid(letter))
+        self.assertFalse(t4_pipeline.structurally_valid(None))
+        self.assertFalse(t4_pipeline.structurally_valid("Z"))
+
+    def test_wrong_letter_survives_structural_check(self):
+        """The exact voided-run signature: an all-'A' candidate set must be
+        structurally VALID (and then scored wrong), never 'invalid'."""
+        cands = [{"letter": "A", "structurally_valid": True} for _ in range(5)]
+        r = select_answer(cands, GOLD)
+        self.assertEqual(r["answer"], "A")
+        self.assertFalse(r["correct"])
+        self.assertFalse(r["abstained"])
+
+    def test_generate_candidates_does_not_use_gold(self):
+        """Full path with a stub model: every emitted letter must come back
+        structurally valid, whatever it is. If gold leaked, non-C letters
+        would be marked invalid."""
+        fn = stub(["A"] * 5)
+        cands = t4_pipeline.generate_candidates(fn, "reasons here")
+        self.assertEqual(len(cands), 5)
+        self.assertTrue(all(c["structurally_valid"] for c in cands))
+        self.assertTrue(all(c["letter"] == "A" for c in cands))
+        self.assertNotIn("verifier_ok", cands[0])
+
+    def test_run_once_selection_unaffected_by_gold_value(self):
+        """Same stub outputs, different gold: the SELECTION must not move."""
+        outs = ["B"] * 12
+        a = t4_pipeline.run_once(stub(outs), gold="C")
+        b = t4_pipeline.run_once(stub(outs), gold="B")
+        self.assertEqual(a["stage_selection"]["answer"],
+                         b["stage_selection"]["answer"])
+        self.assertEqual(a["stage_selection"]["answer"], "B")
+        self.assertFalse(a["stage_selection"]["correct"])
+        self.assertTrue(b["stage_selection"]["correct"])
+
+    def test_frozen_grader_confirms_scoring(self):
+        """Scoring must agree with the frozen grader, used only post-hoc."""
+        fn = stub(["C"] * 12)
+        r = t4_pipeline.run_once(fn, gold="C")
+        sel = r["stage_selection"]
+        self.assertTrue(sel["correct"])
+        self.assertTrue(sel["graded_by_frozen_grader"])
+        self.assertTrue(sel["scoring_agrees"])
 
 
 class TestFrozenSpec(unittest.TestCase):

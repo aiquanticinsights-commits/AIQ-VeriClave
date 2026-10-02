@@ -79,6 +79,21 @@ def extract_reasons(query_fn, requirement: str = T4_REQUIREMENT) -> dict:
     return {"text": text, "tokens": _tok(use), "latency_s": lat}
 
 
+def structurally_valid(letter: str | None) -> bool:
+    """Gold-free structural check: is this a usable candidate at all?
+
+    This is deliberately NOT grade_reasoned(). grade_reasoned(text, "C")
+    answers "is this the right answer" — it is a scoring function, and using
+    it here leaks the gold label into selection (a real defect: the first
+    P3-C run returned 0 hits / 11 abstentions because every non-C candidate
+    was scored invalid and only C could ever be selected).
+
+    A candidate is structurally valid iff a letter parsed AND it is one of
+    the options the requirement offers. Nothing about correctness.
+    """
+    return letter in ("A", "B", "C", "D")
+
+
 def generate_candidates(query_fn, reasons: str,
                         requirement: str = T4_REQUIREMENT) -> list[dict]:
     prompt = PROMPT_ANSWER.replace("{req}", requirement).replace(
@@ -87,10 +102,8 @@ def generate_candidates(query_fn, reasons: str,
     for i in range(N_CANDIDATES):
         text, use, lat = query_fn(prompt, N_ANSWER_TOKENS, GEN_TEMP)
         letter = parse_letter(text)
-        ok, how = grade_reasoned(f"Answer:{letter}") if letter else (False,
-                                                                     "none")
         out.append({"i": i, "text": text.strip(), "letter": letter,
-                    "verifier_ok": ok, "grader_branch": how,
+                    "structurally_valid": structurally_valid(letter),
                     "tokens": _tok(use), "latency_s": lat})
     return out
 
@@ -124,19 +137,19 @@ def fact_consistency(reasons: str, facts: str) -> dict:
 
 
 def select_answer(candidates: list[dict], gold: str) -> dict:
-    """Deterministic selection. Only verifier-passing candidates can win;
-    majority among them; abstain when none pass. A wrong majority cannot be
-    accepted as correct — it is reported as a miss, never as a pass."""
-    passing = [c for c in candidates if c["verifier_ok"]]
-    if not passing:
+    """Deterministic selection. Only structurally-valid candidates can win;
+    majority among them; abstain when none are valid. gold is used ONLY to
+    score the already-chosen answer, never to choose it."""
+    valid = [c for c in candidates if c.get("structurally_valid")]
+    if not valid:
         return {"answer": None, "abstained": True,
-                "correct": False, "reason": "no verifier-passing candidate",
+                "correct": False, "reason": "no structurally-valid candidate",
                 "votes": {}}
-    votes = Counter(c["letter"] for c in passing)
+    votes = Counter(c["letter"] for c in valid)
     top = votes.most_common()
     answer = top[0][0]
     return {"answer": answer, "abstained": False,
-            "correct": answer == gold, "reason": "verifier majority",
+            "correct": answer == gold, "reason": "majority of valid",
             "votes": dict(votes), "tied": len(top) > 1 and top[0][1] == top[1][1]}
 
 
@@ -153,13 +166,21 @@ def run_once(query_fn, requirement: str = T4_REQUIREMENT,
     facts = independent_facts(query_fn, reasons["text"], requirement)
     cons = fact_consistency(reasons["text"], facts["text"])
     sel = select_answer(cands, gold)
+    # Gold enters here and ONLY here: scoring an answer already chosen by
+    # gold-free logic. It cannot influence which candidate is selected.
+    scored, branch = (grade_reasoned(f"Answer:{sel['answer']}")
+                      if sel["answer"] else (False, "none"))
+    sel["graded_by_frozen_grader"] = scored
+    sel["grader_branch"] = branch
+    sel["scoring_agrees"] = scored == sel["correct"]
     return {
         "stage_reason_extraction": reasons,
         "stage_candidate_generation": cands,
         "stage_independent_facts": facts,
         "stage_machine_check": {"consistency": cons,
-                                "passing": sum(1 for c in cands
-                                               if c["verifier_ok"]),
+                                "structurally_valid": sum(
+                                    1 for c in cands
+                                    if c["structurally_valid"]),
                                 "of": len(cands)},
         "stage_selection": sel,
         "tokens": (reasons["tokens"] + facts["tokens"]

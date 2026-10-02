@@ -1,0 +1,12 @@
+{
+  "defect": "T4 pipeline stage-5 'verifier' was not gold-free. scripts/p102_t4_reason_probe.grade_reasoned(text, expected='C') returns whether the answer IS C, so generate_candidates set verifier_ok = (letter == gold). Selection therefore could only ever return C or abstain; the pipeline was grading its own homework.",
+  "discovery": "Live run against the frozen spec. 11/20 samples recorded, 0 hits, 11 abstentions, every candidate letter 'A' with verifier_ok False — the signature of a gold leak, not of a model failure.",
+  "evidence": "P3_PIPELINE_PARTIAL.json (superseded, git-ignored) and the archived first-11-sample extract in P3_C_VOID_RUN.json",
+  "impact": "The run is VOID. No accuracy, no R2 measurement, no verdict may be derived from it. The frozen bars (T4 >= 90%, R2 >= 4 closes, 0 false acceptances) are UNCHANGED and were never relaxed.",
+  "root_cause": "Reused a gold-graded helper as if it were a structural verifier. The frozen probe's grader answers 'is this correct', which is a scoring function, not a verifier.",
+  "spec_status": "P3_PIPELINE_BENCH.json integrity clause 'gold_label_use' was correct and was VIOLATED by the implementation. The spec is not being relaxed to fit the code; the code is corrected to meet the spec.",
+  "test_gap": "test_select_answer_is_gold_independent exercised select_answer with hand-built candidates and could not see a leak introduced upstream in generate_candidates. The regression test now runs the full generate_candidates path with a stub model.",
+  "fix_required": "Stage-5 machine check must be gold-free: a candidate is structurally valid iff a letter parses and it is one of the offered options. Gold is used only in run_once to score the already-selected answer.",
+  "track": "P3-C",
+  "verdict": "VOID — superseded by a corrected run under a re-frozen spec"
+}
