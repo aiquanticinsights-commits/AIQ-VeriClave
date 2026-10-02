@@ -1,0 +1,51 @@
+{
+  "bars": {
+    "note": "Identical to the frozen P2/P3-C bars. Not weakened for a new model — a stronger model is judged by the same ruler.",
+    "r2_closes_min": 4,
+    "r2_false_acceptances_max": 0,
+    "t4_accuracy_min": 0.9
+  },
+  "candidate": {
+    "display_name": "Qwen2.5-Coder-14B-Instruct",
+    "quantization": "Q4_K_M",
+    "repo": "bartowski/Qwen2.5-Coder-14B-Instruct-GGUF",
+    "file": "Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+    "size_bytes": 8988111072,
+    "size_gb": 8.37,
+    "rationale": "Coder-tuned 14B is the largest credible fit in the ~11 GB usable budget, so the experiment stays on THIS host and preserves same-host comparability with the frozen llama/deepseek anchors.",
+    "pinned_before_first_sample": true
+  },
+  "comparison_anchors": {
+    "r2_closes": {"deepseek-coder-6.7b": 3, "llama-3.1-8b": 0},
+    "t4_accuracy": {"deepseek-coder-6.7b": 0.55, "llama-3.1-8b": 0.7},
+    "sources": ["P2_M2_LLAMA.json", "P2_M2_DEEPSEEK.json"]
+  },
+  "decision_rules": {
+    "m1_r2": "closes >= 4 AND false_acceptances == 0",
+    "m2_t4": "accuracy >= 0.90 AND false_acceptances == 0",
+    "m3_overall": "M1 AND M2 pass AND P0/P1 envelope intact. Exactly one passing track = partial track-specific finding, NOT an overall pass; the other wall stays OPEN.",
+    "on_fail": "Miss recorded as a result. Bars are never relaxed to convert a miss. A 14B miss is evidence that scale-in-class does not close these walls, which redirects effort to system-level intervention (P3-C).",
+    "repeatability": "A single 20-sample win is evidence, not proof. Reported, not separately gated at N=20."
+  },
+  "integrity": {
+    "bars_frozen_before_execution": true,
+    "host_unchanged": true,
+    "no_model_swap_after_first_sample": true,
+    "no_post_hoc_relaxation": true,
+    "no_prompt_or_verifier_change": true,
+    "no_training": true,
+    "p0_p1_envelope": "Full suite green, evidence schema PASS, P0/P1 evidence byte-unchanged.",
+    "zero_spend": true,
+    "guardrail": "If the load guardrail refuses the model at this host's free memory, record NOT-RUNNABLE and stop. Do not disable or bypass the guardrail."
+  },
+  "protocol": {
+    "benchmark": "P2_BENCH.json (frozen) — same prompts, graders, 20 T4 samples, 20 R2 cases",
+    "false_acceptance": "One rejects the track outright regardless of accuracy.",
+    "notes": "P3-A uses the plain frozen single-stage benchmark (same as P2). The P3-C pipeline is a separate system track and is not combined with P3-A here, so any gain is attributable to the model alone.",
+    "runner": "scripts/p2_bench.py --model=qwen14b",
+    "temperature": 0.7
+  },
+  "status": "FROZEN — pinned before the candidate's first sample",
+  "title": "P3-A spec — stronger local model (14B) under the frozen benchmark",
+  "tracks": {"P3-A": "14B model evaluation", "P3-B": "ensemble (closed: FAIL both tracks)", "P3-C": "structured/verifier-guided generation (live)", "P3-D": "training readiness (pending)"}
+}
