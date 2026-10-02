@@ -1,0 +1,2002 @@
+{
+  "benchmark": "P3 pipeline benchmark \u2014 frozen spec (system-level intervention)",
+  "spec_tag": "p3-pipeline-bench-v2",
+  "model": "llama-3.1-8b",
+  "model_id": "meta-llama-3.1-8b-instruct",
+  "date": "2026-10-02",
+  "elapsed_s": 7119.0,
+  "t4": {
+    "n": 20,
+    "hits": 0,
+    "accuracy": 0.0,
+    "abstentions": 0,
+    "false_acceptances": 0,
+    "scoring_disagreements": 0,
+    "fact_consistency_mean_jaccard": 0.5808,
+    "tokens": 50085,
+    "latency_s": 4889.3,
+    "samples": {
+      "0": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 34.25853779981844
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.550854800036177
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.6774617000482976
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.6592510999180377
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.564916400006041
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.40411249990575
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure occurring after a reset deassertion and might affect state-machine behavior.\n- B. Timeout counter: The requirement does not mention any timeout-related issues or counters, making this less likely.\n- C. State-machine ack handling: Given that dma_state stays S_READ forever despite m_wb_ack pulses, there could be an issue with the state machine's handling of acknowledgments.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out due to the requirement stating no clock-domain crossings exist.\n\nBased on these considerations, we can narrow down our options further:\n\n- A and C seem more plausible given the symptoms described in the requirement.\n- B is less likely without any mention of timeout counters or related issues.\n- D has already been ruled out.",
+          "tokens": 649,
+          "latency_s": 112.91775819985196
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4651,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2555,
+        "latency_s": 165.0
+      },
+      "1": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 40.51501330011524
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.577977000037208
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.6941515000071377
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.5628352998755872
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.5860554000828415
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.449929299997166
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts that separate options (bullet points):\n- Option A: \n  \u2022 Reset sequencing is relevant because it involves how the system handles resets and state transitions.\n  \u2022 The requirement states that the failure occurs after a reset deassertion.\n\u2022 Option B:\n  \u2022 Timeout counter might be related to handling of m_wb_ack pulses, but there's no direct information about its involvement in this specific scenario.\n  \u2022 However, if we consider the symptom (dma_state stays S_READ forever), it implies some kind of timing or waiting issue which could potentially involve a timeout counter.\n\u2022 Option C:\n  \u2022 State-machine ack handling is relevant because m_wb_ack pulses are involved and dma_state stays S_READ forever.\n  \u2022 The requirement states that waveforms show m_wb_ack arriving cleanly every cycle, suggesting proper signal arrival but incorrect state machine behavior.\n\u2022 Option D: \n  \u2022 As mentioned earlier, this option can be ruled out due to the absence of clock-domain crossings in the design.\n\nConsidering these points, we can narrow down our options based on the given information.",
+          "tokens": 692,
+          "latency_s": 193.24230840010568
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4255,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2598,
+        "latency_s": 249.6
+      },
+      "2": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 80.93159909988753
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2942904999945313
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2371986999642104
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.310470800148323
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.183859199983999
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1746843999717385
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: If there's an issue with the timeout counter, it might prevent dma_state from transitioning out of S_READ.\n- C. State-machine ack handling: Since m_wb_ack pulses but dma_state stays in S_READ, this option seems plausible as it involves how the state machine handles acknowledgments.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out due to the requirement stating there are no clock-domain crossings.\n\nGiven these points, we need more information or analysis before determining the root cause.",
+          "tokens": 615,
+          "latency_s": 168.67919729999267
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.5128,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2521,
+        "latency_s": 265.8
+      },
+      "3": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 74.07428189995699
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.6235907000955194
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2798843001946807
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.041634500026703
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1946166998241097
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.0569712999276817
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: If there's an issue with the timeout counter, it might prevent dma_state from transitioning out of S_READ.\n- C. State-machine ack handling: Since m_wb_ack pulses but dma_state stays in S_READ, this option seems plausible as it involves how the state machine handles acknowledgments.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out due to the requirement stating there are no clock-domain crossings.\n\nGiven these points, we need more information or analysis before determining the root cause.",
+          "tokens": 615,
+          "latency_s": 161.6636844999157
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.5128,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2521,
+        "latency_s": 251.9
+      },
+      "4": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 77.46071449993178
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.605938300024718
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9801818002015352
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9712323998101056
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1396365999244153
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.045503299916163
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: The requirement does not mention anything about timeout counters, so this is an assumption without evidence.\n- C. State-machine ack handling: Since m_wb_ack pulses and dma_state stays S_READ forever, there might be an issue with how the state machine handles acknowledgments.\n- D. Clock-domain crossing: This option can be ruled out due to the requirement stating no clock-domain crossings exist.\n\nBased on this analysis, we can narrow down our options but still need more information to determine the root cause.",
+          "tokens": 612,
+          "latency_s": 163.85454400000162
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.5128,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2518,
+        "latency_s": 257.1
+      },
+      "5": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 74.21585889998823
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.3153661000542343
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.220507699996233
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1957928999327123
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.166723999893293
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.3718231001403183
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure occurring after a reset deassertion and might affect state-machine behavior.\n- B. Timeout counter: The requirement does not mention anything about timeout counters or their functionality in this context.\n- C. State-machine ack handling: Given that dma_state stays S_READ forever, despite m_wb_ack pulses, it suggests an issue with the state machine's ability to handle acknowledgments properly.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out due to the requirement stating there are no clock-domain crossings in the design.\n\nBased on these observations, we can narrow down our options and consider which one is most likely responsible for the failure described in the requirement.\n\nAnswer: C",
+          "tokens": 633,
+          "latency_s": 176.42678970005363
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4494,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2539,
+        "latency_s": 266.9
+      },
+      "6": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 62.12558910017833
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.7739503998309374
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.7537692999467254
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.572845800081268
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.7582381998654455
+          },
+          {
+            "i": 4,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.6175536001101136
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: The requirement does not mention anything about timeout counters, but this might still be relevant if there's an implicit assumption that dma_state should transition out of S_READ within a certain time frame.\n- C. State-machine ack handling: This option is related to the symptom since m_wb_ack pulses but dma_state stays in S_READ forever.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out because there are no clock-domain crossings.\n\nGiven these points, we need more information about how the state machine handles acknowledgments and timeouts before making a final decision.",
+          "tokens": 627,
+          "latency_s": 143.0645306999795
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4651,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 4,
+            "B": 1
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2533,
+        "latency_s": 218.7
+      },
+      "7": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 62.013435899978504
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.8793746000155807
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.698613499989733
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2800730001181364
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.912652400089428
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.634742100024596
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nGiven these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: The requirement does not mention anything about timeout counters, but this might still be relevant if there's an implicit assumption that dma_state should transition out of S_READ within a certain time frame.\n- C. State-machine ack handling: This option is likely related to the symptom since m_wb_ack pulses but dma_state stays in S_READ forever.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out because there are no clock-domain crossings in the design.\n\nConsidering these points, we need more information about how the state machine handles acks and whether there's a timeout mechanism involved to determine the most likely root cause.",
+          "tokens": 639,
+          "latency_s": 143.86867349990644
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4598,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2545,
+        "latency_s": 220.3
+      },
+      "8": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 70.67369559989311
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1171516000758857
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.6926665999926627
+          },
+          {
+            "i": 2,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.7817659999709576
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.5855768001638353
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.6245491998270154
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts to separate options (bullet points):\n- Option A: \n  \u2022 Reset sequencing is relevant because it involves how the system handles resets and state transitions.\n  \u2022 The requirement states that the failure occurs after a reset deassertion, which makes this option more likely.\n\u2022 Option B:\n  \u2022 Timeout counter might be involved if there's an issue with timing or waiting for certain events to occur.\n  \u2022 However, the requirement does not mention any timeouts or delays related to dma_state staying S_READ forever.\n\u2022 Option C:\n  \u2022 State-machine ack handling is relevant because it involves how the system handles acknowledgments and state transitions.\n  \u2022 The requirement states that m_wb_ack pulses, but dma_state stays S_READ forever, which suggests an issue with acknowledging or processing these signals.\n\u2022 Option D: \n  \u2022 As mentioned earlier, this option can be ruled out due to the absence of clock-domain crossings in the design.\n\nBased on the given information and reasoning, we can narrow down the options.",
+          "tokens": 678,
+          "latency_s": 170.08829290000722
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4301,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 4,
+            "B": 1
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2584,
+        "latency_s": 254.6
+      },
+      "9": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 79.754517900059
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.9521264999639243
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9747411001008004
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.757198000093922
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.6241747001186013
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.831816100049764
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts between options A and C: \n- Option A (reset sequencing) is more likely if there's an issue with how the reset signal interacts with other signals in the design.\n- Option C (state-machine ack handling) would be more relevant if there was a problem with the state machine not properly acknowledging m_wb_ack.\n\nDiscriminating facts between options B and the remaining options: \n- Option B (timeout counter) is less likely because it doesn't directly relate to the interaction between dma_state, m_wb_ack, or reset deassertion.",
+          "tokens": 589,
+          "latency_s": 165.92281999997795
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.5882,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2495,
+        "latency_s": 261.8
+      },
+      "10": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 82.35903699998744
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.185906399972737
+          },
+          {
+            "i": 1,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9626354998908937
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1740151001140475
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.842661199858412
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.8497488000430167
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts between options A and C: \n- Both involve state-machine behavior.",
+          "tokens": 491,
+          "latency_s": 90.18346609990112
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.8511,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 4,
+            "B": 1
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2397,
+        "latency_s": 187.6
+      },
+      "11": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 68.23580299993046
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9464506001677364
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1534158000722528
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.7785291001200676
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.550829199841246
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.780740400077775
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts between options A and C: \n- Both involve state-machine behavior.",
+          "tokens": 491,
+          "latency_s": 77.77938740001991
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.8511,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "B": 1,
+            "A": 4
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2397,
+        "latency_s": 160.2
+      },
+      "12": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 67.30500889988616
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.0234642000868917
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.6626856001093984
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.5318730999715626
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.596772399963811
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.5951628999318928
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts between options A and C: \n- Both involve state-machine behavior.",
+          "tokens": 491,
+          "latency_s": 78.91683880006894
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.8511,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "B": 1,
+            "A": 4
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2397,
+        "latency_s": 159.6
+      },
+      "13": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 94.03104360005818
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2292641000822186
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9983326999936253
+          },
+          {
+            "i": 2,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.813167199958116
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 2.9260136999655515
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 4.667546399869025
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nGiven these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: If there's an issue with the timeout counter, it might prevent dma_state from transitioning out of S_READ.\n- C. State-machine ack handling: Since m_wb_ack pulses but dma_state stays in S_READ, this option seems plausible as it involves how the state machine handles acknowledgments.\n\nConsidering these points, we can narrow down our options further:\n\n- Option D is ruled out due to the absence of clock-domain crossings.\n- The symptom (dma_state staying in S_READ) and the facts about m_wb_ack pulses suggest that an issue with handling acknowledgments or a related mechanism might be the root cause.\n\nHowever, without more information, it's difficult to pinpoint the exact root cause.",
+          "tokens": 652,
+          "latency_s": 181.4683745999355
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4762,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "B": 2,
+            "A": 3
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2558,
+        "latency_s": 292.1
+      },
+      "14": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 81.44231910002418
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.869569699978456
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.405314699979499
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.369015999836847
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.5527263002004474
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2099767001345754
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nGiven these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: If there's an issue with the timeout counter, it might prevent dma_state from transitioning out of S_READ.\n- C. State-machine ack handling: Since m_wb_ack pulses but dma_state stays in S_READ, this option seems plausible as it involves how the state machine handles acknowledgments.\n\nConsidering these points, we can narrow down our options further:\n\n- Option D is ruled out due to the absence of clock-domain crossings.\n- The symptom (dma_state staying in S_READ) and the facts about m_wb_ack pulses suggest that an issue with handling acknowledgments or a related mechanism might be the root cause.\n\nHowever, without more information, it's difficult to pinpoint the exact root cause.",
+          "tokens": 652,
+          "latency_s": 206.21137360017747
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4762,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2558,
+        "latency_s": 305.1
+      },
+      "15": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 93.9568970000837
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.9613158002030104
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2765230000950396
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2786210000049323
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.39317709999159
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.428040800150484
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts between options A and C: \n- Both involve state-machine behavior.",
+          "tokens": 491,
+          "latency_s": 109.72584030008875
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.8511,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2397,
+        "latency_s": 221.0
+      },
+      "16": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 93.59930320014246
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 4.311129800044
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.5942806000821292
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.427836500108242
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.268841499928385
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.410336800152436
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure occurring after a reset deassertion and might affect state-machine behavior.\n- B. Timeout counter: The requirement does not mention anything about timeout counters or their functionality in this context.\n- C. State-machine ack handling: Given that dma_state stays S_READ forever, despite m_wb_ack pulses, it suggests an issue with the state machine's ability to handle acknowledgments properly.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out due to the requirement stating there are no clock-domain crossings in the design.\n\nBased on these considerations, we can narrow down our options further.",
+          "tokens": 616,
+          "latency_s": 200.1874428000301
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4819,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2522,
+        "latency_s": 311.8
+      },
+      "17": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 91.99026499991305
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.571059300098568
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.1255157000850886
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.3228788000997156
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.4475948000326753
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2477706000208855
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts to separate options (bullet points):\n- The failure occurs after a reset deassertion: \n  \u2022 Affects option A (reset sequencing).\n- dma_state stays S_READ forever and m_wb_ack pulses:\n  \u2022 Affects options C (state-machine ack handling) and B (timeout counter), as both involve the state machine or timing.\n- Waveforms show m_wb_ack arriving cleanly every cycle: \n  \u2022 Does not directly affect any option, but rules out issues with clock-domain crossings or signal integrity.\n- The design is single-clock (no clock-domain crossings exist):\n  \u2022 Rules out option D.",
+          "tokens": 602,
+          "latency_s": 190.02749740006402
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.6452,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2508,
+        "latency_s": 298.7
+      },
+      "18": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 88.92046889988706
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.852655499940738
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.444631699938327
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.3839289001189172
+          },
+          {
+            "i": 3,
+            "text": "B",
+            "letter": "B",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.3069354000035673
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.3388418999966234
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nDiscriminating facts between options A and C: \n- Both involve state-machine behavior.",
+          "tokens": 491,
+          "latency_s": 108.86366589996032
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.8511,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 4,
+            "B": 1
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2397,
+        "latency_s": 215.1
+      },
+      "19": {
+        "stage_reason_extraction": {
+          "text": "* Facts stated in the requirement: \n  - The failure occurs after a reset deassertion.\n  - dma_state stays S_READ forever.\n  - m_wb_ack pulses.\n  - Waveforms show m_wb_ack arriving cleanly every cycle.\n  - The design is single-clock (no clock-domain crossings exist).\n* Facts that rule options OUT:\n  - Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n* The symptom the root cause must explain: \n  - dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.",
+          "tokens": 351,
+          "latency_s": 94.49518129997887
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 4.676938799908385
+          },
+          {
+            "i": 1,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.35913489991799
+          },
+          {
+            "i": 2,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.2713739001192153
+          },
+          {
+            "i": 3,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.454889800166711
+          },
+          {
+            "i": 4,
+            "text": "A",
+            "letter": "A",
+            "structurally_valid": true,
+            "tokens": 311,
+            "latency_s": 3.307131899986416
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "\u2022 **Facts stated in the requirement**:\n  \u2022 The failure occurs after a reset deassertion.\n  \u2022 dma_state stays S_READ forever.\n  \u2022 m_wb_ack pulses.\n  \u2022 Waveforms show m_wb_ack arriving cleanly every cycle.\n  \u2022 The design is single-clock (no clock-domain crossings exist).\n\u2022 **Facts that rule options OUT**:\n  \u2022 Option D can be ruled out because the requirement states there are no clock-domain crossings in the design.\n\u2022 **The symptom the root cause must explain**:\n  \u2022 dma_state stays S_READ forever after a reset deassertion, despite m_wb_ack pulses.\n\nConsidering these facts, we can analyze each option:\n\n- A. Reset sequencing: This could be related to the failure since it occurs after a reset deassertion.\n- B. Timeout counter: The requirement does not mention anything about timeout counters, but this might still be relevant if there's an implicit assumption that dma_state should transition out of S_READ within a certain time frame.\n- C. State-machine ack handling: This option is related to the symptom since m_wb_ack pulses are expected to cause dma_state to transition out of S_READ.\n- D. Clock-domain crossing: As mentioned earlier, this can be ruled out due to the requirement stating there are no clock-domain crossings in the design.\n\nTo narrow down the options further, we need more information about how the state machine is designed and what triggers transitions between states.",
+          "tokens": 639,
+          "latency_s": 213.8219531001523
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4598,
+            "overlap": 40,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "A",
+          "abstained": false,
+          "correct": false,
+          "reason": "majority of valid",
+          "votes": {
+            "A": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": false,
+          "grader_branch": "marked:A",
+          "scoring_agrees": true
+        },
+        "tokens": 2545,
+        "latency_s": 326.4
+      }
+    }
+  },
+  "r2": {
+    "n": 20,
+    "closed": 8,
+    "first_pass": 8,
+    "false_acceptances": 0,
+    "false_acceptance_cases": [],
+    "abstentions": 12,
+    "sim_not_run": 20,
+    "tokens": 72524,
+    "latency_s": 2189.7,
+    "rows": {
+      "P2-R2-00": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 3,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 4'b0000;",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 16,
+          "expect": 0,
+          "expect_bits": "0000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 120.0,
+        "tokens": 3560
+      },
+      "P2-R2-01": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 31,
+          "expect": 15,
+          "expect_bits": "1111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 124.5,
+        "tokens": 3577
+      },
+      "P2-R2-02": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 17,
+          "expect": 1,
+          "expect_bits": "0001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 111.4,
+        "tokens": 3607
+      },
+      "P2-R2-03": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 4'b0101;",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 6,
+          "literal_value": 37,
+          "expect": 5,
+          "expect_bits": "0101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 113.0,
+        "tokens": 3650
+      },
+      "P2-R2-04": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 22,
+          "expect": 6,
+          "expect_bits": "0110",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 104.4,
+        "tokens": 3558
+      },
+      "P2-R2-05": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 8'h0;",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 256,
+          "expect": 0,
+          "expect_bits": "00000000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 108.0,
+        "tokens": 3627
+      },
+      "P2-R2-06": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 3,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 8'b11111111;",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 511,
+          "expect": 255,
+          "expect_bits": "11111111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 119.3,
+        "tokens": 3566
+      },
+      "P2-R2-07": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 257,
+          "expect": 1,
+          "expect_bits": "00000001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 101.1,
+        "tokens": 3622
+      },
+      "P2-R2-08": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 10,
+          "literal_value": 517,
+          "expect": 5,
+          "expect_bits": "00000101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 103.8,
+        "tokens": 3597
+      },
+      "P2-R2-09": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 390,
+          "expect": 134,
+          "expect_bits": "10000110",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 101.6,
+        "tokens": 3627
+      },
+      "P2-R2-10": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 12'b0;",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 4096,
+          "expect": 0,
+          "expect_bits": "000000000000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 103.7,
+        "tokens": 3707
+      },
+      "P2-R2-11": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 3,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 12'b111111111111;",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 8191,
+          "expect": 4095,
+          "expect_bits": "111111111111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 102.3,
+        "tokens": 3666
+      },
+      "P2-R2-12": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 4097,
+          "expect": 1,
+          "expect_bits": "000000000001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 107.7,
+        "tokens": 3534
+      },
+      "P2-R2-13": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 14,
+          "literal_value": 8205,
+          "expect": 13,
+          "expect_bits": "000000001101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 109.6,
+        "tokens": 3624
+      },
+      "P2-R2-14": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 5461,
+          "expect": 1365,
+          "expect_bits": "010101010101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 106.8,
+        "tokens": 3627
+      },
+      "P2-R2-15": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 65536,
+          "expect": 0,
+          "expect_bits": "0000000000000000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 110.5,
+        "tokens": 3742
+      },
+      "P2-R2-16": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 4,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 16'b1111111111111111;",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 131071,
+          "expect": 65535,
+          "expect_bits": "1111111111111111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 110.0,
+        "tokens": 3665
+      },
+      "P2-R2-17": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 65537,
+          "expect": 1,
+          "expect_bits": "0000000000000001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 104.5,
+        "tokens": 3644
+      },
+      "P2-R2-18": {
+        "closed": false,
+        "first_pass": false,
+        "n_passing": 0,
+        "abstained": true,
+        "sim": "not-run",
+        "answer": null,
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 18,
+          "literal_value": 131077,
+          "expect": 5,
+          "expect_bits": "0000000000000101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 111.7,
+        "tokens": 3655
+      },
+      "P2-R2-19": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 16'b1001100110011001;",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 104857,
+          "expect": 39321,
+          "expect_bits": "1001100110011001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 115.8,
+        "tokens": 3669
+      }
+    }
+  },
+  "signoff": "PENDING"
+}

@@ -1,0 +1,36 @@
+{
+  "bars": {"r2_closes_min": 4, "r2_false_acceptances_max": 0, "t4_accuracy_min": 0.9},
+  "method": "Ran under frozen spec tag p3-pipeline-bench-v2 on llama-3.1-8b. Independent re-derivation of R2 false acceptances against value_gate; frozen-grader agreement check on T4 scoring. No post-hoc change.",
+  "results": {
+    "r2": {
+      "abstentions": 12,
+      "bar": ">= 4 closes, 0 false acceptances",
+      "closed": 8,
+      "closed_cases": ["P2-R2-00", "P2-R2-03", "P2-R2-05", "P2-R2-06", "P2-R2-10", "P2-R2-11", "P2-R2-16", "P2-R2-19"],
+      "false_acceptances": 0,
+      "improvement_over_baseline": "0/20 -> 8/20 (baseline single-shot arm B: 0; P2 deepseek: 3)",
+      "method_note": "Single pipeline pass per case (5 candidates + deterministic ranking), not multi-round closure. first_pass is therefore 'resolved within the single pass' and is not comparable to run_task round counts.",
+      "n": 20,
+      "sim_stage": "not-run on all 20 (no sim back-end for these cases) — recorded, not claimed",
+      "track_verdict": "PASS — bar cleared (8 >= 4) with zero false acceptances, independently re-derived."
+    },
+    "t4": {
+      "abstentions": 0,
+      "accuracy": 0.0,
+      "bar": ">= 0.90",
+      "baseline": 0.7,
+      "false_acceptances": 0,
+      "hits": 0,
+      "n": 20,
+      "note": "All 20 samples selected 'A'. Forcing bare-letter answers removed the free-form reasoning that was the only mechanism the 8B had; the structural constraint actively harmed this track.",
+      "scoring_disagreements": 0,
+      "track_verdict": "FAIL — and a regression vs the 14/20 single-shot baseline."
+    }
+  },
+  "source": "P3_PIPELINE_LLAMA.json",
+  "spec_tag": "p3-pipeline-bench-v2",
+  "status": "PARTIAL — exactly one track passes: recorded as a track-specific improvement finding per the frozen spec. NOT an overall pass.",
+  "system_conclusion": "Structure helps where the verifier is exact and deterministic (R2: computed constraint + value gate), and harms where format freedom was load-bearing (T4: bare letters stripped the reasoning the grader's examples rely on). The load-bearing variable is verifier exactness, not model scale.",
+  "track": "P3-C",
+  "walls": {"r2": "NARROWED by the pipeline (0 -> 8 closes) but the wall is not declared cleared: the frozen protocol requires the overall pass, and T4 regressed; R2 repeatability also remains to be shown on an expanded set per plan.", "t4": "STANDS — and the pipeline is a wrong direction for it on this model."}
+}
