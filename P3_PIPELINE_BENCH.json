@@ -1,0 +1,70 @@
+{
+  "baseline_anchor": {
+    "note": "Frozen P2 artifacts, read as-is. No re-run, no re-grading.",
+    "r2_closes": {"deepseek-coder-6.7b": 3, "llama-3.1-8b": 0},
+    "r2_false_acceptances": {"deepseek-coder-6.7b": 0, "llama-3.1-8b": 0},
+    "sources": ["P2_M2_LLAMA.json", "P2_M2_DEEPSEEK.json", "P2_M3_VERDICT.json"],
+    "t4_accuracy": {"deepseek-coder-6.7b": 0.55, "llama-3.1-8b": 0.7}
+  },
+  "integrity": {
+    "bars_frozen_before_execution": true,
+    "gold_label_use": "gold (C) is used ONLY to score a selection; it never influences selection. Enforced by test_select_answer_is_gold_independent.",
+    "no_post_hoc_relaxation": true,
+    "no_training": true,
+    "no_model_download": true,
+    "zero_spend": true
+  },
+  "model": {
+    "api_id": "meta-llama-3.1-8b-instruct",
+    "name": "llama-3.1-8b",
+    "rationale": "Pipelines are system-level interventions; they must be judged on the frozen baseline host/model so any gain is attributable to the pipeline, not to a new model. P3-A (stronger model) remains blocked on the resource decision and is not evaluated here."
+  },
+  "protocol": {
+    "abstention": "Recorded, not scored as correct. An abstention is never a false acceptance.",
+    "false_acceptance": "Verifier-marked-correct that is actually wrong. ONE false acceptance rejects the track outright, regardless of accuracy.",
+    "order": ["freeze spec (tag)", "CI green", "live run", "record results + verdict"],
+    "p0_p1_envelope": "Full suite green, evidence schema PASS, all P0/P1 evidence byte-unchanged.",
+    "r2_candidates_k": 5,
+    "r2_closure_rules": "Unchanged from frozen repair.run_task: min 2 / max 3 rounds, approvals >= 2 to close. Pipeline additionally applies deterministic ranking and an optional sim/FRM gate.",
+    "r2_sim_stage": "Optional. Not-run is recorded as not-run, never as pass.",
+    "t4_candidates_k": 5,
+    "t4_gold": "C",
+    "t4_temperature": 0.7
+  },
+  "r2_track": {
+    "cases": "P2 frozen 20-case set (P2_BENCH.json) — unchanged",
+    "grader": "Frozen repair.verify (value_gate + splice + lint wall) — unchanged",
+    "metrics": ["closes", "first_pass", "mean_rounds", "false_acceptances", "abstentions"],
+    "pipeline": "scripts/r2_pipeline.py"
+  },
+  "status": "FROZEN — no spec change after this tag",
+  "t4_track": {
+    "grader": "Frozen scripts/p102_t4_reason_probe.py grade_reasoned — unchanged",
+    "metrics": ["accuracy", "abstentions", "marked_vs_last_branch", "fact_consistency_jaccard", "tokens", "latency_s"],
+    "n": 20,
+    "pipeline": "scripts/t4_pipeline.py",
+    "prompt": "Frozen T4 requirement, byte-identical",
+    "temperature": 0.7
+  },
+  "title": "P3 pipeline benchmark — frozen spec (system-level intervention)",
+  "verdict_rules": {
+    "m1_r2": {
+      "bar_closes": 4,
+      "bar_false_acceptances": 0,
+      "improvement_over_baseline": "closes >= 4 (baseline 0/20); bar retained, not lowered",
+      "repeatability": "Reported, not separately gated at N=20; a single-run win is evidence, not proof.",
+      "pass": "closes >= 4 AND false_acceptances == 0"
+    },
+    "m2_t4": {
+      "bar_accuracy": 0.9,
+      "improvement_over_baseline": "accuracy >= 0.90 (baseline 0.70; +20pp) — the frozen T4 bar is retained, not lowered",
+      "pass": "accuracy >= 0.90 AND false_acceptances == 0"
+    },
+    "m3_overall": {
+      "pass": "M1 and M2 both pass AND P0/P1 envelope intact",
+      "partial": "If exactly one track passes: recorded as a partial/track-specific improvement finding. NOT an overall pass. Walls not cleared remain OPEN.",
+      "on_fail": "Miss recorded as a result. Bar never relaxed to convert a miss. Direction moves to further system-level intervention (structured generation, verifier-guided decoding)."
+    },
+    "regression_guard": "Suite green + evidence PASS + P0/P1 files byte-unchanged. Violation rejects regardless of accuracy."
+  }
+}

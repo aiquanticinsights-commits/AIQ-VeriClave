@@ -63,6 +63,16 @@ class TestT4Selection(unittest.TestCase):
         self.assertEqual(r["answer"], "A")
         self.assertFalse(r["correct"])
 
+    def test_select_answer_is_gold_independent(self):
+        """Gold must not steer selection — only score it. A selection that
+        changed with gold would be grading its own homework."""
+        cands = [{"letter": "A", "verifier_ok": True},
+                 {"letter": "C", "verifier_ok": True}]
+        for g in ("A", "B", "C", "D"):
+            r = select_answer(cands, g)
+            self.assertEqual(r["answer"], "A")
+            self.assertEqual(r["correct"], g == "A")
+
     def test_fact_consistency(self):
         c = fact_consistency("reset synchronizer flops in single clock domain",
                              "the design uses a single clock domain")
@@ -148,6 +158,39 @@ class TestR2DeterministicStages(unittest.TestCase):
         r = r2_pipeline.run_once(stub([good] * 8), case)
         self.assertFalse(r["stage_rank"]["abstained"])
         self.assertEqual(r["stage_rank"]["n_passing"], 5)
+
+
+class TestFrozenSpec(unittest.TestCase):
+    SPEC = os.path.join(HERE, "P3_PIPELINE_BENCH.json")
+
+    def test_spec_present_and_frozen(self):
+        import json
+        with open(self.SPEC, encoding="utf-8") as f:
+            spec = json.load(f)
+        self.assertEqual(spec["status"].split()[0], "FROZEN")
+        self.assertTrue(spec["integrity"]["bars_frozen_before_execution"])
+        self.assertTrue(spec["integrity"]["no_post_hoc_relaxation"])
+        self.assertTrue(spec["integrity"]["no_training"])
+
+    def test_spec_bars_match_frozen_p2_anchors(self):
+        import json
+        with open(self.SPEC, encoding="utf-8") as f:
+            spec = json.load(f)
+        # T4 >= 0.90 and R2 >= 4 closes are the frozen P2 bars, carried
+        # forward unchanged. A drift here would be a silent bar change.
+        self.assertEqual(spec["verdict_rules"]["m2_t4"]["bar_accuracy"], 0.9)
+        self.assertEqual(spec["verdict_rules"]["m1_r2"]["bar_closes"], 4)
+        self.assertEqual(
+            spec["verdict_rules"]["m1_r2"]["bar_false_acceptances"], 0)
+        self.assertEqual(spec["baseline_anchor"]["t4_accuracy"]
+                         ["llama-3.1-8b"], 0.7)
+        self.assertEqual(spec["baseline_anchor"]["r2_closes"]
+                         ["llama-3.1-8b"], 0)
+
+    def test_frozen_evidence_present(self):
+        for f in ("P2_M2_LLAMA.json", "P2_M2_DEEPSEEK.json",
+                  "P2_M3_VERDICT.json", "P2_BENCH.json"):
+            self.assertTrue(os.path.exists(os.path.join(HERE, f)), f)
 
 
 if __name__ == "__main__":
