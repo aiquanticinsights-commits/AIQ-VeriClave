@@ -31,7 +31,13 @@ from repair import (  # noqa: E402
 
 LLAMA_ID = "meta-llama-3.1-8b-instruct"
 DEEPSEEK_ID = "deepseek-coder-6.7b-instruct"
-MODEL_IDS = {"llama": LLAMA_ID, "deepseek": DEEPSEEK_ID}
+# P3-A candidate, pinned in P3_A_SPEC.json (tag p3-a-spec-frozen) before its
+# first sample. Model injection only: prompts, graders, cases, temperatures
+# and bars are untouched. Verified by test_p2_bench_qwen_mapping below.
+QWEN14B_ID = "qwen2.5-coder-14b-instruct"
+QWEN14B_SHA256 = "2946d28c9e1bb2bcae6d42e8678863a31775df6f740315c7d7e6d6b6411f5937"
+QWEN14B_SIZE = 8988111072
+MODEL_IDS = {"llama": LLAMA_ID, "deepseek": DEEPSEEK_ID, "qwen14b": QWEN14B_ID}
 
 T4_N = 20
 

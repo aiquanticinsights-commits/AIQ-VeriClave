@@ -41,5 +41,26 @@ class TestR2Table(unittest.TestCase):
         self.assertEqual(widths, [4, 8, 12, 16])
 
 
+class TestQwenMapping(unittest.TestCase):
+    """P3-A model injection. The mapping must add the candidate WITHOUT
+    altering any frozen prompt, grader, case, temperature, or bar."""
+
+    def test_qwen14b_mapped_and_pinned(self):
+        import p2_bench
+        self.assertEqual(p2_bench.MODEL_IDS["qwen14b"],
+                         "qwen2.5-coder-14b-instruct")
+        self.assertEqual(p2_bench.QWEN14B_SHA256,
+                         "2946d28c9e1bb2bcae6d42e8678863a31775df6f740315c7d7e6d6b6411f5937")
+        self.assertEqual(p2_bench.QWEN14B_SIZE, 8988111072)
+
+    def test_benchmark_content_unchanged_by_mapping(self):
+        import p2_bench
+        # Same 20 cases, same table, same T4 constants as the frozen runs.
+        self.assertEqual(len(p2_bench.r2_cases()), 20)
+        self.assertEqual(p2_bench.T4_N, 20)
+        self.assertEqual(p2_bench.LLAMA_ID, "meta-llama-3.1-8b-instruct")
+        self.assertEqual(p2_bench.DEEPSEEK_ID, "deepseek-coder-6.7b-instruct")
+
+
 if __name__ == "__main__":
     unittest.main()
