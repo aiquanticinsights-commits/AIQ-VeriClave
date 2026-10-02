@@ -1,0 +1,119 @@
+{
+  "track": "P3-D",
+  "method": "frozen artifacts only \u2014 nothing trained, nothing reformatted for training",
+  "sources": [
+    "P2_M2_LLAMA.json",
+    "P2_M2_DEEPSEEK.json",
+    "P2_M5_DATASET.json",
+    "P3_PIPELINE_LLAMA.json",
+    "P3_C_PIPELINE_VERDICT.json"
+  ],
+  "size": {
+    "r2_p2_turns": 118,
+    "t4_p2_samples": 40,
+    "p3c_t4_samples": 20,
+    "p3c_r2_candidate_calls": 100,
+    "total_generations": 278
+  },
+  "labels": {
+    "t4": "frozen grade_reasoned (deterministic, known gold)",
+    "r2_p2": "frozen repair.verify (value_gate + splice + lint wall)",
+    "r2_p3c": "same frozen verify + independent value_gate re-derivation",
+    "human_labels": 0,
+    "model_graded_labels": 0
+  },
+  "success_failure_balance": {
+    "r2_closes_total": 11,
+    "r2_non_closing_case_runs": 49,
+    "t4_hits_total": 25,
+    "verdict": "overwhelmingly negative \u2014 suitable for failure analysis, unsuitable as SFT positives"
+  },
+  "diversity": {
+    "distinct_prompts": 23,
+    "task_families": [
+      "T4 single-letter RCA",
+      "R2 width-literal repair"
+    ],
+    "design_families": [
+      "synthetic p2r assign modules (1 family)"
+    ],
+    "models_represented": [
+      "llama-3.1-8b",
+      "deepseek-coder-6.7b"
+    ],
+    "widths_covered_bits": [
+      4,
+      8,
+      12,
+      16
+    ]
+  },
+  "contamination": {
+    "external_text": "none \u2014 prompts repo-authored, outputs fresh",
+    "held_out_split": "NONE \u2014 leakage cannot be proven absent"
+  },
+  "trajectory_quality": {
+    "p2_histories": "per-round approvals/verdicts recorded in P2_M2_*.r2.rows[*].history",
+    "p3c_trajectories": "single-pass (extract->candidates->rank); no multi-round trajectories",
+    "prompts_logged": true,
+    "outputs_verbatim": true,
+    "latencies_and_tokens_logged": true
+  },
+  "failure_mode_representation": {
+    "never_close_single_shot": [
+      "P2-R2-02",
+      "P2-R2-03",
+      "P2-R2-04",
+      "P2-R2-05",
+      "P2-R2-06",
+      "P2-R2-07",
+      "P2-R2-08",
+      "P2-R2-09",
+      "P2-R2-10",
+      "P2-R2-11",
+      "P2-R2-12",
+      "P2-R2-13",
+      "P2-R2-14",
+      "P2-R2-15",
+      "P2-R2-17",
+      "P2-R2-18",
+      "P2-R2-19"
+    ],
+    "never_close_pipeline": [
+      "P2-R2-01",
+      "P2-R2-02",
+      "P2-R2-04",
+      "P2-R2-07",
+      "P2-R2-08",
+      "P2-R2-09",
+      "P2-R2-12",
+      "P2-R2-13",
+      "P2-R2-14",
+      "P2-R2-15",
+      "P2-R2-17",
+      "P2-R2-18"
+    ],
+    "adequate_for_failure_analysis": true
+  },
+  "gaps": [
+    "Scale: ~10^2 generations vs the ~10^3-10^4 positive trajectories an SFT/LoRA run needs. Two orders of magnitude short.",
+    "Positive density: 3 single-shot closes + 8 pipeline single-pass closes across 60 cases; the corpus is overwhelmingly negative.",
+    "Diversity: 2 task families, 1 synthetic design family, 2 models. No real-design R2 cases; no second design family (also flagged in P2-M5 and the P3 plan's R2-expansion item).",
+    "Held-out separation: none exists. No train/test split has been cut.",
+    "Contamination screen: benchmark prompts are repo-authored and model outputs are fresh, so no external-text contamination \u2014 but no held-out gate means leakage cannot be PROVEN absent.",
+    "Failure modes ARE represented (12-17 never-closing cases with full negative trajectories) \u2014 the one dimension that is genuinely adequate for failure-mode analysis, not for training."
+  ],
+  "decision": {
+    "ready_for_sft_lora": false,
+    "sufficient_path_exists": true,
+    "sufficient_path": [
+      "Expand R2 to >= 40 cases across >= 2 REAL design families (pre-registered in the P3 plan, not yet built).",
+      "Collect positive trajectories at scale: the winning recipe on R2 (pipeline single-pass) must be run until positive turns number in the thousands, across cases, widths, and models.",
+      "Cut and freeze a held-out split (cases NEVER used for training, scored only by the frozen verifiers) before any training.",
+      "Deduplicate (21 prompts currently repeat across every turn) and re-balance so positives are not drowned.",
+      "Re-assess against this same checklist. No training until the re-assessment passes."
+    ]
+  },
+  "training_authorized": false,
+  "date": "2026-10-02"
+}
