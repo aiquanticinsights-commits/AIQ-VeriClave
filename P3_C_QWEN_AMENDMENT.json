@@ -51,7 +51,7 @@
     "partial": "exactly one track passes: track-specific finding, NOT an overall pass"
   },
   "regression_comparator": {
-    "artifact": "P3_PIPELINE_LLAMA.json (sha256 a37530683be942c948a2cad00489dcfb28281afc06150d15715a0d777d4c8abc)",
+    "artifact": "P3_PIPELINE_LLAMA.json (sha256 of LF-normalized bytes 81ae02a3eea8b006f8d52670184af4e8a82d0c30f0da3d8a62dca9a80cdc31c8; normalization because local checkouts use CRLF and CI uses LF)",
     "t4": "0/20",
     "r2": "8/20",
     "rule": "Scoring strictly below the corresponding llama-pipeline track result is an unacceptable regression and forces overall FAIL, even if an absolute bar is met. (T4 cannot regress below 0/20; R2 regresses below 8 closes.)"

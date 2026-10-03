@@ -260,9 +260,12 @@ class TestQ1Amendment(unittest.TestCase):
 
     def test_llama_originals_untouched(self):
         import hashlib
+        # Compare LF-normalized bytes: local checkouts use CRLF
+        # (core.autocrlf) while CI uses LF. Content equality is what
+        # matters; line-ending style is not evidence.
         pins = {
             "P3_PIPELINE_LLAMA.json":
-            "a37530683be942c948a2cad00489dcfb28281afc06150d15715a0d777d4c8abc",
+            "81ae02a3eea8b006f8d52670184af4e8a82d0c30f0da3d8a62dca9a80cdc31c8",
             "P3_PIPELINE_BENCH.json":
             "794d2799c340a4c551459465732e8a64f4c00d850db5b3b8816bef004d00109a",
             "P2_BENCH.json":
@@ -270,7 +273,8 @@ class TestQ1Amendment(unittest.TestCase):
         }
         for name, sha in pins.items():
             with open(os.path.join(HERE, name), "rb") as f:
-                self.assertEqual(hashlib.sha256(f.read()).hexdigest(), sha,
+                norm = f.read().replace(b"\r\n", b"\n")
+                self.assertEqual(hashlib.sha256(norm).hexdigest(), sha,
                                  name)
 
 
