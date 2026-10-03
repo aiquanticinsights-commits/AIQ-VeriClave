@@ -26,22 +26,26 @@
     "vs_baselines": {"deepseek-coder-6.7b": 3, "llama-3.1-8b": 0, "qwen14b": 17}
   },
   "m2_t4": {
+    "accuracy": 0.45,
     "bar": "accuracy >= 0.90 AND false_acceptances == 0",
-    "measured": false,
-    "n_attempted": 20,
-    "n_completed": 0,
-    "n_timed_out": 20,
-    "note": "The recorded 0/20 in P3_A_QWEN14B.json is NOT a capability score: every sample carries error='timed out' with empty text. Scoring timeouts as wrong answers would be a false result.",
-    "timeout_cause": "Frozen harness timeout is 600s per call (same for all P2/P3 runs). R2 single-line outputs on this host take 100-400s each; T4 requires up to 256 tokens of prose. One diagnostic T4 call with an 1800s timeout also timed out, while a trivial 8-token query answered in 22s. The model is responsive but cannot complete long prose generations on this CPU host within any reasonable budget (N=20 at >30 min/sample = 10+ hours IF they complete at all).",
-    "verdict": "UNMEASURED — infrastructure timeout, not a model result. M2 cannot pass without a measurement."
+    "false_acceptances": 0,
+    "hits": 9,
+    "measured": true,
+    "measurement": "Amendment A1 re-measurement (P3_A_T4_REMEASURE.json): 20/20 completed, 0 timeouts, 9 hits. All 20 gradings independently re-derived with the frozen grader: 0 mismatches.",
+    "n": 20,
+    "n_completed": 20,
+    "n_timed_out": 0,
+    "sample_4_retry": "Attempt 1 failed on infrastructure (WinError 10054 connection reset at 0.0s latency during an external process-kill incident — not a model result, not a 3600s timeout). Retried once under identical frozen conditions; attempt 2 completed and graded normally. Both attempts recorded; only the completed retry is scored.",
+    "supersedes": "The UNMEASURED status and the 20/20-timeout P3_A_QWEN14B.json T4 section, which were infrastructure artifacts, not capability scores.",
+    "verdict": "FAIL — measured 0.45, far below the 0.90 bar. The T4 wall STANDS on the stronger model too (llama 0.70 -> qwen 0.45 on this probe; directionally worse, not better)."
   },
   "m3_overall": {
     "rule": "M1 AND M2 pass AND P0/P1 envelope intact (P3_A_SPEC.json).",
-    "verdict": "PARTIAL — R2 track passes decisively; T4 unmeasured so the overall pass is not available. The R2 wall is breached by model scale (17/20); the T4 wall status is unchanged (still stands at the llama 70% anchor) because no Qwen T4 measurement exists.",
-    "what_this_answers": "P3's primary question is answered AFFIRMATIVELY for R2: a stronger open model, under exactly the same verification system and frozen benchmark, materially reduces the R2 capability gap (0 -> 17 closes). For T4 the question remains open — unmeasured, not failed."
+    "verdict": "PARTIAL — R2 track passes decisively (17/20); T4 track fails on measurement (9/20 = 0.45 < 0.90). Overall pass not available. Scale breaches the R2 wall but not the T4 wall: the two walls are dissociated, and the T4 failure redirects effort to system-level intervention (P3-C), exactly as the frozen spec's on_fail rule prescribes.",
+    "what_this_answers": "P3's primary question is answered AFFIRMATIVELY for R2 (0 -> 17 closes under the identical system) and NEGATIVELY for T4 as a pure scale play (0.70 -> 0.45): a bigger coder model alone does not fix reasoned root-cause selection on this probe."
   },
-  "method": "Frozen single-stage benchmark (P2_BENCH.json), same host/prompts/verifier/judge/closure/bars. Model injected via query_fn only. No prompt, grader, case, temperature, or bar change. Independent re-derivation of R2 closures and false acceptances from P3_A_QWEN14B.json.",
-  "source": "P3_A_QWEN14B.json",
+  "method": "Frozen single-stage benchmark (P2_BENCH.json), same host/prompts/verifier/judge/closure/bars. Model injected via query_fn only. No prompt, grader, case, temperature, or bar change. Independent re-derivation of R2 closures and false acceptances from P3_A_QWEN14B.json; independent re-derivation of all 20 T4 gradings from P3_A_T4_REMEASURE.json.",
+  "source": "P3_A_QWEN14B.json (R2) + P3_A_T4_REMEASURE.json (T4, amendment A1)",
   "spec_tag": "p3-a-spec-frozen",
   "track": "P3-A"
 }
