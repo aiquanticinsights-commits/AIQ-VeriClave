@@ -7,6 +7,11 @@
     "sha256": "2946d28c9e1bb2bcae6d42e8678863a31775df6f740315c7d7e6d6b6411f5937",
     "size_bytes": 8988111072
   },
+  "false_acceptance_audit": {
+    "corpus_turns": 48,
+    "method": "Every recorded model output in P3_A_QWEN14B.json.corpus re-run through frozen repair.verify(); cross-checked against the closed/not-closed row flags.",
+    "result": "0 contradictions: every closed case has >= 1 independently-verified passing output; no unclosed case has any passing output. FA=0 confirmed by re-derivation, not inherited from the runner."
+  },
   "m1_r2": {
     "abstentions": 3,
     "bar": "closes >= 4 AND false_acceptances == 0",
