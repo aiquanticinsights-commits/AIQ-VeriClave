@@ -214,6 +214,66 @@ class TestGoldLeakRegression(unittest.TestCase):
         self.assertTrue(sel["scoring_agrees"])
 
 
+class TestQ1Amendment(unittest.TestCase):
+    """Amendment Q1 changes the model and per-call timeouts and NOTHING
+    else. These tests pin the frozen parts and the evidence protection."""
+
+    def test_qwen_runner_config(self):
+        import p3c_qwen_run as r
+        self.assertEqual(r.MODEL_ID, "qwen2.5-coder-14b-instruct")
+        self.assertEqual(r.GOLD, "C")
+        self.assertEqual(r.N_T4, 20)
+        self.assertEqual(
+            (r.TIMEOUT_LONG, r.TIMEOUT_R2, r.TIMEOUT_LETTER),
+            (7200, 3600, 1800))
+        self.assertEqual(r.SPEC_TAG, "p3-c-qwen-pipeline-frozen")
+        self.assertTrue(r.OUT.endswith("P3_C_PIPELINE_QWEN.json"))
+        self.assertTrue(
+            r.PARTIAL_PATH.endswith("P3_C_QWEN_PARTIAL.json"))
+
+    def test_pipeline_stages_unchanged(self):
+        import r2_pipeline
+        import t4_pipeline
+        self.assertEqual(t4_pipeline.N_CANDIDATES, 5)
+        self.assertEqual(
+            (t4_pipeline.EXTRACT_TEMP, t4_pipeline.GEN_TEMP), (0.0, 0.7))
+        self.assertEqual(
+            (t4_pipeline.N_REASONS_TOKENS, t4_pipeline.N_ANSWER_TOKENS,
+             t4_pipeline.N_FACT_TOKENS), (512, 8, 512))
+        self.assertEqual(
+            (r2_pipeline.N_CANDIDATES, r2_pipeline.MAX_TOKENS,
+             r2_pipeline.GEN_TEMPERATURE), (5, 128, 0.7))
+
+    def test_amendment_file_pins_bars_and_comparator(self):
+        import json
+        with open(os.path.join(HERE, "P3_C_QWEN_AMENDMENT.json"),
+                  encoding="utf-8") as f:
+            a = json.load(f)
+        self.assertEqual(a["bars"]["t4"],
+                         "accuracy >= 0.90 AND false_acceptances == 0")
+        self.assertEqual(a["bars"]["r2"],
+                         "closes >= 4 AND false_acceptances == 0")
+        self.assertEqual(a["regression_comparator"]["t4"], "0/20")
+        self.assertEqual(a["regression_comparator"]["r2"], "8/20")
+        self.assertEqual(a["model"]["sha256"],
+                         "2946d28c9e1bb2bcae6d42e8678863a31775df6f740315c7d7e6d6b6411f5937")
+
+    def test_llama_originals_untouched(self):
+        import hashlib
+        pins = {
+            "P3_PIPELINE_LLAMA.json":
+            "a37530683be942c948a2cad00489dcfb28281afc06150d15715a0d777d4c8abc",
+            "P3_PIPELINE_BENCH.json":
+            "794d2799c340a4c551459465732e8a64f4c00d850db5b3b8816bef004d00109a",
+            "P2_BENCH.json":
+            "5ad11370e2820452d17ff00aeea70f76f6362745052be45a134fdfdf10ed8409",
+        }
+        for name, sha in pins.items():
+            with open(os.path.join(HERE, name), "rb") as f:
+                self.assertEqual(hashlib.sha256(f.read()).hexdigest(), sha,
+                                 name)
+
+
 class TestA1Amendment(unittest.TestCase):
     """Amendment A1 changes the per-call timeout and NOTHING else. These
     tests pin the frozen parts so a future edit cannot silently move them."""

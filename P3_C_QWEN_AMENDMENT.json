@@ -1,0 +1,60 @@
+{
+  "title": "P3-C amendment Q1 — Qwen-plus-pipeline (separately frozen experiment)",
+  "amendment_id": "Q1",
+  "date": "2026-10-04",
+  "authorized_by": "human (explicit ordered plan: P3-A T4 completion -> Q1 freeze -> Qwen-pipeline run -> verdict)",
+  "status": "FROZEN — tag p3-c-qwen-pipeline-frozen. No change after the tag.",
+  "base_spec": "P3_PIPELINE_BENCH.json (tag p3-pipeline-bench-v2, sha256 794d2799c340a4c551459465732e8a64f4c00d850db5b3b8816bef004d00109a). Read as-is; NOT modified by this amendment.",
+  "model": {
+    "api_id": "qwen2.5-coder-14b-instruct",
+    "display_name": "Qwen2.5-Coder-14B-Instruct",
+    "quantization": "Q4_K_M",
+    "repo": "bartowski/Qwen2.5-Coder-14B-Instruct-GGUF",
+    "file": "Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf",
+    "sha256": "2946d28c9e1bb2bcae6d42e8678863a31775df6f740315c7d7e6d6b6411f5937",
+    "size_bytes": 8988111072,
+    "context": 8192,
+    "parallel": 4,
+    "resident_size": "8.99 GB"
+  },
+  "what_changes": "Model ONLY (llama-3.1-8b -> qwen2.5-coder-14b-instruct) plus per-call HTTP timeouts sized for 14B CPU generation (harness, not benchmark). New runner scripts/p3c_qwen_run.py; new outputs P3_C_QWEN_PARTIAL.json (git-ignored checkpoint), P3_C_PIPELINE_QWEN.json, P3_C_QWEN_VERDICT.json.",
+  "what_does_not_change": [
+    "T4/R2 case sets (P2_BENCH.json 20+20, sha256 5ad11370e2820452d17ff00aeea70f76f6362745052be45a134fdfdf10ed8409)",
+    "T4 prompt (byte-identical frozen requirement), T4 temperatures (extract 0.0, candidates 0.7), token budgets (512/8/512), k=5",
+    "R2 prompt, GEN_TEMPERATURE 0.7, MAX_TOKENS 128, k=5",
+    "Verifiers/judges: frozen grade_reasoned for T4 scoring only; frozen repair.verify for R2; gold-free structural selection; deterministic ranking",
+    "Closure: single pipeline pass per case via run_once; no repair.run_task rounds added, no retry loop",
+    "Sim/FRM: optional, not-run recorded as not-run",
+    "Original llama-only evidence: P3_PIPELINE_LLAMA.json, P3_C_PIPELINE_VERDICT.json, P3_PIPELINE_BENCH.json, scripts/p3_pipeline_run.py — read-only, never written by the Qwen run"
+  ],
+  "pipeline_code_pins": {
+    "scripts/t4_pipeline.py": "0efe57705308535971660adb615736d037870346e509d196a0f4d95d9666c070",
+    "scripts/r2_pipeline.py": "29c616aa2ef56f5fa9013d4ca1bde61d9c446fbd165b4d1b379a6750d4d9d6fe",
+    "scripts/p102_t4_reason_probe.py": "77c144a59122cc9179bb3c1384c7dd80eb9c01c0735f441a547d7fc426d42a00",
+    "repair.py": "9d07fda94e53d2b2bfa51f9974cd11041b770224d9064fd46be58e44fda7eb52"
+  },
+  "timeouts_and_resources": {
+    "http_timeout_long_prose_512tok": 7200,
+    "http_timeout_r2_repair_128tok": 3600,
+    "http_timeout_bare_letter_8tok": 1800,
+    "model_load_timeout": 1800,
+    "server_readiness_check": "required before first sample; FATAL out otherwise (same as all runs)",
+    "host": "same Windows host as all P2/P3 runs",
+    "exclusivity": "no concurrent P3-A/P3-C/model process; checkpoints after every T4 sample and R2 case so the run is resumable",
+    "timeout_rule": "timeouts recorded as timeouts/errors, never scored; a track with any unfinished sample is UNMEASURED, not zero",
+    "runtime_estimate": "~3h per T4 pipeline sample and ~0.5-1.5h per R2 case at observed 14B CPU throughput; total on the order of days. No global abort: the run continues to N=20/N=20 unless the host itself fails (recorded as interrupted)."
+  },
+  "bars": {
+    "t4": "accuracy >= 0.90 AND false_acceptances == 0",
+    "r2": "closes >= 4 AND false_acceptances == 0",
+    "overall_pass": "M1 AND M2 pass",
+    "partial": "exactly one track passes: track-specific finding, NOT an overall pass"
+  },
+  "regression_comparator": {
+    "artifact": "P3_PIPELINE_LLAMA.json (sha256 a37530683be942c948a2cad00489dcfb28281afc06150d15715a0d777d4c8abc)",
+    "t4": "0/20",
+    "r2": "8/20",
+    "rule": "Scoring strictly below the corresponding llama-pipeline track result is an unacceptable regression and forces overall FAIL, even if an absolute bar is met. (T4 cannot regress below 0/20; R2 regresses below 8 closes.)"
+  },
+  "verdict_rule": "PASS/FAIL recorded honestly against the bars plus the regression rule, regardless of outcome. A miss is a result; bars are never relaxed."
+}
