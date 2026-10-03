@@ -1,0 +1,973 @@
+{
+  "benchmark": "P2 capability benchmark (frozen M1 spec)",
+  "date": "2026-10-03",
+  "model": "qwen14b",
+  "model_id": "qwen2.5-coder-14b-instruct",
+  "elapsed_s": 26912.7,
+  "t4": {
+    "n": 20,
+    "hits": 0,
+    "accuracy": 0.0,
+    "samples": [
+      {
+        "i": 0,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 1,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 2,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 3,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 4,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 5,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 6,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 7,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 8,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 9,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 10,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 11,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 12,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 13,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 14,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 15,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 16,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 17,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 18,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      },
+      {
+        "i": 19,
+        "ok": false,
+        "error": "timed out",
+        "picked": null,
+        "latency_s": 0.0,
+        "tokens": 0,
+        "text": ""
+      }
+    ]
+  },
+  "r2": {
+    "n": 20,
+    "closed": 17,
+    "first_pass": 10,
+    "false_acceptances": 0,
+    "mean_rounds": 2.4,
+    "rows": {
+      "P2-R2-00": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 426.5,
+        "tokens": 351,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-01": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 383.7,
+        "tokens": 350,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-02": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 701.5,
+        "tokens": 547,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-03": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 850.4,
+        "tokens": 558,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      },
+      "P2-R2-04": {
+        "closed": true,
+        "rounds": 3,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 716.3,
+        "tokens": 546,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-05": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 503.5,
+        "tokens": 366,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-06": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 489.9,
+        "tokens": 366,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-07": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 600.4,
+        "tokens": 374,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-08": {
+        "closed": true,
+        "rounds": 3,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 900.8,
+        "tokens": 581,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-09": {
+        "closed": true,
+        "rounds": 3,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 949.0,
+        "tokens": 574,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-10": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 659.2,
+        "tokens": 394,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-11": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 648.5,
+        "tokens": 394,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-12": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 629.1,
+        "tokens": 394,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-13": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 661.4,
+        "tokens": 398,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-14": {
+        "closed": true,
+        "rounds": 3,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 1090.2,
+        "tokens": 612,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-15": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 761.9,
+        "tokens": 410,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-16": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 754.9,
+        "tokens": 410,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-17": {
+        "closed": true,
+        "rounds": 2,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": true,
+        "false_acceptance": false,
+        "latency_s": 736.7,
+        "tokens": 410,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 2
+          },
+          {
+            "round": 2,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-18": {
+        "closed": true,
+        "rounds": 3,
+        "approvals": 2,
+        "escalated_to_human": false,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 1176.3,
+        "tokens": 630,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 2
+          }
+        ]
+      },
+      "P2-R2-19": {
+        "closed": false,
+        "rounds": 3,
+        "approvals": 0,
+        "escalated_to_human": true,
+        "first_pass": false,
+        "false_acceptance": false,
+        "latency_s": 1138.6,
+        "tokens": 627,
+        "history": [
+          {
+            "round": 1,
+            "approvals": 0
+          },
+          {
+            "round": 2,
+            "approvals": 0
+          },
+          {
+            "round": 3,
+            "approvals": 0
+          }
+        ]
+      }
+    }
+  },
+  "corpus": [
+    {
+      "case": "P2-R2-00",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r00(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10000;\nendmodule",
+      "output": "assign q = 4'b0000;",
+      "tokens": 164
+    },
+    {
+      "case": "P2-R2-00",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r00(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b00000;",
+      "tokens": 187
+    },
+    {
+      "case": "P2-R2-01",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r01(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b11111;\nendmodule",
+      "output": "assign q = 4'b1111;",
+      "tokens": 164
+    },
+    {
+      "case": "P2-R2-01",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r01(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b11111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 4'b1111;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-02",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r02(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10001;\nendmodule",
+      "output": "assign q = 5'b10001[3:0];",
+      "tokens": 169
+    },
+    {
+      "case": "P2-R2-02",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r02(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10001[3:0];",
+      "tokens": 191
+    },
+    {
+      "case": "P2-R2-02",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r02(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b00001;",
+      "tokens": 187
+    },
+    {
+      "case": "P2-R2-03",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (6-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r03(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b100101;\nendmodule",
+      "output": "assign q = 6'b100101[3:0];",
+      "tokens": 171
+    },
+    {
+      "case": "P2-R2-03",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (6-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r03(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b100101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 6'b100101[3:0];",
+      "tokens": 193
+    },
+    {
+      "case": "P2-R2-03",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (6-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r03(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b100101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "```verilog\nassign q = 6'b000101;\n```",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-04",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r04(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule",
+      "output": "assign q = 5'b10110[3:0];",
+      "tokens": 169
+    },
+    {
+      "case": "P2-R2-04",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r04(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 5'b10110[3:0];",
+      "tokens": 191
+    },
+    {
+      "case": "P2-R2-04",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (5-bit literal on 4-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r04(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 4'b0110;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-05",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r05(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000000;\nendmodule",
+      "output": "assign q = 8'b00000000;",
+      "tokens": 172
+    },
+    {
+      "case": "P2-R2-05",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r05(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'b10000000;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-06",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r06(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b111111111;\nendmodule",
+      "output": "assign q = 8'b11111111;",
+      "tokens": 172
+    },
+    {
+      "case": "P2-R2-06",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r06(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'b11111111;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-07",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r07(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000001;\nendmodule",
+      "output": "```verilog\nassign q = 8'(9'b100000001);\n```",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-07",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r07(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'b00000001;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-08",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (10-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r08(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1000000101;\nendmodule",
+      "output": "assign q = 10'b1000000101[7:0];",
+      "tokens": 182
+    },
+    {
+      "case": "P2-R2-08",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (10-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r08(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'(10'b1000000101);",
+      "tokens": 202
+    },
+    {
+      "case": "P2-R2-08",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (10-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r08(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'b00000101;",
+      "tokens": 197
+    },
+    {
+      "case": "P2-R2-09",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r09(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b110000110;\nendmodule",
+      "output": "```verilog\nassign q = 8'(9'b110000110);\n```",
+      "tokens": 180
+    },
+    {
+      "case": "P2-R2-09",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r09(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b110000110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 8'b01000011;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-09",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (9-bit literal on 8-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r09(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b110000110;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "```verilog\nassign q = 8'b010000110;\n```",
+      "tokens": 200
+    },
+    {
+      "case": "P2-R2-10",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r10(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000000;\nendmodule",
+      "output": "assign q = 12'b000000000000;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-10",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r10(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b100000000000;",
+      "tokens": 208
+    },
+    {
+      "case": "P2-R2-11",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r11(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1111111111111;\nendmodule",
+      "output": "assign q = 12'b111111111111;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-11",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r11(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1111111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b111111111111;",
+      "tokens": 208
+    },
+    {
+      "case": "P2-R2-12",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r12(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000001;\nendmodule",
+      "output": "assign q = 12'b000000000001;",
+      "tokens": 186
+    },
+    {
+      "case": "P2-R2-12",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r12(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b000000000001;",
+      "tokens": 208
+    },
+    {
+      "case": "P2-R2-13",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (14-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r13(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 14'b10000000001101;\nendmodule",
+      "output": "assign q = 14'b00100000001101;",
+      "tokens": 189
+    },
+    {
+      "case": "P2-R2-13",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (14-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r13(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 14'b10000000001101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b000000001101;",
+      "tokens": 209
+    },
+    {
+      "case": "P2-R2-14",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r14(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1010101010101;\nendmodule",
+      "output": "```verilog\nassign q = 12'b101010101010;\n```",
+      "tokens": 191
+    },
+    {
+      "case": "P2-R2-14",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r14(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1010101010101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 12'b101010101010;",
+      "tokens": 208
+    },
+    {
+      "case": "P2-R2-14",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (13-bit literal on 12-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r14(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1010101010101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "```verilog\nassign q = 12'b010101010101;\n```",
+      "tokens": 213
+    },
+    {
+      "case": "P2-R2-15",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r15(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000000;\nendmodule",
+      "output": "assign q = 16'b0000000000000000;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-15",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r15(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000000;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b0000000000000000;",
+      "tokens": 216
+    },
+    {
+      "case": "P2-R2-16",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r16(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11111111111111111;\nendmodule",
+      "output": "assign q = 16'b1111111111111111;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-16",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r16(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11111111111111111;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b1111111111111111;",
+      "tokens": 216
+    },
+    {
+      "case": "P2-R2-17",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r17(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000001;\nendmodule",
+      "output": "assign q = 16'b0000000000000001;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-17",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r17(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b0000000000000001;",
+      "tokens": 216
+    },
+    {
+      "case": "P2-R2-18",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (18-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r18(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 18'b100000000000000101;\nendmodule",
+      "output": "assign q = 16'b0000000000000010;",
+      "tokens": 195
+    },
+    {
+      "case": "P2-R2-18",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (18-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r18(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 18'b100000000000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b0000000000000001;",
+      "tokens": 217
+    },
+    {
+      "case": "P2-R2-18",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (18-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r18(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 18'b100000000000000101;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b00000000000000101;",
+      "tokens": 218
+    },
+    {
+      "case": "P2-R2-19",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r19(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11001100110011001;\nendmodule",
+      "output": "assign q = 16'b1100110011001100;",
+      "tokens": 194
+    },
+    {
+      "case": "P2-R2-19",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r19(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11001100110011001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b1100110011001100;",
+      "tokens": 216
+    },
+    {
+      "case": "P2-R2-19",
+      "model": "qwen2.5-coder-14b-instruct",
+      "prompt": "This Verilog assign statement has a width bug (17-bit literal on 16-bit signal). Reply with ONLY the corrected assign line and nothing else. Keep the FULL original value: truncation keeps the LOW bits (e.g. 5'b10000 holds 0x10, whose low 4 bits are 4'b0000). Do not restructure anything:\nmodule p2r19(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b11001100110011001;\nendmodule\n\nYour previous answer FAILED (failed checks: none). Fix exactly that failure; reply in the same format.",
+      "output": "assign q = 16'b11001100110011001;",
+      "tokens": 217
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "bars": {"r2_closes_min": 4, "r2_false_acceptances_max": 0, "t4_accuracy_min": 0.9},
+  "candidate": {
+    "display_name": "Qwen2.5-Coder-14B-Instruct",
+    "quantization": "Q4_K_M",
+    "repo": "bartowski/Qwen2.5-Coder-14B-Instruct-GGUF",
+    "sha256": "2946d28c9e1bb2bcae6d42e8678863a31775df6f740315c7d7e6d6b6411f5937",
+    "size_bytes": 8988111072
+  },
+  "m1_r2": {
+    "abstentions": 3,
+    "bar": "closes >= 4 AND false_acceptances == 0",
+    "closed": 17,
+    "closed_cases": ["P2-R2-00", "P2-R2-01", "P2-R2-04", "P2-R2-05", "P2-R2-06", "P2-R2-07", "P2-R2-08", "P2-R2-09", "P2-R2-10", "P2-R2-11", "P2-R2-12", "P2-R2-13", "P2-R2-14", "P2-R2-15", "P2-R2-16", "P2-R2-17", "P2-R2-18"],
+    "false_acceptances": 0,
+    "first_pass": 10,
+    "mean_rounds": 2.4,
+    "n": 20,
+    "not_closed": ["P2-R2-02", "P2-R2-03", "P2-R2-19"],
+    "verdict": "PASS — bar cleared by a wide margin (17 >= 4) with zero false acceptances. A 14B coder-tuned model materially improves R2 under the identical frozen system: 0 (llama) / 3 (deepseek) -> 17.",
+    "vs_baselines": {"deepseek-coder-6.7b": 3, "llama-3.1-8b": 0, "qwen14b": 17}
+  },
+  "m2_t4": {
+    "bar": "accuracy >= 0.90 AND false_acceptances == 0",
+    "measured": false,
+    "n_attempted": 20,
+    "n_completed": 0,
+    "n_timed_out": 20,
+    "note": "The recorded 0/20 in P3_A_QWEN14B.json is NOT a capability score: every sample carries error='timed out' with empty text. Scoring timeouts as wrong answers would be a false result.",
+    "timeout_cause": "Frozen harness timeout is 600s per call (same for all P2/P3 runs). R2 single-line outputs on this host take 100-400s each; T4 requires up to 256 tokens of prose. One diagnostic T4 call with an 1800s timeout also timed out, while a trivial 8-token query answered in 22s. The model is responsive but cannot complete long prose generations on this CPU host within any reasonable budget (N=20 at >30 min/sample = 10+ hours IF they complete at all).",
+    "verdict": "UNMEASURED — infrastructure timeout, not a model result. M2 cannot pass without a measurement."
+  },
+  "m3_overall": {
+    "rule": "M1 AND M2 pass AND P0/P1 envelope intact (P3_A_SPEC.json).",
+    "verdict": "PARTIAL — R2 track passes decisively; T4 unmeasured so the overall pass is not available. The R2 wall is breached by model scale (17/20); the T4 wall status is unchanged (still stands at the llama 70% anchor) because no Qwen T4 measurement exists.",
+    "what_this_answers": "P3's primary question is answered AFFIRMATIVELY for R2: a stronger open model, under exactly the same verification system and frozen benchmark, materially reduces the R2 capability gap (0 -> 17 closes). For T4 the question remains open — unmeasured, not failed."
+  },
+  "method": "Frozen single-stage benchmark (P2_BENCH.json), same host/prompts/verifier/judge/closure/bars. Model injected via query_fn only. No prompt, grader, case, temperature, or bar change. Independent re-derivation of R2 closures and false acceptances from P3_A_QWEN14B.json.",
+  "source": "P3_A_QWEN14B.json",
+  "spec_tag": "p3-a-spec-frozen",
+  "track": "P3-A"
+}
