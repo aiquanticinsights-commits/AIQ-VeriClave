@@ -214,6 +214,44 @@ class TestGoldLeakRegression(unittest.TestCase):
         self.assertTrue(sel["scoring_agrees"])
 
 
+class TestA1Amendment(unittest.TestCase):
+    """Amendment A1 changes the per-call timeout and NOTHING else. These
+    tests pin the frozen parts so a future edit cannot silently move them."""
+
+    def test_remeasure_uses_frozen_prompt_temp_tokens(self):
+        import p3a_t4_remeasure as r
+        from p102_t4_reason_probe import (MAX_TOKENS, PROMPT, TEMPERATURE)
+        self.assertEqual(r.T4_PROMPT, PROMPT)
+        self.assertEqual(r.T4_TEMP, TEMPERATURE)
+        self.assertEqual(r.T4_TOKENS, MAX_TOKENS)
+        self.assertEqual(r.N, 20)
+        self.assertEqual(r.GOLD, "C")
+        self.assertEqual(r.MODEL_ID, "qwen2.5-coder-14b-instruct")
+
+    def test_timeout_is_recorded_and_bounded(self):
+        import p3a_t4_remeasure as r
+        self.assertEqual(r.TIMEOUT_S, 3600)
+
+    def test_timeouts_never_scored(self):
+        import p3a_t4_remeasure as r
+        import inspect
+        src = inspect.getsource(r.main)
+        # Accuracy exists only when nothing timed out.
+        self.assertIn("if not timed_out else None", src)
+
+    def test_amendment_recorded_in_spec(self):
+        import json
+        with open(os.path.join(HERE, "P3_A_SPEC.json"),
+                  encoding="utf-8") as f:
+            spec = json.load(f)
+        a1 = next(a for a in spec["amendments"] if a["id"] == "A1")
+        self.assertIn("3600", a1["what_changes"])
+        self.assertTrue(a1["what_does_not_change"])
+        # Bars byte-identical to the frozen tag.
+        self.assertEqual(spec["bars"]["t4_accuracy_min"], 0.9)
+        self.assertEqual(spec["bars"]["r2_closes_min"], 4)
+
+
 class TestFrozenSpec(unittest.TestCase):
     SPEC = os.path.join(HERE, "P3_PIPELINE_BENCH.json")
 

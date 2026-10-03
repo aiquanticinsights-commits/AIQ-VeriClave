@@ -46,6 +46,17 @@
     "temperature": 0.7
   },
   "status": "FROZEN — pinned before the candidate's first sample",
+  "amendments": [
+    {
+      "id": "A1",
+      "date": "2026-10-03",
+      "authorized_by": "human (explicit authorization to re-measure T4 under an extended, recorded timeout)",
+      "what_changes": "Per-call HTTP timeout for the T4 track ONLY: 600s -> 3600s. Implemented in a dedicated re-measurement script; bakeoff.py TASK_TIMEOUT_S untouched so every other run keeps the frozen harness.",
+      "what_does_not_change": "T4 prompt (byte-identical), grader (frozen grade_reasoned), temperature (0.7), N (20 fresh samples; the 20 timed-out empties are discarded, not scored), R2 results, bars, model, host.",
+      "why": "All 20 T4 samples timed out at 600s (empty text, not answers); one diagnostic at 1800s also timed out while a trivial query answered in 22s. 3600s is the next defensible bound (6x frozen budget). If samples time out at 3600s, T4 is recorded UNMEASURABLE on this host — itself a deployability result.",
+      "rule": "Timeouts are recorded as timeouts, never scored as wrong. Accuracy is computed over completed samples only if all 20 complete; otherwise T4 remains UNMEASURED."
+    }
+  ],
   "title": "P3-A spec — stronger local model (14B) under the frozen benchmark",
   "tracks": {"P3-A": "14B model evaluation", "P3-B": "ensemble (closed: FAIL both tracks)", "P3-C": "structured/verifier-guided generation (live)", "P3-D": "training readiness (pending)"}
 }
