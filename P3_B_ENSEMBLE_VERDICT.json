@@ -24,6 +24,14 @@
     "implication": "T4 is not an ensemble problem either at this model scale."
   },
   "overall_verdict": "P3-B FAIL on both tracks",
+  "closure": {
+    "status": "CLOSED / FAIL",
+    "date": "2026-10-03",
+    "approval": "Approved by the human operator in session; named reviewer not supplied",
+    "recorded_finding": "P3-B demonstrates insufficient ensemble ceiling from the frozen P2 results.",
+    "execution_policy": "No further P3-B execution is warranted under the current two-model configuration.",
+    "measurements_changed": false
+  },
   "honest_note": "The complementarity the plan anticipated IS real and measurable (deepseek closes 3 cases llama never touches, 0 overlap). It is simply too small to clear the bars. Recorded as a measured negative, not suppressed.",
   "next": "A 3rd model or the P3-C system pipeline is required for ensembling to have headroom. Neither is assumed here."
 }
