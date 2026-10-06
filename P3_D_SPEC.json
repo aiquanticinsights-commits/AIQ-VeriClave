@@ -1,0 +1,71 @@
+{
+  "title": "P3-D spec — training-readiness assessment (assessment ONLY, never training)",
+  "status": "FROZEN — criteria and thresholds pinned before the assessment runs. No change after the verdict.",
+  "objective": "Determine whether AIQ-VeriClave has enough evidence to justify FUTURE SFT/training. This track produces a verdict, never a model.",
+  "no_training_guardrail": {
+    "rule": "HARD. No training, fine-tuning, LoRA, RL, distillation, tokenizer training, or training-data formatting (no .jsonl/.parquet training shards, no prompt/completion pairing for trainers) may occur in this track. The assessor reads frozen evidence artifacts and writes one assessment JSON. Violation rejects the track regardless of the verdict.",
+    "enforcement": "regression tests in test_p3_readiness_v2.py assert the assessor imports no training libraries and writes only P3_D_READINESS_V2.json"
+  },
+  "decision_tree": "P3-C PASS -> P3-D assessment -> READY (training may be authorized SEPARATELY via a P4 authorization, never here) | NOT READY (improve dataset/harness, then reassess) | BLOCKED (required evidence cannot currently be measured). P3-C PASS does NOT authorize training.",
+  "verdict_categories": {
+    "READY": "evidence supports a controlled training experiment (all dimensions PASS)",
+    "NOT READY": "dataset/evidence insufficient (any dimension FAIL)",
+    "BLOCKED": "required evidence cannot currently be measured (any dimension UNMEASURABLE)"
+  },
+  "anti_rule": "P3-D must never use 'dataset exists' as sufficient justification for training. Volume without balance, diversity, labels, held-out separation, and economics is NOT READY.",
+  "dimensions": {
+    "d1_scale": {
+      "question": "Dataset scale — current corpus vs required training scale",
+      "pass": "verifier-positive trajectories >= 1000",
+      "why": "SFT/LoRA needs ~10^3-10^4 positives; below 1000 there is no training-scale claim"
+    },
+    "d2_diversity": {
+      "question": "Diversity — RTL blocks, requirements, bug types, verification tasks",
+      "pass": ">= 3 task families AND >= 2 design families with >= 1 REAL (non-synthetic) family",
+      "why": "2 synthetic task families cannot support generalization claims"
+    },
+    "d3_balance": {
+      "question": "Success/failure balance — high-quality positive AND negative trajectories",
+      "pass": "positives >= 100 AND positives >= 20% of labeled generations",
+      "why": "a drowned-positive corpus teaches failure, not repair"
+    },
+    "d4_labels": {
+      "question": "Verifier labels — machine-verifiable PASS/FAIL/UNPROVEN evidence",
+      "pass": "100% of scored generations carry deterministic verifier labels; 0 human-graded and 0 model-graded labels",
+      "why": "training labels must be machine-checkable, not opinion"
+    },
+    "d5_failure_modes": {
+      "question": "Failure-mode coverage — T4/R2/R5 and other capability walls represented",
+      "pass": "full trajectories exist for the T4 wall AND the R2 wall AND >= 1 further wall/family (e.g. R5)",
+      "why": "training must see every wall it is expected to climb"
+    },
+    "d6_trajectories": {
+      "question": "Trajectory quality — generation, verification, repair, closure logged",
+      "pass": ">= 95% of generations log prompt + verbatim output + verdict + latency/tokens, AND multi-round repair histories exist",
+      "why": "SFT needs complete trajectories, not bare answers"
+    },
+    "d7_contamination": {
+      "question": "Contamination control — clean provenance of prompts and outputs",
+      "pass": "all prompts repo-authored AND all outputs freshly generated (no external text)",
+      "why": "memorized text is not evidence of capability"
+    },
+    "d8_heldout": {
+      "question": "Held-out evaluation readiness — genuinely unseen IP/tasks with a frozen split",
+      "pass": "a frozen held-out split exists, disjoint from every training-eligible case, scored only by frozen verifiers",
+      "why": "without held-out separation, leakage cannot be proven absent and no training claim is measurable"
+    },
+    "d9_provenance": {
+      "question": "Data provenance/versioning — reproducible dataset construction",
+      "pass": "every trajectory traceable to (source artifact, commit/tag, model id, verifier)",
+      "why": "an unreproducible dataset is not an asset"
+    },
+    "d10_economics": {
+      "question": "Training economics — evidence justifies GPU/training expenditure",
+      "pass": "a recorded cost/benefit memo shows expected value (capability gain x generality) exceeds GPU spend at current scale",
+      "why": "training without a positive-EV case is expenditure without justification"
+    }
+  },
+  "verdict_rule": "READY iff all 10 dimensions PASS. NOT READY if any dimension FAILs. BLOCKED if any dimension is UNMEASURABLE (required source artifact missing or unreadable). Dimension grades are computed, not asserted, by scripts/p3d_readiness_v2.py from frozen artifacts only (no model calls, no network).",
+  "sources": ["P2_M2_LLAMA.json", "P2_M2_DEEPSEEK.json", "P2_M5_DATASET.json", "P3_PIPELINE_LLAMA.json", "P3_A_QWEN14B.json", "P3_A_T4_REMEASURE.json", "P3_C_PIPELINE_QWEN.json"],
+  "runner": "scripts/p3d_readiness_v2.py (read-only) -> P3_D_READINESS_V2.json (original P3_D_READINESS.json untouched)"
+}
