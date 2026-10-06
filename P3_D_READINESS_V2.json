@@ -85,5 +85,12 @@
     "d10_economics": "FAIL"
   },
   "verdict": "NOT READY",
-  "training_authorized": false
+  "training_authorized": false,
+  "closure": {
+    "status": "CLOSED / NOT READY",
+    "date": "2026-10-06",
+    "direction": "Human-directed closure: verdict NOT READY accepted; 5 PASS / 5 FAIL evidence preserved unaltered.",
+    "training_authorization": "NONE — explicitly not authorized, now or by implication. A separate P4 authorization would be required after a future READY verdict; none exists.",
+    "measurements_changed": false
+  }
 }
