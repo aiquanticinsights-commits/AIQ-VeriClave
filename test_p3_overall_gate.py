@@ -65,5 +65,27 @@ class TestOverallGate(unittest.TestCase):
             "P3 = CLOSED → SYSTEM DIRECTION VALIDATED / TRAINING NOT AUTHORIZED")
 
 
+class TestRemediationStatus(unittest.TestCase):
+    def test_status_matches_live_grades(self):
+        """The status record must equal the frozen gate list minus the
+        currently-passing dimensions: remaining == live FAILs, cleared ==
+        gate constraints already PASS."""
+        gate = load("P3_OVERALL_GATE.json")
+        d = load("P3_D_READINESS_V2.json")
+        s = load("P3_REMEDIATION_STATUS.json")
+        constrained = {c["id"] for c in gate["binding_constraints"]}
+        failing_now = {k for k, g in d["grades"].items() if g == "FAIL"}
+        remaining = {r.split(":")[0] for r in
+                     s["remaining_binding_constraints"]}
+        cleared = {c.split(":")[0] for c in
+                   s["cleared_through_remeasurement"]}
+        self.assertEqual(remaining, failing_now & constrained)
+        self.assertEqual(cleared, constrained - failing_now)
+        self.assertEqual(s["p3d_training_readiness"], d["verdict"])
+        self.assertFalse(s["training_authorized"])
+        self.assertIn("do not replace the original frozen benchmark",
+                      s["r2b"])
+
+
 if __name__ == "__main__":
     unittest.main()
