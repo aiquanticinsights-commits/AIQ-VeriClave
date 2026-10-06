@@ -1,0 +1,59 @@
+{
+  "gate": "P3 Overall Decision Gate",
+  "date": "2026-10-06",
+  "status": "P3 = CLOSED → SYSTEM DIRECTION VALIDATED / TRAINING NOT AUTHORIZED",
+  "tracks": {
+    "P3-A": {
+      "result": "FAIL / PARTIAL",
+      "meaning": "Model alone insufficient (R2 17/20 breached by scale; T4 9/20 fails — walls dissociated)",
+      "source": "P3_A_VERDICT.json"
+    },
+    "P3-B": {
+      "result": "FAIL (closed, approved)",
+      "meaning": "Diversity alone insufficient (R2 union ceiling 3/20; T4 consensus floor 30%)",
+      "source": "P3_B_ENSEMBLE_VERDICT.json"
+    },
+    "P3-C": {
+      "result": "PASS (scoped, approved)",
+      "meaning": "System-level approach works (Qwen + frozen pipeline: T4 20/20, R2 20/20, 0 FA)",
+      "source": "P3_C_QWEN_VERDICT.json"
+    },
+    "P3-D": {
+      "result": "NOT READY (closed)",
+      "meaning": "Dataset does not justify training (5/10 readiness dimensions fail)",
+      "source": "P3_D_READINESS_V2.json"
+    }
+  },
+  "key_conclusion": "P3 provides evidence that improving the verification system is currently more valuable than training a new model.",
+  "binding_constraints": [
+    {
+      "id": "d1_scale",
+      "constraint": "102 verifier-positive trajectories vs 1000 required",
+      "direction": "Generate positives ONLY via the validated recipe (strong model inside the structured pipeline); count only verifier-passing trajectories toward the 1000"
+    },
+    {
+      "id": "d2_diversity",
+      "constraint": "2 task families, 1 synthetic design family, 0 real families",
+      "direction": "Add a third task family and a second, REAL design family first — volume without this is explicitly insufficient per the frozen rule"
+    },
+    {
+      "id": "d5_failure_modes",
+      "constraint": "No third-wall trajectory corpus (R5 exists only as a finding document)",
+      "direction": "Build full R5 (or equivalent) generation→verification trajectories with frozen labels before any training claim"
+    },
+    {
+      "id": "d8_heldout",
+      "constraint": "No frozen held-out split exists",
+      "direction": "Cut and freeze a held-out split (cases never train-eligible, scored only by frozen verifiers) BEFORE further data generation, so all future data is born separated"
+    },
+    {
+      "id": "d10_economics",
+      "constraint": "No recorded cost/benefit case for GPU expenditure",
+      "direction": "Record the training-economics memo once the other four move: expected capability gain x generality vs GPU cost at projected scale"
+    }
+  ],
+  "data_generation_rule": "Constraint-driven, not volume-driven: each new trajectory must be tied to one of the five binding constraints above and carry machine-verifiable evidence. The P3-D result proves additional positives alone do not move the constraints that matter.",
+  "next_phase": "Targeted dataset/harness improvements against the five constraints → re-measure with the frozen assessor (scripts/p3d_readiness_v2.py) → reassess training readiness. No training until a re-assessment returns READY, followed by a separate P4 authorization.",
+  "training_authorized": false,
+  "method": "Readout of frozen track verdicts; no new measurement, no re-grading, no post-hoc change. Consistency with underlying verdict files is enforced by test_p3_overall_gate.py."
+}
