@@ -1,0 +1,73 @@
+{
+  "plan": "P3 Constraint Remediation Plan",
+  "date": "2026-10-06",
+  "status": "FROZEN — remediation experiments may only execute against this plan. No change after execution starts.",
+  "sequence_position": "After P3 Overall Gate + P3 evidence freeze + 5 binding constraints; before targeted experiments.",
+  "ordering_rule": "Held-out separation FIRST (all future data is born separated), then diversity/walls, then scale, then economics. Scale without diversity is explicitly forbidden by the frozen P3-D rule.",
+  "guardrails": [
+    "NO TRAINING at any point in this plan (same hard guardrail as P3-D, enforced by the same tests).",
+    "All new trajectories carry frozen-verifier labels; no human-graded or model-graded labels.",
+    "Held-out cases are never train-eligible and are scored only by frozen verifiers.",
+    "Every experiment checkpoints per case/sample and is resumable; timeouts recorded, never scored.",
+    "No benchmark or bar changes after results: bars for re-measurement are the frozen P3-D thresholds."
+  ],
+  "items": [
+    {
+      "id": "R-1",
+      "constraint": "d8_heldout",
+      "title": "Cut and freeze the held-out split",
+      "experiment": "Author a HELDOUT spec: new cases never used in any prior run, disjoint case IDs/prompts from all training-eligible sets, frozen verifier scoring only. Freeze with hashes before any R-2/R-3/R-4 generation.",
+      "acceptance": "HELDOUT artifact exists; CI test proves zero case/prompt overlap with every training-eligible set; split frozen under tag.",
+      "remeasure": "d8_heldout flips to PASS when the assessor finds the frozen split.",
+      "depends_on": []
+    },
+    {
+      "id": "R-2b",
+      "constraint": "d2_diversity",
+      "title": "Add a second, REAL design family",
+      "experiment": "Select a real open-source RTL block family; inject width/bug variants under the frozen repair.verify gate; pre-register case list and widths before generation. Human decision required for block selection.",
+      "acceptance": ">= 1 real design family with >= 20 verifier-gated cases across >= 2 widths; case list pre-registered and frozen.",
+      "remeasure": "d2_diversity design-family count rises (needs R-2a as well for full PASS).",
+      "depends_on": ["R-1"]
+    },
+    {
+      "id": "R-2a",
+      "constraint": "d2_diversity",
+      "title": "Add a third task family",
+      "experiment": "Stand up the R5 task family end-to-end (shares corpus with R-3): frozen prompts, frozen verifier, pre-registered cases.",
+      "acceptance": ">= 1 third task family with >= 20 verifier-labeled trajectories.",
+      "remeasure": "d2_diversity task-family count rises; combined with R-2b gives full PASS.",
+      "depends_on": ["R-1"]
+    },
+    {
+      "id": "R-3",
+      "constraint": "d5_failure_modes",
+      "title": "Build the third-wall trajectory corpus",
+      "experiment": "Collect full generation → verification trajectories for the R5 wall (same corpus as R-2a) with frozen labels; include both passing and failing trajectories.",
+      "acceptance": ">= 20 complete R5 trajectories with verifier labels, prompts/outputs/verdicts logged.",
+      "remeasure": "d5_failure_modes flips to PASS.",
+      "depends_on": ["R-1", "R-2a"]
+    },
+    {
+      "id": "R-4",
+      "constraint": "d1_scale",
+      "title": "Run the validated recipe at scale",
+      "experiment": "Run strong-model-inside-structured-pipeline (the P3-C Q1 recipe) over the expanded case pool (R-2b + R-2a) until verifier-positive trajectories >= 1000, across cases, widths, and models. Held-out cases excluded by construction (R-1).",
+      "acceptance": "Assessor counts >= 1000 verifier-positive trajectories.",
+      "remeasure": "d1_scale flips to PASS (d3_balance must remain PASS — rebalancing runs under the same recipe if positives drown).",
+      "depends_on": ["R-1", "R-2b", "R-2a"]
+    },
+    {
+      "id": "R-5",
+      "constraint": "d10_economics",
+      "title": "Record the training-economics memo",
+      "experiment": "Once R-1..R-4 move: estimate GPU cost at projected scale vs expected capability gain x generality; record as a memo artifact. No training spend is authorized by the memo itself.",
+      "acceptance": "Memo exists with costed options and an explicit positive/negative-EV conclusion.",
+      "remeasure": "d10_economics flips to PASS.",
+      "depends_on": ["R-1", "R-2b", "R-2a", "R-4"]
+    }
+  ],
+  "re_measure_rule": "After each remediation item completes, rerun scripts/p3d_readiness_v2.py (frozen thresholds). Cleared = dimension PASS. Any remaining FAIL → iterate on its item. All 10 PASS → Training Readiness Gate: a fresh verdict file, then a SEPARATE training authorization (P4) — never training here.",
+  "training_authorized": false,
+  "method": "Plan only. No experiment executed, no trajectory generated, no model called in writing this plan."
+}
