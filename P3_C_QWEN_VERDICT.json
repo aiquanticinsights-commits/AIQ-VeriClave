@@ -41,6 +41,13 @@
     "rule_outcome": "no unacceptable regression on either track"
   },
   "overall_verdict": "PASS — both tracks pass the frozen bars with zero false acceptances and no regression vs the llama pipeline.",
+  "human_approval": {
+    "basis": "Reviewed P3_C_QWEN_AMENDMENT.json (frozen/tagged p3-c-qwen-pipeline-frozen BEFORE the run completed), the verdict bars (identical to the pre-frozen bars), the method's no-post-hoc-change statement, the independently re-derived T4 scoring (20/20 agree) and R2 false acceptances (0), and the timeline (amendment frozen 2026-10-04, result recorded 2026-10-06). The bfe0212 fix touched only hash-representation strings, never bars or benchmark.",
+    "date": "2026-10-06",
+    "decision": "APPROVED — P3-C demonstrated that integrating Qwen with the frozen AIQ-VeriClave verification pipeline achieved the predefined P3-C acceptance criteria.",
+    "not_approved": "NOT approved as 'Qwen solved verification.' No claim about general verification capability, no training authorization, no change to P0/P1/P2 evidence, and N=20 remains evidence, not proof.",
+    "reviewer": "human operator (name not supplied)"
+  },
   "honest_note": "This passes where each intervention alone did not: standalone Qwen T4 was 9/20 (A1) and the llama pipeline T4 was 0/20; combined they reach 20/20. On R2, standalone Qwen closed 17/20 and the llama pipeline 8/20; combined they reach 20/20. The gain is attributable to the combination (stronger model inside the structured pipeline), not to either factor alone — the frozen llama-only baseline and the standalone-Qwen measurement isolate each factor. N=20 is evidence, not proof; repeatability on an expanded set remains unshown.",
   "method": "Ran under frozen tag p3-c-qwen-pipeline-frozen with scripts/p3c_qwen_run.py (model + timeouts only); pipeline modules, cases, prompts, verifiers, judges, temperatures, token budgets, k=5, single-pass closure unchanged; llama evidence untouched. Independent re-derivation of T4 scoring and R2 false acceptances above. No post-hoc change."
 }
