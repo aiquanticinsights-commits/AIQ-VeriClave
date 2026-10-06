@@ -1,0 +1,46 @@
+{
+  "track": "P3-C Qwen-plus-pipeline (amendment Q1)",
+  "spec_tag": "p3-c-qwen-pipeline-frozen",
+  "amendment": "P3_C_QWEN_AMENDMENT.json (model + per-call timeouts only)",
+  "source": "P3_C_PIPELINE_QWEN.json",
+  "model": "qwen2.5-coder-14b-instruct",
+  "date": "2026-10-06",
+  "elapsed_s": 52991.9,
+  "bars": {
+    "t4": "accuracy >= 0.90 AND false_acceptances == 0",
+    "r2": "closes >= 4 AND false_acceptances == 0"
+  },
+  "results": {
+    "t4": {
+      "n": 20,
+      "hits": 20,
+      "accuracy": 1.0,
+      "abstentions": 0,
+      "errors": 0,
+      "false_acceptances": 0,
+      "scoring_disagreements": 0,
+      "answers": "all 20 selected C (reported plainly, as the llama run's all-A was)",
+      "independent_check": "all 20 selections re-scored with the frozen grader: 20/20 agree, 0 mismatches",
+      "track_verdict": "PASS — 1.0 >= 0.90 with zero false acceptances"
+    },
+    "r2": {
+      "n": 20,
+      "closed": 20,
+      "abstentions": 0,
+      "errors": 0,
+      "false_acceptances": 0,
+      "sim": "not-run on all 20 (no sim back-end for these cases) — recorded, not claimed",
+      "independent_check": "all 20 emitted answers re-derived against value_gate: 0 false acceptances",
+      "track_verdict": "PASS — 20 >= 4 with zero false acceptances"
+    }
+  },
+  "regression_check": {
+    "comparator": "P3_PIPELINE_LLAMA.json (T4 0/20, R2 8/20)",
+    "t4": "20/20 is above 0/20 — no regression",
+    "r2": "20/20 is above 8/20 — no regression",
+    "rule_outcome": "no unacceptable regression on either track"
+  },
+  "overall_verdict": "PASS — both tracks pass the frozen bars with zero false acceptances and no regression vs the llama pipeline.",
+  "honest_note": "This passes where each intervention alone did not: standalone Qwen T4 was 9/20 (A1) and the llama pipeline T4 was 0/20; combined they reach 20/20. On R2, standalone Qwen closed 17/20 and the llama pipeline 8/20; combined they reach 20/20. The gain is attributable to the combination (stronger model inside the structured pipeline), not to either factor alone — the frozen llama-only baseline and the standalone-Qwen measurement isolate each factor. N=20 is evidence, not proof; repeatability on an expanded set remains unshown.",
+  "method": "Ran under frozen tag p3-c-qwen-pipeline-frozen with scripts/p3c_qwen_run.py (model + timeouts only); pipeline modules, cases, prompts, verifiers, judges, temperatures, token budgets, k=5, single-pass closure unchanged; llama evidence untouched. Independent re-derivation of T4 scoring and R2 false acceptances above. No post-hoc change."
+}

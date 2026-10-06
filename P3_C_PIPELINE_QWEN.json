@@ -1,0 +1,2001 @@
+{
+  "track": "P3-C Qwen-plus-pipeline (amendment Q1)",
+  "spec_tag": "p3-c-qwen-pipeline-frozen",
+  "model": "qwen2.5-coder-14b",
+  "model_id": "qwen2.5-coder-14b-instruct",
+  "date": "2026-10-06",
+  "elapsed_s": 52991.9,
+  "timeouts": {
+    "long_prose_512": 7200,
+    "r2_repair_128": 3600,
+    "bare_letter_8": 1800
+  },
+  "t4": {
+    "n": 20,
+    "hits": 20,
+    "accuracy": 1.0,
+    "errors": 0,
+    "abstentions": 0,
+    "false_acceptances": 0,
+    "scoring_disagreements": 0,
+    "tokens": 47947,
+    "latency_s": 55599.0,
+    "samples": {
+      "0": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - The `dma_state` remains stuck in the S_READ state after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.\n\nAnswer: X",
+          "tokens": 361,
+          "latency_s": 1886.307978700148
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 71.56566690001637
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 23.52970439987257
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 23.503730800002813
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 27.159441200084984
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 27.809065599925816
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - The `dma_state` remains stuck in the S_READ state after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.",
+          "tokens": 491,
+          "latency_s": 1522.2673571000341
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.9773,
+            "overlap": 43,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2462,
+        "latency_s": 3582.1
+      },
+      "1": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.\n\nAnswer: X",
+          "tokens": 358,
+          "latency_s": 1482.6140739000402
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 34.357364600058645
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 23.070247899973765
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 22.825993199832737
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 22.235001900000498
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 22.403881500009447
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The design is single-clock with no clock-domain crossings.\n- `m_wb_ack` pulses cleanly every cycle at the slave pads.\n- After reset deasserts, `dma_state` stays S_READ forever.",
+          "tokens": 393,
+          "latency_s": 509.82340799993835
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4651,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2346,
+        "latency_s": 2117.3
+      },
+      "2": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - The `dma_state` remains stuck in the S_READ state after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.\n\nAnswer: X",
+          "tokens": 361,
+          "latency_s": 2042.7160835000686
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 77.24148020008579
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 25.22962150000967
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 30.135104099987075
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 29.761025599902496
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 29.15525440010242
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - The `dma_state` remains stuck in the S_READ state after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.",
+          "tokens": 491,
+          "latency_s": 1757.1344031000044
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.9773,
+            "overlap": 43,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2462,
+        "latency_s": 3991.4
+      },
+      "3": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.\n\nAnswer: X",
+          "tokens": 358,
+          "latency_s": 1664.1240637998562
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 37.84741110005416
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 27.349320499924943
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 30.759067100007087
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 30.707430799957365
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 28.902697699842975
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The design is single-clock with no clock-domain crossings.\n- `m_wb_ack` pulses cleanly every cycle at the slave pads.\n- After reset deasserts, `dma_state` stays S_READ forever.",
+          "tokens": 393,
+          "latency_s": 589.6466858999338
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4651,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2346,
+        "latency_s": 2409.3
+      },
+      "4": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1831.3185464998242
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 59.879132400033996
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 27.879429700085893
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.561981100123376
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.428155800094828
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.762601499911398
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement explicitly states that there are no clock-domain crossings, which rules out option D.\n- The symptom is that `dma_state` remains stuck in S_READ even though `m_wb_ack` pulses cleanly every cycle, indicating an issue with how the state machine handles acknowledgments.",
+          "tokens": 408,
+          "latency_s": 739.0318698999472
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3571,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2367,
+        "latency_s": 2733.9
+      },
+      "5": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1875.7928206000943
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 32.02195780002512
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 33.25359539990313
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 27.165317700011656
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.390351000009105
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 26.236924399854615
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement explicitly states that there are no clock-domain crossings, which rules out option D.\n- The symptom is that `dma_state` remains stuck in S_READ even though `m_wb_ack` pulses cleanly every cycle, indicating an issue with how the state machine handles acknowledgments.",
+          "tokens": 408,
+          "latency_s": 727.9613425999414
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3571,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2367,
+        "latency_s": 2747.8
+      },
+      "6": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1554.758299899986
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 29.33410180010833
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.090374999912456
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 22.4331996999681
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.165751400170848
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.465247199870646
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue arising post-reset.\n- It is mentioned that `dma_state` stays in S_READ forever, which is the symptom to be explained by the root cause.\n- Clean and regular `m_wb_ack` pulses are observed at the slave pads every cycle, suggesting that the problem lies within the handling of these acknowledgments rather than with the acknowledgment signals themselves.\n- The design is single-clock with no clock-domain crossings, ruling out any issues related to timing mismatches or domain transitions.\n\nAnswer: C",
+          "tokens": 466,
+          "latency_s": 1342.1734732999466
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4225,
+            "overlap": 30,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2425,
+        "latency_s": 3022.4
+      },
+      "7": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1496.5116164998617
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 32.59148510009982
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 26.11990029993467
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 26.814994200132787
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.17592900013551
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.705298100132495
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue arising post-reset.\n- It is mentioned that `dma_state` stays in S_READ forever, which is the symptom to be explained by the root cause.\n- Clean and regular `m_wb_ack` pulses are observed at the slave pads every cycle, suggesting that the problem lies within the handling of these acknowledgments rather than with the acknowledgment signals themselves.\n- The design is single-clock with no clock-domain crossings, ruling out option D as a potential cause.\n\nAnswer: C",
+          "tokens": 462,
+          "latency_s": 1356.784836200066
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4627,
+            "overlap": 31,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2421,
+        "latency_s": 2985.7
+      },
+      "8": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1699.6725360001437
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 31.833478200016543
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 33.72803750005551
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 31.851857100147754
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 33.206908099818975
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 31.224474099930376
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue related to the reset process.\n- The symptom is that `dma_state` stays in S_READ forever, suggesting a problem with state transitions or handling within the state machine.\n- Clean and regular `m_wb_ack` pulses at the slave pads rule out issues with the acknowledgment signal itself.\n- The design being single-clock with no clock-domain crossings eliminates clock-related problems as potential causes.\n\nAnswer: C",
+          "tokens": 447,
+          "latency_s": 1334.0467222000007
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3939,
+            "overlap": 26,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2406,
+        "latency_s": 3195.6
+      },
+      "9": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - The `dma_state` remains stuck in the S_READ state after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.\n\nAnswer: X",
+          "tokens": 361,
+          "latency_s": 1909.850425499957
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 68.56489320006222
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 24.441484400071204
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 19.790128199849278
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 20.68426760006696
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 322,
+            "latency_s": 21.82973730005324
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - The `dma_state` remains stuck in the S_READ state after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.",
+          "tokens": 491,
+          "latency_s": 1487.8951828000136
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.9773,
+            "overlap": 43,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2462,
+        "latency_s": 3553.1
+      },
+      "10": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design is single-clock with no clock-domain crossings.\n  - `m_wb_ack` pulses cleanly every cycle at the slave pads.\n  - After reset deasserts, `dma_state` stays S_READ forever.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ after reset deasserts, despite `m_wb_ack` pulses arriving cleanly every cycle.\n\nAnswer: X",
+          "tokens": 358,
+          "latency_s": 1467.5909116999246
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 33.25738329999149
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 19.376935899956152
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 21.301817700034007
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 20.10004820022732
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 319,
+            "latency_s": 28.376372300088406
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The design is single-clock with no clock-domain crossings.\n- `m_wb_ack` pulses cleanly every cycle at the slave pads.\n- After reset deasserts, `dma_state` stays S_READ forever.",
+          "tokens": 393,
+          "latency_s": 467.17318950011395
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4651,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2346,
+        "latency_s": 2057.2
+      },
+      "11": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1525.153014499927
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 53.912012399872765
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.88672690000385
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.957508500199765
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.88857279997319
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 26.884057600051165
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement explicitly states that there are no clock-domain crossings, which rules out option D.\n- The symptom is that `dma_state` remains stuck in S_READ even though `m_wb_ack` pulses cleanly every cycle, indicating an issue with how the state machine handles acknowledgments.",
+          "tokens": 408,
+          "latency_s": 705.164439199958
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3571,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2367,
+        "latency_s": 2383.8
+      },
+      "12": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1594.8309557999019
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 26.23977280012332
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.510714000090957
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.18700290005654
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.727877900004387
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.17414449993521
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement explicitly states that there are no clock-domain crossings, which rules out option D.\n- The symptom is that `dma_state` remains stuck in S_READ even though `m_wb_ack` pulses cleanly every cycle, indicating an issue with how the state machine handles acknowledgments.",
+          "tokens": 408,
+          "latency_s": 683.1952603999525
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3571,
+            "overlap": 20,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2367,
+        "latency_s": 2402.9
+      },
+      "13": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1626.1386943000834
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.109445699956268
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.271369399968535
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.533805900020525
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.564743999857455
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.99751629983075
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue arising post-reset.\n- It is mentioned that `dma_state` stays in S_READ forever, which is the symptom to be explained by the root cause.\n- Clean and regular `m_wb_ack` pulses are observed at the slave pads every cycle, suggesting that the problem lies within the handling of these acknowledgments rather than with the acknowledgment signals themselves.\n- The design is single-clock with no clock-domain crossings, ruling out any issues related to timing mismatches or domain transitions.\n\nAnswer: C",
+          "tokens": 466,
+          "latency_s": 1358.3422187999822
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4225,
+            "overlap": 30,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2425,
+        "latency_s": 3109.0
+      },
+      "14": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1637.468061499996
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.330968500114977
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.348631399916485
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.346964200027287
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.736108799930662
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.91705449996516
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue arising post-reset.\n- It is mentioned that `dma_state` stays in S_READ forever, which is the symptom to be explained by the root cause.\n- Clean and regular `m_wb_ack` pulses are observed at the slave pads every cycle, suggesting that the problem lies within the handling of these acknowledgments rather than with the acknowledgment signals themselves.\n- The design is single-clock with no clock-domain crossings, ruling out option D as a potential cause.\n\nAnswer: C",
+          "tokens": 462,
+          "latency_s": 1250.7174158000853
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.4627,
+            "overlap": 31,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2421,
+        "latency_s": 3011.9
+      },
+      "15": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1448.4028652000707
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 30.08066780003719
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 22.15778180002235
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 21.33181169978343
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 21.740623800083995
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 22.609303899807855
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue related to the reset process.\n- The symptom is that `dma_state` stays in S_READ forever, suggesting a problem with state transitions or handling within the state machine.\n- Clean and regular `m_wb_ack` pulses at the slave pads rule out issues with the acknowledgment signal itself.\n- The design being single-clock with no clock-domain crossings eliminates clock-related problems as potential causes.\n\nAnswer: C",
+          "tokens": 447,
+          "latency_s": 1024.3153800000437
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3939,
+            "overlap": 26,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2406,
+        "latency_s": 2590.6
+      },
+      "16": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1475.6791594000533
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.427721900166944
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.43979030009359
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 21.717481200117618
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 22.954031000146642
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 27.41775230015628
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design is single-clock with no clock-domain crossings, which rules out option D.\n- The symptom of `dma_state` staying stuck in S_READ despite clean and regular `m_wb_ack` pulses suggests an issue with how the state machine handles acknowledgments, pointing towards option C.",
+          "tokens": 413,
+          "latency_s": 656.4855641999748
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3333,
+            "overlap": 19,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2372,
+        "latency_s": 2253.1
+      },
+      "17": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1466.7962929001078
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.978618700057268
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.09885310009122
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 21.232247600099072
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.11710899998434
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 22.913835699902847
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design is single-clock with no clock-domain crossings, which rules out option D.\n- The symptom of `dma_state` staying stuck in S_READ despite clean and regular `m_wb_ack` pulses suggests an issue with how the state machine handles acknowledgments.",
+          "tokens": 408,
+          "latency_s": 629.1042761001736
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3455,
+            "overlap": 19,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2367,
+        "latency_s": 2214.2
+      },
+      "18": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1439.8463705000468
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.856606599874794
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 29.12370799994096
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 24.42200760007836
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.179053500061855
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 23.445493699982762
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue related to the reset process.\n- The symptom is that `dma_state` stays in S_READ forever, suggesting a problem with state transitions or handling within the state machine.\n- Clean and regular `m_wb_ack` pulses at the slave pads rule out issues with the acknowledgment signal itself.\n- The design being single-clock with no clock-domain crossings eliminates clock-related problems as potential causes.\n\nAnswer: C",
+          "tokens": 447,
+          "latency_s": 1020.3218708999921
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3939,
+            "overlap": 26,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2406,
+        "latency_s": 2584.2
+      },
+      "19": {
+        "stage_reason_extraction": {
+          "text": "- **Facts stated in the requirement:**\n  - The design fails after reset deasserts.\n  - `dma_state` stays in S_READ forever.\n  - `m_wb_ack` pulses are observed cleanly every cycle at the slave pads.\n  - The design is single-clock with no clock-domain crossings.\n\n- **Facts that rule options OUT:**\n  - Option D (clock-domain crossing) can be ruled out because the requirement explicitly states there are no clock-domain crossings in the design.\n\n- **The symptom the root cause must explain:**\n  - `dma_state` remains stuck in S_READ despite clean and regular `m_wb_ack` pulses.\n\nAnswer: C",
+          "tokens": 359,
+          "latency_s": 1517.789646500023
+        },
+        "stage_candidate_generation": [
+          {
+            "i": 0,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.035859200172126
+          },
+          {
+            "i": 1,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 22.917992200003937
+          },
+          {
+            "i": 2,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 21.06741619994864
+          },
+          {
+            "i": 3,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 21.307201699819416
+          },
+          {
+            "i": 4,
+            "text": "C",
+            "letter": "C",
+            "structurally_valid": true,
+            "tokens": 320,
+            "latency_s": 25.100066400133073
+          }
+        ],
+        "stage_independent_facts": {
+          "text": "- The requirement states that the design fails after reset deasserts, indicating an issue related to the reset process.\n- The symptom is that `dma_state` stays in S_READ forever, suggesting a problem with state transitions or handling within the state machine.\n- Clean and regular `m_wb_ack` pulses at the slave pads rule out issues with the acknowledgment signal itself.\n- The design being single-clock with no clock-domain crossings eliminates clock-related problems as potential causes.\n\nAnswer: C",
+          "tokens": 447,
+          "latency_s": 1020.2964965999126
+        },
+        "stage_machine_check": {
+          "consistency": {
+            "jaccard": 0.3939,
+            "overlap": 26,
+            "degenerate": false
+          },
+          "structurally_valid": 5,
+          "of": 5
+        },
+        "stage_selection": {
+          "answer": "C",
+          "abstained": false,
+          "correct": true,
+          "reason": "majority of valid",
+          "votes": {
+            "C": 5
+          },
+          "tied": false,
+          "graded_by_frozen_grader": true,
+          "grader_branch": "marked:C",
+          "scoring_agrees": true
+        },
+        "tokens": 2406,
+        "latency_s": 2653.5
+      }
+    }
+  },
+  "r2": {
+    "n": 20,
+    "closed": 20,
+    "first_pass": 20,
+    "false_acceptances": 0,
+    "false_acceptance_cases": [],
+    "errors": 0,
+    "abstentions": 0,
+    "sim_not_run": 20,
+    "tokens": 79055,
+    "latency_s": 23627.1,
+    "rows": {
+      "P2-R2-00": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 4'b0000;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 16,
+          "expect": 0,
+          "expect_bits": "0000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 984.0,
+        "tokens": 3826
+      },
+      "P2-R2-01": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 4'b1111;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 31,
+          "expect": 15,
+          "expect_bits": "1111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 925.8,
+        "tokens": 3735
+      },
+      "P2-R2-02": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 4,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 4'b0001;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 17,
+          "expect": 1,
+          "expect_bits": "0001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 927.4,
+        "tokens": 3776
+      },
+      "P2-R2-03": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 4,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 4'b0101;",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 6,
+          "literal_value": 37,
+          "expect": 5,
+          "expect_bits": "0101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 867.7,
+        "tokens": 3777
+      },
+      "P2-R2-04": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 4,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 4'b0110;",
+        "constraint": {
+          "ok": true,
+          "width": 4,
+          "literal_bits": 5,
+          "literal_value": 22,
+          "expect": 6,
+          "expect_bits": "0110",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 835.8,
+        "tokens": 3766
+      },
+      "P2-R2-05": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 8'b00000000;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 256,
+          "expect": 0,
+          "expect_bits": "00000000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1141.2,
+        "tokens": 3970
+      },
+      "P2-R2-06": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 8'b11111111;",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 511,
+          "expect": 255,
+          "expect_bits": "11111111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1038.7,
+        "tokens": 3785
+      },
+      "P2-R2-07": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 8'b00000001;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 257,
+          "expect": 1,
+          "expect_bits": "00000001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1110.1,
+        "tokens": 3920
+      },
+      "P2-R2-08": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 8'b00000101;",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 10,
+          "literal_value": 517,
+          "expect": 5,
+          "expect_bits": "00000101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1066.2,
+        "tokens": 3855
+      },
+      "P2-R2-09": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 8'b10000110;",
+        "constraint": {
+          "ok": true,
+          "width": 8,
+          "literal_bits": 9,
+          "literal_value": 390,
+          "expect": 134,
+          "expect_bits": "10000110",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1076.1,
+        "tokens": 3840
+      },
+      "P2-R2-10": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 12'b000000000000;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 4096,
+          "expect": 0,
+          "expect_bits": "000000000000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1327.0,
+        "tokens": 4085
+      },
+      "P2-R2-11": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 12'b111111111111;",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 8191,
+          "expect": 4095,
+          "expect_bits": "111111111111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1329.7,
+        "tokens": 3995
+      },
+      "P2-R2-12": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 12'b000000000001;",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 4097,
+          "expect": 1,
+          "expect_bits": "000000000001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1213.5,
+        "tokens": 4025
+      },
+      "P2-R2-13": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 12'b000000001101;",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 14,
+          "literal_value": 8205,
+          "expect": 13,
+          "expect_bits": "000000001101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1239.6,
+        "tokens": 4045
+      },
+      "P2-R2-14": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 3,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 12'b010101010101;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 12,
+          "literal_bits": 13,
+          "literal_value": 5461,
+          "expect": 1365,
+          "expect_bits": "010101010101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1308.8,
+        "tokens": 4005
+      },
+      "P2-R2-15": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 3,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 16'b0000000000000000;",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 65536,
+          "expect": 0,
+          "expect_bits": "0000000000000000",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1439.2,
+        "tokens": 4085
+      },
+      "P2-R2-16": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 5,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 16'b1111111111111111;",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 131071,
+          "expect": 65535,
+          "expect_bits": "1111111111111111",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1483.2,
+        "tokens": 4140
+      },
+      "P2-R2-17": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 3,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "```verilog\nassign q = 16'b0000000000000001;\n```",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 65537,
+          "expect": 1,
+          "expect_bits": "0000000000000001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1316.1,
+        "tokens": 4120
+      },
+      "P2-R2-18": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 4,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 16'b0000000000000101;",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 18,
+          "literal_value": 131077,
+          "expect": 5,
+          "expect_bits": "0000000000000101",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1490.0,
+        "tokens": 4145
+      },
+      "P2-R2-19": {
+        "closed": true,
+        "first_pass": true,
+        "n_passing": 1,
+        "abstained": false,
+        "sim": "not-run",
+        "answer": "assign q = 16'b1001100110011001;",
+        "constraint": {
+          "ok": true,
+          "width": 16,
+          "literal_bits": 17,
+          "literal_value": 104857,
+          "expect": 39321,
+          "expect_bits": "1001100110011001",
+          "agrees_with_frozen_task": true,
+          "truncates": true
+        },
+        "latency_s": 1507.0,
+        "tokens": 4160
+      }
+    }
+  },
+  "signoff": "PENDING"
+}
