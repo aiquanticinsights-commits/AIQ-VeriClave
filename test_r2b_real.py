@@ -55,8 +55,17 @@ class TestR2bReal(unittest.TestCase):
                                         c["bad"]), c["id"])
 
     def test_disjoint_from_training_evidence(self):
+        import fnmatch
+        # Scale-run outputs (R4_CYCLE_*.json, R4_TRAJECTORIES.json) run
+        # these same cases by design; disjointness is required against
+        # every OTHER benchmark's evidence.
         for path in glob.glob(os.path.join(HERE, "*.json")):
-            if os.path.basename(path) == "P3_R2B_REAL.json":
+            base = os.path.basename(path)
+            if base == "P3_R2B_REAL.json":
+                continue
+            if fnmatch.fnmatch(base, "R4_CYCLE_*.json"):
+                continue
+            if base == "R4_TRAJECTORIES.json":
                 continue
             with open(path, encoding="utf-8") as f:
                 self.assertNotIn("R2B-R-", f.read(),

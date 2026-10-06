@@ -55,6 +55,19 @@ def measure_scale(got):
     pos += got["P3_A_T4_REMEASURE.json"]["hits"]
     pos += got["P3_C_PIPELINE_QWEN.json"]["r2"]["closed"]
     pos += got["P3_C_PIPELINE_QWEN.json"]["t4"]["hits"]
+    # Third-wall and scale-cycle positives (files absent -> contribute 0,
+    # never UNMEASURABLE on their own).
+    try:
+        r5t = load("R5_TRAJECTORIES.json")
+        pos += sum(1 for v in r5t["trajectories"].values()
+                   if v.get("passed"))
+    except (OSError, ValueError):
+        pass
+    try:
+        r4t = load("R4_TRAJECTORIES.json")
+        pos += sum(v.get("n_passing", 0) for v in r4t["rows"])
+    except (OSError, ValueError):
+        pass
     return {"positive_trajectories": pos}
 
 
@@ -74,17 +87,48 @@ def measure_labeled(got):
     n += len(got["P3_A_T4_REMEASURE.json"]["samples"])
     q = got["P3_C_PIPELINE_QWEN.json"]
     n += len(q["t4"]["samples"]) + len(q["r2"]["rows"]) * 5
+    try:
+        r5t = load("R5_TRAJECTORIES.json")
+        n += r5t.get("n", 0)
+    except (OSError, ValueError):
+        pass
+    try:
+        r4t = load("R4_TRAJECTORIES.json")
+        n += sum(v.get("n_candidates", 0) for v in r4t.get("rows", []))
+    except (OSError, ValueError):
+        pass
     return {"labeled_generations": n}
 
 
 def measure_diversity(got):
     if "P2_M5_DATASET.json" not in got:
         return None
-    return {"task_families": ["T4 single-letter RCA", "R2 width-literal repair"],
-            "n_task_families": 2,
-            "design_families": ["synthetic p2r assign modules"],
-            "n_design_families": 1,
-            "n_real_families": 0,
+    # Task families are DETECTED, not hardcoded: a family counts when a
+    # frozen bench plus verifier-labeled trajectories both exist for it.
+    tasks = ["T4 single-letter RCA", "R2 width-literal repair"]
+    try:
+        r5b = load("P3_R5_FAMILY.json")
+        r5t = load("R5_TRAJECTORIES.json")
+        if r5b.get("n", 0) >= 20 and r5t.get("n", 0) >= 20:
+            tasks.append("R5 declline repair")
+    except (OSError, ValueError):
+        pass
+    # Design families: synthetic p2r always; rideprotect real blocks count
+    # once the frozen R-2b family exists.
+    designs = ["synthetic p2r assign modules"]
+    n_real = 0
+    try:
+        r2b = load("P3_R2B_REAL.json")
+        if r2b.get("n", 0) >= 10 and "FROZEN" in r2b.get("status", ""):
+            designs.append("rideprotect-rv real blocks")
+            n_real = 1
+    except (OSError, ValueError):
+        pass
+    return {"task_families": tasks,
+            "n_task_families": len(tasks),
+            "design_families": designs,
+            "n_design_families": len(designs),
+            "n_real_families": n_real,
             "models": sorted({"llama-3.1-8b", "deepseek-coder-6.7b",
                               "qwen2.5-coder-14b"})}
 
@@ -139,6 +183,23 @@ def measure_trajectories(got):
             total += 1
             if all(x in v for x in ("answer", "tokens", "latency_s")):
                 complete += 1
+    try:
+        r5t = load("R5_TRAJECTORIES.json")
+        for v in r5t["trajectories"].values():
+            total += 1
+            if all(x in v for x in ("prompt", "output", "tokens",
+                                    "latency_s")):
+                complete += 1
+    except (OSError, ValueError):
+        pass
+    try:
+        r4t = load("R4_TRAJECTORIES.json")
+        for v in r4t.get("rows", []):
+            total += 1
+            if all(x in v for x in ("answer", "tokens", "latency_s")):
+                complete += 1
+    except (OSError, ValueError):
+        pass
     multi = any("history" in v
                 for k in ("P2_M2_LLAMA.json", "P3_A_QWEN14B.json")
                 if k in got
