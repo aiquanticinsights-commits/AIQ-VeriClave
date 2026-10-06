@@ -1,0 +1,443 @@
+{
+  "track": "P3-R1 held-out split",
+  "status": "FROZEN under tag p3-heldout-frozen",
+  "rules": "New cases only; disjoint IDs/prompts from every training-eligible set; scored only by frozen verifiers; never train-eligible.",
+  "r2": {
+    "n": 16,
+    "verifier": "frozen repair.verify (value_gate + splice + lint wall)",
+    "validation": "known-good passes all verdicts; buggy fails; recorded per case at authoring",
+    "cases": [
+      {
+        "id": "HELD-R2-00",
+        "verify_mode": "line",
+        "bug": "5-bit literal on 4-bit signal",
+        "frame": "module heldr00(input wire [4-1:0] a, output wire [4-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr00(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 5'b10110;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "5'b10110",
+        "expect_value": 6,
+        "width": 4,
+        "literal_bits": 5,
+        "literal_value": 22,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-01",
+        "verify_mode": "line",
+        "bug": "6-bit literal on 4-bit signal",
+        "frame": "module heldr01(input wire [4-1:0] a, output wire [4-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr01(input wire [4-1:0] a, output wire [4-1:0] q);\nassign q = 6'b111111;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "6'b111111",
+        "expect_value": 15,
+        "width": 4,
+        "literal_bits": 6,
+        "literal_value": 63,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-02",
+        "verify_mode": "line",
+        "bug": "6-bit literal on 5-bit signal",
+        "frame": "module heldr02(input wire [5-1:0] a, output wire [5-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr02(input wire [5-1:0] a, output wire [5-1:0] q);\nassign q = 6'b100001;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "6'b100001",
+        "expect_value": 1,
+        "width": 5,
+        "literal_bits": 6,
+        "literal_value": 33,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-03",
+        "verify_mode": "line",
+        "bug": "8-bit literal on 5-bit signal",
+        "frame": "module heldr03(input wire [5-1:0] a, output wire [5-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr03(input wire [5-1:0] a, output wire [5-1:0] q);\nassign q = 8'b11110000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "8'b11110000",
+        "expect_value": 16,
+        "width": 5,
+        "literal_bits": 8,
+        "literal_value": 240,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-04",
+        "verify_mode": "line",
+        "bug": "7-bit literal on 6-bit signal",
+        "frame": "module heldr04(input wire [6-1:0] a, output wire [6-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr04(input wire [6-1:0] a, output wire [6-1:0] q);\nassign q = 7'b1100101;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "7'b1100101",
+        "expect_value": 37,
+        "width": 6,
+        "literal_bits": 7,
+        "literal_value": 101,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-05",
+        "verify_mode": "line",
+        "bug": "9-bit literal on 6-bit signal",
+        "frame": "module heldr05(input wire [6-1:0] a, output wire [6-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr05(input wire [6-1:0] a, output wire [6-1:0] q);\nassign q = 9'b111111111;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "9'b111111111",
+        "expect_value": 63,
+        "width": 6,
+        "literal_bits": 9,
+        "literal_value": 511,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-06",
+        "verify_mode": "line",
+        "bug": "9-bit literal on 8-bit signal",
+        "frame": "module heldr06(input wire [8-1:0] a, output wire [8-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr06(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 9'b100000000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "9'b100000000",
+        "expect_value": 0,
+        "width": 8,
+        "literal_bits": 9,
+        "literal_value": 256,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-07",
+        "verify_mode": "line",
+        "bug": "10-bit literal on 8-bit signal",
+        "frame": "module heldr07(input wire [8-1:0] a, output wire [8-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr07(input wire [8-1:0] a, output wire [8-1:0] q);\nassign q = 10'b1111111111;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "10'b1111111111",
+        "expect_value": 255,
+        "width": 8,
+        "literal_bits": 10,
+        "literal_value": 1023,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-08",
+        "verify_mode": "line",
+        "bug": "11-bit literal on 10-bit signal",
+        "frame": "module heldr08(input wire [10-1:0] a, output wire [10-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr08(input wire [10-1:0] a, output wire [10-1:0] q);\nassign q = 11'b10000000000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "11'b10000000000",
+        "expect_value": 0,
+        "width": 10,
+        "literal_bits": 11,
+        "literal_value": 1024,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-09",
+        "verify_mode": "line",
+        "bug": "12-bit literal on 10-bit signal",
+        "frame": "module heldr09(input wire [10-1:0] a, output wire [10-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr09(input wire [10-1:0] a, output wire [10-1:0] q);\nassign q = 12'b101010101010;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "12'b101010101010",
+        "expect_value": 682,
+        "width": 10,
+        "literal_bits": 12,
+        "literal_value": 2730,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-10",
+        "verify_mode": "line",
+        "bug": "13-bit literal on 12-bit signal",
+        "frame": "module heldr10(input wire [12-1:0] a, output wire [12-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr10(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 13'b1000000000000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "13'b1000000000000",
+        "expect_value": 0,
+        "width": 12,
+        "literal_bits": 13,
+        "literal_value": 4096,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-11",
+        "verify_mode": "line",
+        "bug": "14-bit literal on 12-bit signal",
+        "frame": "module heldr11(input wire [12-1:0] a, output wire [12-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr11(input wire [12-1:0] a, output wire [12-1:0] q);\nassign q = 14'b11110000111100;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "14'b11110000111100",
+        "expect_value": 3132,
+        "width": 12,
+        "literal_bits": 14,
+        "literal_value": 15420,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-12",
+        "verify_mode": "line",
+        "bug": "17-bit literal on 16-bit signal",
+        "frame": "module heldr12(input wire [16-1:0] a, output wire [16-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr12(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 17'b10000000000000000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "17'b10000000000000000",
+        "expect_value": 0,
+        "width": 16,
+        "literal_bits": 17,
+        "literal_value": 65536,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-13",
+        "verify_mode": "line",
+        "bug": "20-bit literal on 16-bit signal",
+        "frame": "module heldr13(input wire [16-1:0] a, output wire [16-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr13(input wire [16-1:0] a, output wire [16-1:0] q);\nassign q = 20'b11111111111111111111;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "20'b11111111111111111111",
+        "expect_value": 65535,
+        "width": 16,
+        "literal_bits": 20,
+        "literal_value": 1048575,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-14",
+        "verify_mode": "line",
+        "bug": "25-bit literal on 24-bit signal",
+        "frame": "module heldr14(input wire [24-1:0] a, output wire [24-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr14(input wire [24-1:0] a, output wire [24-1:0] q);\nassign q = 25'b1000000000000000000000000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "25'b1000000000000000000000000",
+        "expect_value": 0,
+        "width": 24,
+        "literal_bits": 25,
+        "literal_value": 16777216,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      },
+      {
+        "id": "HELD-R2-15",
+        "verify_mode": "line",
+        "bug": "33-bit literal on 32-bit signal",
+        "frame": "module heldr15(input wire [32-1:0] a, output wire [32-1:0] q);\n{line}\nendmodule",
+        "buggy": "module heldr15(input wire [32-1:0] a, output wire [32-1:0] q);\nassign q = 33'b100000000000000000000000000000000;\nendmodule",
+        "must_contain": [],
+        "must_absent": [],
+        "bad": "33'b100000000000000000000000000000000",
+        "expect_value": 0,
+        "width": 32,
+        "literal_bits": 33,
+        "literal_value": 4294967296,
+        "validation": {
+          "good_verdicts": {
+            "syntax": true,
+            "fix": true
+          },
+          "buggy_verdicts": {
+            "syntax": false,
+            "fix": false
+          }
+        }
+      }
+    ]
+  },
+  "t4": {
+    "n": 8,
+    "grader": "frozen grade_reasoned",
+    "validation": "Answer:X sanity on all four letters per probe; recorded at authoring",
+    "probes": [
+      {
+        "id": "HELD-T4-00",
+        "prompt": "Failure: an I2C slave holds SDA low forever after a NACK, hanging the bus. Waveforms show clean pull-up release timing on SDA/SCL when the slave is detached, no clock stretching pulses, and a quiet ground plane. The design is single-clock with no clock-domain crossings. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. pull-up resistor sizing\nB. clock stretching logic\nC. slave state machine not releasing SDA\nD. ground bounce",
+        "gold": "C"
+      },
+      {
+        "id": "HELD-T4-01",
+        "prompt": "Failure: an asynchronous FIFO overflow flag never asserts even though writes exceed the depth. Waveforms show both clocks running, gray-code synchronizer outputs stable, and the binary write pointer counting past the DEPTH parameter. The design uses standard two-flop synchronizers. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. pointer-width / depth parameter mismatch\nB. clock-domain crossing synchronization\nC. read clock stopped\nD. reset sequencing",
+        "gold": "A"
+      },
+      {
+        "id": "HELD-T4-02",
+        "prompt": "Failure: spurious interrupts fire in bursts correlated with board-level activity, though all enable/priority/mode registers read back correctly and the handler completes well within budget. Waveforms show glitches on the asynchronous reset input with no synchronizer, and each burst aligns with a reset glitch. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. interrupt clock source\nB. priority configuration\nC. handler latency\nD. reset signal integrity",
+        "gold": "D"
+      },
+      {
+        "id": "HELD-T4-03",
+        "prompt": "Failure: a PWM output is stuck at 50% duty although firmware writes new compare values every period. Waveforms show the counter free-running, direct (non-shadow) compare writes taking effect immediately, and the shadow-load strobe never asserting. Output polarity and dead-time read back as programmed. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. clock prescaler\nB. shadow register load strobe\nC. output polarity\nD. dead-time insertion",
+        "gold": "B"
+      },
+      {
+        "id": "HELD-T4-04",
+        "prompt": "Failure: an SRAM BIST controller flags FAIL on known-good memory. Waveforms show the march sequence running to completion, the address counter covering the full range, timing margins clean, and direct readback of the array correct \u2014 only the final signature compare mismatches. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. expected-signature / polynomial mismatch\nB. address counter\nC. timing margin\nD. redundancy fuses",
+        "gold": "A"
+      },
+      {
+        "id": "HELD-T4-05",
+        "prompt": "Failure: a serial link never trains above its lowest rate. Waveforms show a clean reference clock, completed equalization sweeps, verified lane polarity, but the partner never emits training ordered sets because its PERST# input never deasserts. The local training state machine waits in its polling state until its watchdog fires. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. reference clock quality\nB. receiver equalization\nC. lane polarity\nD. partner link-training handshake / power sequencing",
+        "gold": "D"
+      },
+      {
+        "id": "HELD-T4-06",
+        "prompt": "Failure: a low-priority bus master starves although the arbiter is programmed round-robin. Waveforms show all requests asserted, configuration reading back round-robin, and the grant pointer frozen on one master whose grant-ack never arrives. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. priority configuration\nB. grant-ack handshake stall\nC. request synchronization\nD. arbiter clock",
+        "gold": "B"
+      },
+      {
+        "id": "HELD-T4-07",
+        "prompt": "Failure: a CRC error flag asserts on every frame although payloads are correct. Waveforms show single-bit error injection detected and located correctly (polynomial and bit order proven), frame lengths exact, but the checker seed register holds its reset value instead of the protocol-specified init. Think step by step about the most likely root cause, then end your reply with exactly `Answer: X` where X is one letter.\nA. CRC polynomial\nB. bit order\nC. seed / init value\nD. length field",
+        "gold": "C"
+      }
+    ]
+  }
+}
