@@ -101,6 +101,13 @@ def measure_failure_modes(got):
             "further_wall_trajectories": r5_trajectories}
 
 
+def _vals(node):
+    """T4 samples are a list in P2 artifacts and a dict in P3 artifacts."""
+    if isinstance(node, dict):
+        return list(node.values())
+    return list(node or [])
+
+
 def measure_trajectories(got):
     """Fraction of counted generations whose record carries prompt (or case
     reference), verbatim output, verdict, and latency/tokens — plus whether
@@ -117,14 +124,14 @@ def measure_trajectories(got):
             total += 1
             if all(x in e for x in ("prompt", "output", "tokens")):
                 complete += 1
-        for v in got[k]["t4"]["samples"].values():
+        for v in _vals(got[k]["t4"]["samples"]):
             total += 1
             if all(x in v for x in ("text", "tokens", "latency_s")):
                 complete += 1
     for k in ("P3_PIPELINE_LLAMA.json", "P3_C_PIPELINE_QWEN.json"):
         if k not in got:
             continue
-        for v in got[k]["t4"]["samples"].values():
+        for v in _vals(got[k]["t4"]["samples"]):
             total += 1
             if all(x in v for x in ("tokens", "latency_s")):
                 complete += 1
@@ -142,8 +149,14 @@ def measure_trajectories(got):
 
 
 def measure_provenance(got):
+    # Provenance is a property of trajectory-bearing sources.
+    # P2_M5_DATASET.json is a characterization document with zero
+    # trajectories, so it is excluded from the denominator (counting it
+    # would grade paperwork, not data lineage).
     traceable = total = 0
     for name, d in got.items():
+        if name == "P2_M5_DATASET.json":
+            continue
         total += 1
         has_model = bool(d.get("model") or d.get("model_id")
                          or d.get("models_represented"))
