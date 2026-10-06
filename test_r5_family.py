@@ -1,7 +1,6 @@
 """Hermetic tests for the frozen R5 bench. No Verilator, no models:
 structure, recorded validation, pure-python value re-validation, and
 disjointness from training-eligible evidence."""
-import glob
 import json
 import os
 import unittest
@@ -69,9 +68,19 @@ class TestR5Bench(unittest.TestCase):
         d = load("P3_R5_FAMILY.json")
         held = {task_prompt(c) for c in d["cases"]}
         held |= {c["buggy"] for c in d["cases"]}
-        for path in glob.glob(os.path.join(HERE, "*.json")):
-            if os.path.basename(path) in ("P3_R5_FAMILY.json",):
+        # Same-family trajectory records necessarily contain r5h cases;
+        # disjointness is required against every OTHER benchmark's evidence.
+        # Scan git-tracked JSON only: untracked working files (partials such
+        # as R5_PARTIAL.json) are not evidence.
+        same_family = ("P3_R5_FAMILY.json", "R5_TRAJECTORIES.json")
+        import subprocess
+        tracked = subprocess.run(
+            ["git", "-C", HERE, "ls-files", "*.json"],
+            capture_output=True, text=True, check=True).stdout.split()
+        for name in tracked:
+            if name in same_family:
                 continue
+            path = os.path.join(HERE, name)
             with open(path, encoding="utf-8") as f:
                 blob = f.read()
             self.assertNotIn("r5h", blob, os.path.basename(path))

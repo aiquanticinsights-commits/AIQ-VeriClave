@@ -1,0 +1,530 @@
+{
+  "track": "P3-R-3 R5 trajectories (model generations + frozen verification)",
+  "spec_tag": "p3-r5-bench-frozen",
+  "n": 40,
+  "passed": 1,
+  "failed": 39,
+  "errors": 0,
+  "trajectories": {
+    "llama:R5H-00": {
+      "case": "R5H-00",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal c AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h00(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a + c + 5'b10000;\nendmodule",
+      "output": "DECL: internal wire [3:0] c;\n\nASSIGN: assign y = a + c + 8'b10000000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 15.0,
+      "tokens": 193
+    },
+    "llama:R5H-01": {
+      "case": "R5H-01",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal sc AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h01(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a - sc + 5'b11111;\nendmodule",
+      "output": "wire [3:0] sc; \nassign y = a - sc + 15'd15;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 11.2,
+      "tokens": 186
+    },
+    "llama:R5H-02": {
+      "case": "R5H-02",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal ec AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h02(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a & ec + 5'b10101;\nendmodule",
+      "output": "DECL: `wire [3:0] ec; \nASSIGN: `assign y = a & ec + 4'b1010;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 14.5,
+      "tokens": 194
+    },
+    "llama:R5H-03": {
+      "case": "R5H-03",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal ic AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h03(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a | ic + 5'b11011;\nendmodule",
+      "output": "DECL: internal wire [3:0] ic; \nASSIGN: assign y = a | {ic, 1'b0} + 4'd11;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 14.0,
+      "tokens": 199
+    },
+    "llama:R5H-04": {
+      "case": "R5H-04",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal oc AND 7-bit literal on 6-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h04(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a + oc + 7'b1000000;\nendmodule",
+      "output": "DECL: wire [3:0] oc; \nASSIGN: assign y = a + oc + 8'b10000000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 12.8,
+      "tokens": 194
+    },
+    "llama:R5H-05": {
+      "case": "R5H-05",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal uc AND 7-bit literal on 6-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h05(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a ^ uc + 7'b1111111;\nendmodule",
+      "output": "DECL: wire [3:0] uc; \nASSIGN: assign y = a ^ uc + 4'd15;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 12.1,
+      "tokens": 192
+    },
+    "llama:R5H-06": {
+      "case": "R5H-06",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal ac AND 7-bit literal on 6-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h06(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a - ac + 7'b1000010;\nendmodule",
+      "output": "DECL: internal wire [3:0] ac;\nASSIGN: assign y = a - {ac[3:0],4'b0000} + 4'd10;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 14.8,
+      "tokens": 203
+    },
+    "llama:R5H-07": {
+      "case": "R5H-07",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal bc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h07(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a + bc + 9'b100000000;\nendmodule",
+      "output": "DECL: wire [3:0] bc;\n\nASSIGN: assign y = a + {bc[7:4], 5'b0} + 9'd128;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 15.2,
+      "tokens": 202
+    },
+    "llama:R5H-08": {
+      "case": "R5H-08",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal dc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h08(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a & dc + 9'b111111111;\nendmodule",
+      "output": "DECL: internal wire [8-1:0] dc;\nASSIGN: assign y = a & dc + 8'b11111111;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 14.5,
+      "tokens": 196
+    },
+    "llama:R5H-09": {
+      "case": "R5H-09",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal fc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h09(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a | fc + 9'b101010101;\nendmodule",
+      "output": "DECL: wire [3:0] fc;\nASSIGN: assign y = a | {fc, 3'b0} + 5'd10;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 15.7,
+      "tokens": 198
+    },
+    "llama:R5H-10": {
+      "case": "R5H-10",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal gc AND 11-bit literal on 10-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h10(input wire [10-1:0] a, output wire [10-1:0] y);\nassign y = a + gc + 11'b10000000000;\nendmodule",
+      "output": "DECL: wire [3:0] gc;\n\nASSIGN: assign y = a + gc + {4{1'b1}};",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 15.8,
+      "tokens": 195
+    },
+    "llama:R5H-11": {
+      "case": "R5H-11",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal hc AND 11-bit literal on 10-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h11(input wire [10-1:0] a, output wire [10-1:0] y);\nassign y = a - hc + 11'b11111111111;\nendmodule",
+      "output": "DECL: `wire [3:0] hc;`\nASSIGN: `assign y = a - hc + 8'd123;`",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 15.5,
+      "tokens": 196
+    },
+    "llama:R5H-12": {
+      "case": "R5H-12",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal jc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h12(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a + jc + 13'b1000000000000;\nendmodule",
+      "output": "DECL: internal wire [3:0] jc;\nASSIGN: assign y = a + jc + 8'd10;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 15.2,
+      "tokens": 194
+    },
+    "llama:R5H-13": {
+      "case": "R5H-13",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal kc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h13(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a ^ kc + 13'b1111000011111;\nendmodule",
+      "output": "DECL: internal wire [3:0] kc;\nASSIGN: assign y = a[11:4]^kc+10'd1111000011;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 17.2,
+      "tokens": 200
+    },
+    "llama:R5H-14": {
+      "case": "R5H-14",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal lc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h14(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a & lc + 13'b1010101010101;\nendmodule",
+      "output": "DECL: `wire [3:0] lc;`\nASSIGN: `assign y = a & lc + 4'b1010;`",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 18.2,
+      "tokens": 198
+    },
+    "llama:R5H-15": {
+      "case": "R5H-15",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal mc AND 17-bit literal on 16-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h15(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a + mc + 17'b10000000000000000;\nendmodule",
+      "output": "DECL: internal wire [3:0] mc;\n\nASSIGN: assign y = a + mc + 4'd8;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 18.0,
+      "tokens": 195
+    },
+    "llama:R5H-16": {
+      "case": "R5H-16",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal nc AND 17-bit literal on 16-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h16(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a | nc + 17'b11111111111111111;\nendmodule",
+      "output": "DECL: `wire [3:0] nc;` \nASSIGN: `assign y = a | {nc, 15'd0} + 17'b11111111111111111;`",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 21.4,
+      "tokens": 211
+    },
+    "llama:R5H-17": {
+      "case": "R5H-17",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal pc AND 17-bit literal on 16-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h17(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a - pc + 17'b10000000000000001;\nendmodule",
+      "output": "internal wire [3:0] pc; \nassign y = a - pc + 4'b10001;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 16.3,
+      "tokens": 192
+    },
+    "llama:R5H-18": {
+      "case": "R5H-18",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal qc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h18(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a ^ qc + 9'b100110011;\nendmodule",
+      "output": "DECL: `wire [3:0] qc;`\nASSIGN: `assign y = a[7:4]^qc + 4'b1001;`",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 20.3,
+      "tokens": 200
+    },
+    "llama:R5H-19": {
+      "case": "R5H-19",
+      "model": "llama",
+      "prompt": "This Verilog module has two bugs (undeclared signal rc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h19(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a | rc + 13'b1100110011001;\nendmodule",
+      "output": "DECL: wire [3:0] rc;\n\nASSIGN: assign y = a | {4{rc[3]}} + 11'b10100001010;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 23.0,
+      "tokens": 203
+    },
+    "qwen:R5H-00": {
+      "case": "R5H-00",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal c AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h00(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a + c + 5'b10000;\nendmodule",
+      "output": "DECL: wire [3:0] c;\nASSIGN: assign y = a + c + 4'b1000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 513.4,
+      "tokens": 191
+    },
+    "qwen:R5H-01": {
+      "case": "R5H-01",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal sc AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h01(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a - sc + 5'b11111;\nendmodule",
+      "output": "DECL: wire [3:0] sc;\nASSIGN: assign y = a - sc + 4'b1111;",
+      "verdicts": {
+        "syntax": true,
+        "fix": true
+      },
+      "passed": true,
+      "latency_s": 404.4,
+      "tokens": 191
+    },
+    "qwen:R5H-02": {
+      "case": "R5H-02",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal ec AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h02(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a & ec + 5'b10101;\nendmodule",
+      "output": "DECL: wire [3:0] ec;\nASSIGN: assign y = a & ec + 4'b1010;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 360.3,
+      "tokens": 191
+    },
+    "qwen:R5H-03": {
+      "case": "R5H-03",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal ic AND 5-bit literal on 4-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h03(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a | ic + 5'b11011;\nendmodule",
+      "output": "DECL: wire [3:0] ic;\nASSIGN: assign y = a | ic + 4'b1101;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 350.3,
+      "tokens": 191
+    },
+    "qwen:R5H-04": {
+      "case": "R5H-04",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal oc AND 7-bit literal on 6-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h04(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a + oc + 7'b1000000;\nendmodule",
+      "output": "DECL: wire [3:0] oc;\nASSIGN: assign y = a + oc + 4'b1000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 344.4,
+      "tokens": 193
+    },
+    "qwen:R5H-05": {
+      "case": "R5H-05",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal uc AND 7-bit literal on 6-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h05(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a ^ uc + 7'b1111111;\nendmodule",
+      "output": "DECL: wire [3:0] uc;\nASSIGN: assign y = a ^ uc + 4'b1111;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 347.4,
+      "tokens": 193
+    },
+    "qwen:R5H-06": {
+      "case": "R5H-06",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal ac AND 7-bit literal on 6-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h06(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a - ac + 7'b1000010;\nendmodule",
+      "output": "DECL: wire [3:0] ac;\nASSIGN: assign y = a - ac + 4'b10000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 364.5,
+      "tokens": 194
+    },
+    "qwen:R5H-07": {
+      "case": "R5H-07",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal bc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h07(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a + bc + 9'b100000000;\nendmodule",
+      "output": "DECL: wire [3:0] bc;\nASSIGN: assign y = a + bc + 8'b10000000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 430.2,
+      "tokens": 199
+    },
+    "qwen:R5H-08": {
+      "case": "R5H-08",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal dc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h08(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a & dc + 9'b111111111;\nendmodule",
+      "output": "DECL: wire [3:0] dc;\nASSIGN: assign y = a & dc + 8'b11111111;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 393.6,
+      "tokens": 199
+    },
+    "qwen:R5H-09": {
+      "case": "R5H-09",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal fc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h09(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a | fc + 9'b101010101;\nendmodule",
+      "output": "DECL: wire [3:0] fc;\nASSIGN: assign y = a | fc + 4'b1010;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 351.1,
+      "tokens": 195
+    },
+    "qwen:R5H-10": {
+      "case": "R5H-10",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal gc AND 11-bit literal on 10-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h10(input wire [10-1:0] a, output wire [10-1:0] y);\nassign y = a + gc + 11'b10000000000;\nendmodule",
+      "output": "DECL: wire [3:0] gc;\nASSIGN: assign y = a + gc + 4'b1000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 360.2,
+      "tokens": 202
+    },
+    "qwen:R5H-11": {
+      "case": "R5H-11",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal hc AND 11-bit literal on 10-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h11(input wire [10-1:0] a, output wire [10-1:0] y);\nassign y = a - hc + 11'b11111111111;\nendmodule",
+      "output": "DECL: wire [3:0] hc;\nASSIGN: assign y = a - hc + 4'b1111;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 351.5,
+      "tokens": 202
+    },
+    "qwen:R5H-12": {
+      "case": "R5H-12",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal jc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h12(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a + jc + 13'b1000000000000;\nendmodule",
+      "output": "DECL: wire [3:0] jc;\nASSIGN: assign y = a + jc + 4'b1000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 347.5,
+      "tokens": 204
+    },
+    "qwen:R5H-13": {
+      "case": "R5H-13",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal kc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h13(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a ^ kc + 13'b1111000011111;\nendmodule",
+      "output": "DECL: wire [3:0] kc;\nASSIGN: assign y = a ^ kc + 4'b1111;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 354.8,
+      "tokens": 204
+    },
+    "qwen:R5H-14": {
+      "case": "R5H-14",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal lc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h14(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a & lc + 13'b1010101010101;\nendmodule",
+      "output": "DECL: wire [3:0] lc;\nASSIGN: assign y = a & lc + 4'b1010;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 356.0,
+      "tokens": 204
+    },
+    "qwen:R5H-15": {
+      "case": "R5H-15",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal mc AND 17-bit literal on 16-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h15(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a + mc + 17'b10000000000000000;\nendmodule",
+      "output": "DECL: wire [3:0] mc;\nASSIGN: assign y = a + mc + 16'b1000000000000000;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 499.3,
+      "tokens": 221
+    },
+    "qwen:R5H-16": {
+      "case": "R5H-16",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal nc AND 17-bit literal on 16-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h16(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a | nc + 17'b11111111111111111;\nendmodule",
+      "output": "DECL: wire [3:0] nc;\nASSIGN: assign y = a | nc + 4'b1111;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 344.7,
+      "tokens": 208
+    },
+    "qwen:R5H-17": {
+      "case": "R5H-17",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal pc AND 17-bit literal on 16-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h17(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a - pc + 17'b10000000000000001;\nendmodule",
+      "output": "DECL: `wire [3:0] pc;`\nASSIGN: `assign y = a - pc + 4'b1001;`",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 349.7,
+      "tokens": 212
+    },
+    "qwen:R5H-18": {
+      "case": "R5H-18",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal qc AND 9-bit literal on 8-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h18(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a ^ qc + 9'b100110011;\nendmodule",
+      "output": "DECL: wire [3:0] qc;\nASSIGN: assign y = a[3:0] ^ qc + 4'b1001;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 358.9,
+      "tokens": 200
+    },
+    "qwen:R5H-19": {
+      "case": "R5H-19",
+      "model": "qwen",
+      "prompt": "This Verilog module has two bugs (undeclared signal rc AND 13-bit literal on 12-bit signal). Reply with EXACTLY two lines and nothing else:\nDECL: <declaration line for the missing signal \u2014 internal wire only with the SAME width as the other operands ([3:0] here), never add ports>\nASSIGN: <corrected assign line \u2014 keep the original expression shape, changing only the wrong literal>\nmodule r5h19(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a | rc + 13'b1100110011001;\nendmodule",
+      "output": "DECL: wire [3:0] rc;\nASSIGN: assign y = a | rc + 4'b1100;",
+      "verdicts": {
+        "syntax": false,
+        "fix": false
+      },
+      "passed": false,
+      "latency_s": 309.4,
+      "tokens": 204
+    }
+  }
+}

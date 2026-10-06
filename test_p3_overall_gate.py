@@ -33,12 +33,19 @@ class TestOverallGate(unittest.TestCase):
         self.assertIn("NOT READY", gate["tracks"]["P3-D"]["result"])
 
     def test_binding_constraints_are_exactly_the_d_failures(self):
+        """The gate's binding list is a FROZEN snapshot of the D failures
+        at gate time. Remediation may only CLEAR listed constraints: the
+        current failing set must be a subset (no new failures), while the
+        gate list itself never changes."""
         gate = load("P3_OVERALL_GATE.json")
         d = load("P3_D_READINESS_V2.json")
-        failing = sorted(k for k, g in d["grades"].items() if g == "FAIL")
-        constrained = sorted(c["id"] for c in gate["binding_constraints"])
-        self.assertEqual(constrained, failing)
-        self.assertEqual(len(constrained), 5)
+        failing_now = {k for k, g in d["grades"].items() if g == "FAIL"}
+        constrained = {c["id"] for c in gate["binding_constraints"]}
+        self.assertEqual(
+            constrained, {"d1_scale", "d2_diversity", "d5_failure_modes",
+                          "d8_heldout", "d10_economics"})
+        self.assertTrue(failing_now <= constrained,
+                        f"new failures appeared: {failing_now - constrained}")
 
     def test_training_authorized_nowhere(self):
         gate = load("P3_OVERALL_GATE.json")

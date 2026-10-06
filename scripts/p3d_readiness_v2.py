@@ -244,12 +244,22 @@ def main() -> int:
                         "d5_failure_modes", "d6_trajectories",
                         "d7_contamination", "d8_heldout", "d9_provenance",
                         "d10_economics")}
+    # Re-measurement updates measurements/grades but never erases closure
+    # metadata stamped by a prior closure commit.
+    closure = None
+    try:
+        with open(OUT, encoding="utf-8") as f:
+            closure = json.load(f).get("closure")
+    except (OSError, ValueError):
+        closure = None
     doc = {"track": "P3-D readiness v2 (assessment ONLY — nothing trained)",
            "spec": SPEC, "date": __import__("time").strftime("%Y-%m-%d"),
            "sources_read": sorted(got), "sources_missing": missing,
            "measurements": meas, "grades": grades,
            "verdict": overall_verdict(grades),
            "training_authorized": False}
+    if closure is not None:
+        doc["closure"] = closure
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(doc, f, indent=2)
     print(f"verdict={doc['verdict']} grades={grades} -> {OUT}", flush=True)
