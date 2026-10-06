@@ -1,0 +1,670 @@
+{
+  "track": "P3-R-2a R5 family bench (frozen cases, no model runs)",
+  "status": "FROZEN under tag p3-r5-bench-frozen",
+  "shape": "mirrors frozen REPAIR_TASKS R5-double (declline); frozen repair.verify; frozen recipe untouched",
+  "prompt": "repair.PROMPT_DECLLINE template via task_prompt",
+  "temperature": 0.7,
+  "n": 20,
+  "cases": [
+    {
+      "id": "R5H-00",
+      "verify_mode": "declline",
+      "bug": "undeclared signal c AND 5-bit literal on 4-bit signal",
+      "frame": "module r5h00(input wire [4-1:0] a, output wire [4-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h00(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a + c + 5'b10000;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "5'b10000",
+      "expect_value": 0,
+      "decl_must": [
+        "wire",
+        "[3:0]",
+        "c"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 4,
+      "signal": "c",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [3:0] c;\nASSIGN: assign y = a + c + 4'b0000;"
+    },
+    {
+      "id": "R5H-01",
+      "verify_mode": "declline",
+      "bug": "undeclared signal sc AND 5-bit literal on 4-bit signal",
+      "frame": "module r5h01(input wire [4-1:0] a, output wire [4-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h01(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a - sc + 5'b11111;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "5'b11111",
+      "expect_value": 15,
+      "decl_must": [
+        "wire",
+        "[3:0]",
+        "sc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 4,
+      "signal": "sc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [3:0] sc;\nASSIGN: assign y = a - sc + 4'b1111;"
+    },
+    {
+      "id": "R5H-02",
+      "verify_mode": "declline",
+      "bug": "undeclared signal ec AND 5-bit literal on 4-bit signal",
+      "frame": "module r5h02(input wire [4-1:0] a, output wire [4-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h02(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a & ec + 5'b10101;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "5'b10101",
+      "expect_value": 5,
+      "decl_must": [
+        "wire",
+        "[3:0]",
+        "ec"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 4,
+      "signal": "ec",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [3:0] ec;\nASSIGN: assign y = a & ec + 4'b0101;"
+    },
+    {
+      "id": "R5H-03",
+      "verify_mode": "declline",
+      "bug": "undeclared signal ic AND 5-bit literal on 4-bit signal",
+      "frame": "module r5h03(input wire [4-1:0] a, output wire [4-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h03(input wire [4-1:0] a, output wire [4-1:0] y);\nassign y = a | ic + 5'b11011;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "5'b11011",
+      "expect_value": 11,
+      "decl_must": [
+        "wire",
+        "[3:0]",
+        "ic"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 4,
+      "signal": "ic",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [3:0] ic;\nASSIGN: assign y = a | ic + 4'b1011;"
+    },
+    {
+      "id": "R5H-04",
+      "verify_mode": "declline",
+      "bug": "undeclared signal oc AND 7-bit literal on 6-bit signal",
+      "frame": "module r5h04(input wire [6-1:0] a, output wire [6-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h04(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a + oc + 7'b1000000;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "7'b1000000",
+      "expect_value": 0,
+      "decl_must": [
+        "wire",
+        "[5:0]",
+        "oc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 6,
+      "signal": "oc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [5:0] oc;\nASSIGN: assign y = a + oc + 6'b000000;"
+    },
+    {
+      "id": "R5H-05",
+      "verify_mode": "declline",
+      "bug": "undeclared signal uc AND 7-bit literal on 6-bit signal",
+      "frame": "module r5h05(input wire [6-1:0] a, output wire [6-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h05(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a ^ uc + 7'b1111111;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "7'b1111111",
+      "expect_value": 63,
+      "decl_must": [
+        "wire",
+        "[5:0]",
+        "uc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 6,
+      "signal": "uc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [5:0] uc;\nASSIGN: assign y = a ^ uc + 6'b111111;"
+    },
+    {
+      "id": "R5H-06",
+      "verify_mode": "declline",
+      "bug": "undeclared signal ac AND 7-bit literal on 6-bit signal",
+      "frame": "module r5h06(input wire [6-1:0] a, output wire [6-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h06(input wire [6-1:0] a, output wire [6-1:0] y);\nassign y = a - ac + 7'b1000010;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "7'b1000010",
+      "expect_value": 2,
+      "decl_must": [
+        "wire",
+        "[5:0]",
+        "ac"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 6,
+      "signal": "ac",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [5:0] ac;\nASSIGN: assign y = a - ac + 6'b000010;"
+    },
+    {
+      "id": "R5H-07",
+      "verify_mode": "declline",
+      "bug": "undeclared signal bc AND 9-bit literal on 8-bit signal",
+      "frame": "module r5h07(input wire [8-1:0] a, output wire [8-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h07(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a + bc + 9'b100000000;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "9'b100000000",
+      "expect_value": 0,
+      "decl_must": [
+        "wire",
+        "[7:0]",
+        "bc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 8,
+      "signal": "bc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [7:0] bc;\nASSIGN: assign y = a + bc + 8'b00000000;"
+    },
+    {
+      "id": "R5H-08",
+      "verify_mode": "declline",
+      "bug": "undeclared signal dc AND 9-bit literal on 8-bit signal",
+      "frame": "module r5h08(input wire [8-1:0] a, output wire [8-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h08(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a & dc + 9'b111111111;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "9'b111111111",
+      "expect_value": 255,
+      "decl_must": [
+        "wire",
+        "[7:0]",
+        "dc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 8,
+      "signal": "dc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [7:0] dc;\nASSIGN: assign y = a & dc + 8'b11111111;"
+    },
+    {
+      "id": "R5H-09",
+      "verify_mode": "declline",
+      "bug": "undeclared signal fc AND 9-bit literal on 8-bit signal",
+      "frame": "module r5h09(input wire [8-1:0] a, output wire [8-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h09(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a | fc + 9'b101010101;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "9'b101010101",
+      "expect_value": 85,
+      "decl_must": [
+        "wire",
+        "[7:0]",
+        "fc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 8,
+      "signal": "fc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [7:0] fc;\nASSIGN: assign y = a | fc + 8'b01010101;"
+    },
+    {
+      "id": "R5H-10",
+      "verify_mode": "declline",
+      "bug": "undeclared signal gc AND 11-bit literal on 10-bit signal",
+      "frame": "module r5h10(input wire [10-1:0] a, output wire [10-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h10(input wire [10-1:0] a, output wire [10-1:0] y);\nassign y = a + gc + 11'b10000000000;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "11'b10000000000",
+      "expect_value": 0,
+      "decl_must": [
+        "wire",
+        "[9:0]",
+        "gc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 10,
+      "signal": "gc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [9:0] gc;\nASSIGN: assign y = a + gc + 10'b0000000000;"
+    },
+    {
+      "id": "R5H-11",
+      "verify_mode": "declline",
+      "bug": "undeclared signal hc AND 11-bit literal on 10-bit signal",
+      "frame": "module r5h11(input wire [10-1:0] a, output wire [10-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h11(input wire [10-1:0] a, output wire [10-1:0] y);\nassign y = a - hc + 11'b11111111111;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "11'b11111111111",
+      "expect_value": 1023,
+      "decl_must": [
+        "wire",
+        "[9:0]",
+        "hc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 10,
+      "signal": "hc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [9:0] hc;\nASSIGN: assign y = a - hc + 10'b1111111111;"
+    },
+    {
+      "id": "R5H-12",
+      "verify_mode": "declline",
+      "bug": "undeclared signal jc AND 13-bit literal on 12-bit signal",
+      "frame": "module r5h12(input wire [12-1:0] a, output wire [12-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h12(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a + jc + 13'b1000000000000;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "13'b1000000000000",
+      "expect_value": 0,
+      "decl_must": [
+        "wire",
+        "[11:0]",
+        "jc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 12,
+      "signal": "jc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [11:0] jc;\nASSIGN: assign y = a + jc + 12'b000000000000;"
+    },
+    {
+      "id": "R5H-13",
+      "verify_mode": "declline",
+      "bug": "undeclared signal kc AND 13-bit literal on 12-bit signal",
+      "frame": "module r5h13(input wire [12-1:0] a, output wire [12-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h13(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a ^ kc + 13'b1111000011111;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "13'b1111000011111",
+      "expect_value": 3615,
+      "decl_must": [
+        "wire",
+        "[11:0]",
+        "kc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 12,
+      "signal": "kc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [11:0] kc;\nASSIGN: assign y = a ^ kc + 12'b111000011111;"
+    },
+    {
+      "id": "R5H-14",
+      "verify_mode": "declline",
+      "bug": "undeclared signal lc AND 13-bit literal on 12-bit signal",
+      "frame": "module r5h14(input wire [12-1:0] a, output wire [12-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h14(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a & lc + 13'b1010101010101;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "13'b1010101010101",
+      "expect_value": 1365,
+      "decl_must": [
+        "wire",
+        "[11:0]",
+        "lc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 12,
+      "signal": "lc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [11:0] lc;\nASSIGN: assign y = a & lc + 12'b010101010101;"
+    },
+    {
+      "id": "R5H-15",
+      "verify_mode": "declline",
+      "bug": "undeclared signal mc AND 17-bit literal on 16-bit signal",
+      "frame": "module r5h15(input wire [16-1:0] a, output wire [16-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h15(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a + mc + 17'b10000000000000000;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "17'b10000000000000000",
+      "expect_value": 0,
+      "decl_must": [
+        "wire",
+        "[15:0]",
+        "mc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 16,
+      "signal": "mc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [15:0] mc;\nASSIGN: assign y = a + mc + 16'b0000000000000000;"
+    },
+    {
+      "id": "R5H-16",
+      "verify_mode": "declline",
+      "bug": "undeclared signal nc AND 17-bit literal on 16-bit signal",
+      "frame": "module r5h16(input wire [16-1:0] a, output wire [16-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h16(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a | nc + 17'b11111111111111111;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "17'b11111111111111111",
+      "expect_value": 65535,
+      "decl_must": [
+        "wire",
+        "[15:0]",
+        "nc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 16,
+      "signal": "nc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [15:0] nc;\nASSIGN: assign y = a | nc + 16'b1111111111111111;"
+    },
+    {
+      "id": "R5H-17",
+      "verify_mode": "declline",
+      "bug": "undeclared signal pc AND 17-bit literal on 16-bit signal",
+      "frame": "module r5h17(input wire [16-1:0] a, output wire [16-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h17(input wire [16-1:0] a, output wire [16-1:0] y);\nassign y = a - pc + 17'b10000000000000001;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "17'b10000000000000001",
+      "expect_value": 1,
+      "decl_must": [
+        "wire",
+        "[15:0]",
+        "pc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 16,
+      "signal": "pc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [15:0] pc;\nASSIGN: assign y = a - pc + 16'b0000000000000001;"
+    },
+    {
+      "id": "R5H-18",
+      "verify_mode": "declline",
+      "bug": "undeclared signal qc AND 9-bit literal on 8-bit signal",
+      "frame": "module r5h18(input wire [8-1:0] a, output wire [8-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h18(input wire [8-1:0] a, output wire [8-1:0] y);\nassign y = a ^ qc + 9'b100110011;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "9'b100110011",
+      "expect_value": 51,
+      "decl_must": [
+        "wire",
+        "[7:0]",
+        "qc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 8,
+      "signal": "qc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [7:0] qc;\nASSIGN: assign y = a ^ qc + 8'b00110011;"
+    },
+    {
+      "id": "R5H-19",
+      "verify_mode": "declline",
+      "bug": "undeclared signal rc AND 13-bit literal on 12-bit signal",
+      "frame": "module r5h19(input wire [12-1:0] a, output wire [12-1:0] y);\n{decl}\n{line}\nendmodule",
+      "buggy": "module r5h19(input wire [12-1:0] a, output wire [12-1:0] y);\nassign y = a | rc + 13'b1100110011001;\nendmodule",
+      "must_contain": [],
+      "must_absent": [],
+      "bad": "13'b1100110011001",
+      "expect_value": 2457,
+      "decl_must": [
+        "wire",
+        "[11:0]",
+        "rc"
+      ],
+      "decl_must_absent": [
+        "input",
+        "output"
+      ],
+      "width": 12,
+      "signal": "rc",
+      "validation": {
+        "good_verdicts": {
+          "syntax": true,
+          "fix": true
+        },
+        "buggy_verdicts": {
+          "syntax": false,
+          "fix": false
+        }
+      },
+      "good_text": "DECL: wire [11:0] rc;\nASSIGN: assign y = a | rc + 12'b100110011001;"
+    }
+  ]
+}
