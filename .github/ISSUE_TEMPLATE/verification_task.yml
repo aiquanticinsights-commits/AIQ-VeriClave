@@ -1,0 +1,38 @@
+name: Verification task
+description: A scoped verification job (mutant campaign, localization run, closure, benchmark repro)
+title: "[verify] "
+labels: ["verify-task", "needs-triage"]
+body:
+  - type: textarea
+    id: target
+    attributes:
+      label: Target (IP/block + spec/requirement IDs)
+      description: e.g. wb_dma + traceability rows; link spec or PR with the frozen RTL under test
+      validations:
+        required: true
+  - type: dropdown
+    id: lane
+    attributes:
+      label: Pipeline lane
+      options:
+        - mutate (BugGen-style campaign)
+        - localize (fault localization)
+        - close (coverage closure + sign-off)
+        - formal (bounded proofs)
+        - benchmark-repro (reproduce a published number)
+  - type: textarea
+    id: gates
+    attributes:
+      label: Acceptance gates
+      description: Thresholds from the trust ladder (e.g. ≥90% mutant functional accuracy, ≥70% Top-1, C4 = 1.0)
+      validations:
+        required: true
+  - type: checkboxes
+    id: hygiene
+    attributes:
+      label: Hygiene
+      options:
+        - label: No proprietary RTL/VCD internals will be posted in this issue
+          required: true
+        - label: Results will land as JSON evidence + ledger entries, not screenshots alone
+          required: true

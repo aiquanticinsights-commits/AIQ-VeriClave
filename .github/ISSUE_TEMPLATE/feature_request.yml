@@ -1,0 +1,39 @@
+name: Feature request
+description: Propose an enhancement tied to a rating metric or roadmap phase
+title: "[feat] "
+labels: ["enhancement", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Features land only if they move a §6 metric or unblock a roadmap phase. Say which one.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and metric
+      description: Which rating metric (mutant-kill, SVA-validity, localization, coverage, cost/task) or phase gate does this serve?
+      validations:
+        required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: Design sketch, affected modules, no-duplication check (where does this concept canonically live?)
+      validations:
+        required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria
+      description: Machine-checkable gates (tests, thresholds, budgets) — how will we know it's done?
+      validations:
+        required: true
+  - type: dropdown
+    id: phase
+    attributes:
+      label: Roadmap phase
+      options:
+        - P0/P1/P2 (current program)
+        - P3 (dataset/tracks)
+        - PHASE 4+ (training/specialization — conditional)
+        - docs/CI/infra
