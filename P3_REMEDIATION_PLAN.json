@@ -1,7 +1,19 @@
 {
   "plan": "P3 Constraint Remediation Plan",
   "date": "2026-10-06",
-  "status": "FROZEN — remediation experiments may only execute against this plan. No change after execution starts.",
+  "status": "FROZEN — remediation experiments may only execute against this plan. No change after execution starts except via recorded amendments below.",
+  "amendments": [
+    {
+      "id": "A1",
+      "date": "2026-10-06",
+      "authorized_by": "human (directed: proceed with recommendation (a))",
+      "item": "R-2b",
+      "what_changes": "Acceptance: '>= 20 verifier-gated real cases' -> batch 1 (11 cases across 6 WIDTH-clean blocks, frozen under p3-r2b-real-frozen) accepted as the complete R-2b real family. R-2b marked complete; no batch 2 required.",
+      "what_does_not_change": "All bars, guards, ordering, every other remediation item, and the 11 cases themselves (untouched, still frozen under p3-r2b-real-frozen).",
+      "why": "Four independent screens show recipe-compatible real RTL lines are ecologically scarce, not merely unsourced: (1) rideprotect-rv/rtl fully screened -> 11 cases; wb_spi.v disqualified (own WIDTH bugs trip the wall); legacy picorv32.v WIDTH-clean but shapeless; (2) VHDL-100-Projects Stage 1 (26 folders) -> language wall (VHDL vs Verilog-only frozen recipe); (3) snbk001 Verilog-Design-Examples (60 files) -> 1 behaviorally-thin case plus no LICENSE found (provenance risk); (4) full local ChipDesign tree (554 Verilog files) -> VexRiscv copies all WIDTHTRUNC, vendor IP / netlists / testbenches excluded by provenance rules. Chasing 9 more cases costs more provenance risk than evidence value; scale comes from R-4 cycles.",
+      "rule": "R-2b completeness is judged by family validity (real blocks, frozen recipe, verifier-validated), not by reaching 20."
+    }
+  ],
   "sequence_position": "After P3 Overall Gate + P3 evidence freeze + 5 binding constraints; before targeted experiments.",
   "ordering_rule": "Held-out separation FIRST (all future data is born separated), then diversity/walls, then scale, then economics. Scale without diversity is explicitly forbidden by the frozen P3-D rule.",
   "guardrails": [
@@ -26,7 +38,7 @@
       "constraint": "d2_diversity",
       "title": "Add a second, REAL design family",
       "experiment": "Select a real open-source RTL block family; inject width/bug variants under the frozen repair.verify gate; pre-register case list and widths before generation. Human decision required for block selection.",
-      "acceptance": ">= 1 real design family with >= 20 verifier-gated cases across >= 2 widths; case list pre-registered and frozen.",
+      "acceptance": ">= 1 real design family with batch-1 verifier-gated cases across >= 2 widths (11 cases, 6 blocks, frozen under p3-r2b-real-frozen); case list pre-registered and frozen. Per amendment A1, batch 1 is the complete family.",
       "remeasure": "d2_diversity design-family count rises (needs R-2a as well for full PASS).",
       "depends_on": ["R-1"]
     },

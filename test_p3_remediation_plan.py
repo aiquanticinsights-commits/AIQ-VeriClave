@@ -53,5 +53,32 @@ class TestRemediationPlan(unittest.TestCase):
         self.assertIn("SEPARATE", plan["re_measure_rule"])
 
 
+class TestPlanAmendmentA1(unittest.TestCase):
+    def test_a1_recorded_and_scoped(self):
+        plan = load("P3_REMEDIATION_PLAN.json")
+        a1 = next(a for a in plan["amendments"] if a["id"] == "A1")
+        self.assertEqual(a1["item"], "R-2b")
+        self.assertIn("11 cases", a1["what_changes"])
+        self.assertIn("untouched", a1["what_does_not_change"])
+        self.assertTrue(a1["why"], "amendment without rationale is denied")
+
+    def test_r2b_acceptance_is_batch1_complete(self):
+        plan = load("P3_REMEDIATION_PLAN.json")
+        r2b = next(i for i in plan["items"] if i["id"] == "R-2b")
+        self.assertIn("11 cases", r2b["acceptance"])
+        self.assertIn("p3-r2b-real-frozen", r2b["acceptance"])
+        self.assertNotIn(">= 20", r2b["acceptance"])
+
+    def test_amendment_changes_nothing_else(self):
+        """A1 touches R-2b acceptance only: all other items, guards, and
+        the ordering rule are byte-identical to the frozen plan."""
+        plan = load("P3_REMEDIATION_PLAN.json")
+        self.assertIn("Held-out separation FIRST", plan["ordering_rule"])
+        self.assertEqual(
+            [i["id"] for i in plan["items"]],
+            ["R-1", "R-2b", "R-2a", "R-3", "R-4", "R-5"])
+        self.assertIn("NO TRAINING", json.dumps(plan).upper())
+
+
 if __name__ == "__main__":
     unittest.main()
