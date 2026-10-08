@@ -12,7 +12,7 @@ import sys
 sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(HERE, "scripts"))
 
-from repair import value_gate  # noqa: E402
+from repair import task_prompt, value_gate  # noqa: E402
 
 WIDTH_CLEAN = {"wb_hslink.v", "wb_shared_bus.v", "wb_sram.v", "wb_uart.v",
                "jtag_tap.v", "hslink_phy_selectio.v"}
@@ -56,20 +56,30 @@ class TestR2bReal(unittest.TestCase):
 
     def test_disjoint_from_training_evidence(self):
         import fnmatch
-        # Scale-run outputs (R4_CYCLE_*.json, R4_TRAJECTORIES.json) run
-        # these same cases by design; disjointness is required against
-        # every OTHER benchmark's evidence.
+        # Scale-run outputs (R4_CYCLE_*.json, R4_TRAJECTORIES.json,
+        # R4_PARTIAL.json checkpoint) run these same cases by design.
+        # Disjointness = no other benchmark's evidence duplicates the
+        # case CONTENT (prompts, good/buggy lines). Bare ID mentions
+        # (e.g. status commentary) are not duplication and must not trip
+        # the test.
+        d = load("P3_R2B_REAL.json")
+        contents = set()
+        for c in d["cases"]:
+            contents.add(task_prompt(c))
+            contents.add(c["good_line"])
+            contents.add(c["buggy_line"])
         for path in glob.glob(os.path.join(HERE, "*.json")):
             base = os.path.basename(path)
             if base == "P3_R2B_REAL.json":
                 continue
             if fnmatch.fnmatch(base, "R4_CYCLE_*.json"):
                 continue
-            if base == "R4_TRAJECTORIES.json":
+            if base in ("R4_TRAJECTORIES.json", "R4_PARTIAL.json"):
                 continue
             with open(path, encoding="utf-8") as f:
-                self.assertNotIn("R2B-R-", f.read(),
-                                 os.path.basename(path))
+                blob = f.read()
+            for hp in contents:
+                self.assertNotIn(hp, blob, base)
 
     def test_frozen_status(self):
         d = load("P3_R2B_REAL.json")

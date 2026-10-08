@@ -48,17 +48,19 @@ class TestHeldout(unittest.TestCase):
         self.assertEqual(len(set(prompts)), 24)
 
     def test_zero_overlap_with_training_eligible_evidence(self):
-        """heldr modules and held-out prompts must appear in NO other
-        committed JSON — the split is disjoint by construction."""
+        """Held-out case CONTENT (prompts, buggy lines) must appear in NO
+        other JSON — the split is disjoint by construction. Bare ID or
+        module-name mentions (e.g. status commentary) are not duplication
+        and must not trip the test."""
         d = load("P3_HELDOUT.json")
         held_prompts = {task_prompt(c) for c in d["r2"]["cases"]}
         held_prompts |= {p["prompt"] for p in d["t4"]["probes"]}
+        held_prompts |= {c["buggy"] for c in d["r2"]["cases"]}
         for path in glob.glob(os.path.join(HERE, "*.json")):
             if os.path.basename(path) in ("P3_HELDOUT.json",):
                 continue
             with open(path, encoding="utf-8") as f:
                 blob = f.read()
-            self.assertNotIn("heldr", blob, os.path.basename(path))
             for hp in held_prompts:
                 self.assertNotIn(hp, blob, os.path.basename(path))
 

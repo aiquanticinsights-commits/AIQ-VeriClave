@@ -1,19 +1,19 @@
 {
   "record": "P3 remediation status",
-  "date": "2026-10-06",
+  "date": "2026-10-08",
   "p3d_training_readiness": "NOT READY",
   "remaining_binding_constraints": [
     "d1_scale: Scale",
-    "d2_diversity: Diversity",
     "d10_economics: Economics"
   ],
   "cleared_through_remeasurement": [
+    "d2_diversity: PASS (3 task families incl. R5; synthetic + rideprotect real design families)",
     "d5_failure_modes: PASS (R5 trajectory corpus exists)",
     "d8_heldout: PASS (held-out split frozen)"
   ],
   "r3": "executed and frozen; severe capability-wall finding (1 pass / 39 fails under the frozen single-shot evaluation)",
   "r2b": "continue with the planned real RTL cases; do not replace the original frozen benchmark",
-  "r4": "scale evaluation next",
+  "r4": "scale cycle 1 complete: 19/22 closed, 0 FA (independently re-derived), +80 positives (183 total); R2B-R-00/01 failures confounded by wrong-line constraint (pool gate since strengthened to require width match)",
   "r5": "economics after/alongside scale according to the frozen plan",
   "training_authorized": false,
   "method": "Readout of P3_D_READINESS_V2.json grades against the frozen gate constraint list. Updated by re-measurement only."

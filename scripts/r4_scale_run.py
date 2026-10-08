@@ -46,7 +46,13 @@ def save(partial):
 def pool_cases():
     """(pool, excluded): pool entries are (origin, case). A case joins the
     pool iff the pipeline's own constraint computation agrees with its
-    frozen expect_value (pure check, no model, no lint)."""
+    frozen expect_value AND width (pure check, no model, no lint).
+
+    Width match is load-bearing (amendment A1, cycle-1 lesson): an
+    expect-only match can come from the wrong assign line in a full
+    module (R2B-R-00/01 computed width 4 vs true width 1), which would
+    feed the model a false 'verified' constraint. Such cases are
+    excluded with reasons — never run, never scored."""
     pool = [("P2", c) for c in r2_cases()]
     with open(os.path.join(HERE, "P3_R2B_REAL.json"),
               encoding="utf-8") as f:
@@ -54,13 +60,16 @@ def pool_cases():
     excluded = []
     for c in r2b:
         con = numeric_constraint(c)
-        if con.get("ok") and con.get("expect") == c["expect_value"]:
+        if con.get("ok") and con.get("expect") == c["expect_value"] \
+                and con.get("width") == c["width"]:
             pool.append(("R2B", c))
         else:
             excluded.append({"id": c["id"],
                              "reason": con.get("why", "constraint mismatch"),
                              "con_expect": con.get("expect"),
-                             "case_expect": c["expect_value"]})
+                             "case_expect": c["expect_value"],
+                             "con_width": con.get("width"),
+                             "case_width": c["width"]})
     return pool, excluded
 
 

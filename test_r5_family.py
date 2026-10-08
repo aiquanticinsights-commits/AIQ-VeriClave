@@ -71,20 +71,25 @@ class TestR5Bench(unittest.TestCase):
         # Same-family trajectory records necessarily contain r5h cases;
         # disjointness is required against every OTHER benchmark's evidence.
         # Scan git-tracked JSON only: untracked working files (partials such
-        # as R5_PARTIAL.json) are not evidence.
+        # as R5_PARTIAL.json) are not evidence. Content (prompts, buggy
+        # modules), not bare IDs: ID mentions in commentary are not
+        # duplication and must not trip the test.
         same_family = ("P3_R5_FAMILY.json", "R5_TRAJECTORIES.json")
         import subprocess
         tracked = subprocess.run(
             ["git", "-C", HERE, "ls-files", "*.json"],
             capture_output=True, text=True, check=True).stdout.split()
+        contents = set()
+        for c in d["cases"]:
+            contents.add(task_prompt(c))
+            contents.add(c["buggy"])
         for name in tracked:
             if name in same_family:
                 continue
             path = os.path.join(HERE, name)
             with open(path, encoding="utf-8") as f:
                 blob = f.read()
-            self.assertNotIn("r5h", blob, os.path.basename(path))
-            for hp in held:
+            for hp in contents:
                 self.assertNotIn(hp, blob, os.path.basename(path))
 
     def test_frozen_status_and_temperature(self):

@@ -21,18 +21,24 @@ def load(name):
 
 class TestR4Pool(unittest.TestCase):
     def test_pool_is_p2_plus_agreeing_r2b(self):
+        """Amendment A1: agreement now requires width match too. Cycle-1
+        lesson: R2B-R-00/01 matched on expect (0==0) but computed width 4
+        vs true width 1 — a wrong-line constraint. Both are excluded with
+        recorded width-mismatch reasons; the pool is P2-only until
+        agreeing real cases exist."""
         pool, excluded = pool_cases()
         origins = [o for o, _ in pool]
-        self.assertEqual(len(pool), 22)
         self.assertEqual(origins.count("P2"), 20)
-        self.assertEqual(origins.count("R2B"), 2)
-        r2b_ids = sorted(c["id"] for o, c in pool if o == "R2B")
-        self.assertEqual(r2b_ids, ["R2B-R-00", "R2B-R-01"])
-        # The other 9 are excluded with recorded reasons, never silently.
-        self.assertEqual(len(excluded), 9)
+        self.assertEqual([c["id"] for o, c in pool if o == "R2B"], [])
+        self.assertEqual(len(excluded), 11)
+        wdrop = {e["id"]: e for e in excluded
+                 if e["id"] in ("R2B-R-00", "R2B-R-01")}
+        self.assertEqual(len(wdrop), 2)
+        for e in wdrop.values():
+            self.assertNotEqual(e["con_width"], e["case_width"])
         for e in excluded:
-            self.assertTrue(e["reason"], e["id"])
-            self.assertIn(e["id"], [f"R2B-R-{i:02d}" for i in range(2, 11)])
+            self.assertTrue(e["reason"] or
+                            e["con_width"] != e["case_width"], e["id"])
 
     def test_row_shape_feeds_assessor(self):
         r = {"stage_rank": {"abstained": False, "answer": "assign q = 1'b0;",

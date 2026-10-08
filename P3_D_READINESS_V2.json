@@ -1,7 +1,7 @@
 {
   "track": "P3-D readiness v2 (assessment ONLY \u2014 nothing trained)",
   "spec": "P3_D_SPEC.json",
-  "date": "2026-10-06",
+  "date": "2026-10-08",
   "sources_read": [
     "P2_M2_DEEPSEEK.json",
     "P2_M2_LLAMA.json",
@@ -14,27 +14,29 @@
   "sources_missing": [],
   "measurements": {
     "d1_scale": {
-      "positive_trajectories": 102
+      "positive_trajectories": 183
     },
     "labeled": {
-      "labeled_generations": 466
+      "labeled_generations": 616
     },
     "d3_balance": {
-      "positives": 102,
-      "labeled": 466,
-      "fraction": 0.2189
+      "positives": 183,
+      "labeled": 616,
+      "fraction": 0.2971
     },
     "d2_diversity": {
       "task_families": [
         "T4 single-letter RCA",
-        "R2 width-literal repair"
+        "R2 width-literal repair",
+        "R5 declline repair"
       ],
-      "n_task_families": 2,
+      "n_task_families": 3,
       "design_families": [
-        "synthetic p2r assign modules"
+        "synthetic p2r assign modules",
+        "rideprotect-rv real blocks"
       ],
-      "n_design_families": 1,
-      "n_real_families": 0,
+      "n_design_families": 2,
+      "n_real_families": 1,
       "models": [
         "deepseek-coder-6.7b",
         "llama-3.1-8b",
@@ -52,8 +54,8 @@
       "further_wall_trajectories": true
     },
     "d6_trajectories": {
-      "complete": 238,
-      "total": 238,
+      "complete": 300,
+      "total": 300,
       "fraction": 1.0,
       "multi_round_histories": true
     },
@@ -74,7 +76,7 @@
   },
   "grades": {
     "d1_scale": "FAIL",
-    "d2_diversity": "FAIL",
+    "d2_diversity": "PASS",
     "d3_balance": "PASS",
     "d4_labels": "PASS",
     "d5_failure_modes": "PASS",
