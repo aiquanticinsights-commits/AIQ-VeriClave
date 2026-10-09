@@ -61,5 +61,64 @@ class TestR4Pool(unittest.TestCase):
         self.assertTrue(r.TRAJ_PATH.endswith("R4_TRAJECTORIES.json"))
 
 
+class TestR4Verdict(unittest.TestCase):
+    """The verdict is a readout: pass-rate math, the frozen (not invented)
+    bar, FA re-derivation, and the recorded exclusions must all agree."""
+
+    def test_pass_rate_math(self):
+        cyc = load("R4_CYCLE_1.json")
+        v = load("P3_R4_VERDICT.json")
+        self.assertEqual(len(cyc["rows"]), 22)
+        self.assertEqual(cyc["closed"], 19)
+        self.assertEqual(v["result"]["pass_rate_exact"], "19/22")
+        self.assertAlmostEqual(v["result"]["pass_rate"], 19 / 22, places=4)
+
+    def test_frozen_bar_and_outcome(self):
+        v = load("P3_R4_VERDICT.json")
+        self.assertEqual(v["bar_applied"]["bar"],
+                         "closes >= 4 AND false_acceptances == 0")
+        self.assertIn("NO R-4-specific acceptance bar was ever frozen",
+                      v["bar_applied"]["provenance"])
+        self.assertIn("PASS", v["bar_applied"]["outcome"])
+        self.assertIn("PASS", v["closure"]["status"])
+
+    def test_false_acceptances_rederived(self):
+        import r2_pipeline
+        from p2_bench import r2_cases
+        from repair import value_gate
+        p2 = {c["id"]: c for c in r2_cases()}
+        r2b = {c["id"]: c for c in load("P3_R2B_REAL.json")["cases"]}
+        cyc = load("R4_CYCLE_1.json")
+        fa = []
+        for cid, row in cyc["rows"].items():
+            ans = row.get("answer")
+            if not ans:
+                continue
+            case = p2[row["case"]] if row["origin"] == "P2" \
+                else r2b[row["case"]]
+            line = r2_pipeline._assign_line(ans) or ans
+            if not value_gate(line, case["expect_value"], case["bad"]):
+                fa.append(cid)
+        self.assertEqual(fa, [])
+        self.assertEqual(cyc["false_acceptances"], 0)
+
+    def test_exclusions_recorded(self):
+        cyc = load("R4_CYCLE_1.json")
+        v = load("P3_R4_VERDICT.json")
+        self.assertEqual(len(cyc["excluded"]), 9)
+        self.assertEqual(len(v["exclusions"]["who"]), 9)
+        self.assertFalse(v["closure"]["training_authorized"])
+
+    def test_no_plain_arm_mixed_in(self):
+        """R-4 is pipeline-recipe only: the cycle doc must show the Qwen
+        pipeline runner's signature on every row, no plain-regime rows."""
+        cyc = load("R4_CYCLE_1.json")
+        self.assertEqual(cyc["spec_tag"], "p3-r4-scale-frozen")
+        self.assertEqual(cyc["model_id"], "qwen2.5-coder-14b-instruct")
+        for row in cyc["rows"].values():
+            self.assertIn("n_candidates", row)
+            self.assertIn("constraint", row)
+
+
 if __name__ == "__main__":
     unittest.main()

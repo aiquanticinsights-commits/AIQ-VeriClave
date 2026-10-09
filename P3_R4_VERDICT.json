@@ -1,0 +1,39 @@
+{
+  "track": "P3-R-4 scale (cycle 1 verdict)",
+  "source": "R4_CYCLE_1.json",
+  "spec_tags": ["p3-r4-scale-frozen", "p3-r4-scale-a1-frozen"],
+  "model": "qwen2.5-coder-14b-instruct",
+  "evaluated": {
+    "cycles": 1,
+    "cases": 22,
+    "pool": "20 P2 + 2 R2B (constraint-agreeing under the frozen pool rule)",
+    "candidates": 110,
+    "passing_candidates": 80
+  },
+  "result": {
+    "closed": 19,
+    "pass_rate": 0.8636,
+    "pass_rate_exact": "19/22",
+    "false_acceptances": 0,
+    "false_acceptance_check": "independently re-derived with frozen value_gate over all 19 answers: 0",
+    "not_closed": ["P2:P2-R2-14", "R2B:R2B-R-00", "R2B:R2B-R-01"]
+  },
+  "bar_applied": {
+    "bar": "closes >= 4 AND false_acceptances == 0",
+    "provenance": "The frozen system R2 bar, identical since the P2/P3-C specs and predating R-4. NO R-4-specific acceptance bar was ever frozen; none is invented here. An R2-repair experiment under the frozen system is judged by the frozen R2 ruler.",
+    "outcome": "PASS — 19 >= 4 with zero false acceptances."
+  },
+  "exclusions": {
+    "count": 9,
+    "who": ["R2B-R-02", "R2B-R-03", "R2B-R-04", "R2B-R-05", "R2B-R-06", "R2B-R-07", "R2B-R-08", "R2B-R-09", "R2B-R-10"],
+    "reason": "Pool-gate disagreement (pipeline-computed constraint does not match the case's frozen expect/width). Recorded per case in R4_CYCLE_1.json.excluded; never run, never scored."
+  },
+  "confound_note": "The 2 R2B rows that DID run (R2B-R-00/01) used a wrong-line constraint (width 4 vs true 1; expect matched only by 0==0 coincidence) under the pre-A1 pool gate. Their n_pass=0 failures are unattributable (prompt confound vs real-context difficulty) and must not be cited as evidence about real-context repair. Their labels (failures) remain true; the gate was strengthened to width-match for all future cycles.",
+  "scale_measurement": "Cycle 1 adds 80 verifier-positive trajectories (102 + 1 + 80 = 183 total toward P3-D d1). Recorded as measurement only: the 1000 figure is P3-D's preregistered readiness threshold, NOT an R-4 acceptance bar, and mandates no further cycles.",
+  "closure": {
+    "status": "CLOSED / PASS",
+    "direction": "Human-directed: finish the authorized cycle, evaluate the frozen bar, close on PASS, freeze the result. No cycle 2 authorized. No plain-regime arm mixed into R-4.",
+    "training_authorized": false
+  },
+  "method": "Readout of R4_CYCLE_1.json against the frozen system R2 bar; FA independently re-derived. No re-grading, no post-hoc change."
+}

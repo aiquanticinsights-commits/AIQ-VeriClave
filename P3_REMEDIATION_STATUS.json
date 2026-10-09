@@ -13,7 +13,7 @@
   ],
   "r3": "executed and frozen; severe capability-wall finding (1 pass / 39 fails under the frozen single-shot evaluation)",
   "r2b": "continue with the planned real RTL cases; do not replace the original frozen benchmark",
-  "r4": "scale cycle 1 complete: 19/22 closed, 0 FA (independently re-derived), +80 positives (183 total); R2B-R-00/01 failures confounded by wrong-line constraint (pool gate since strengthened to require width match)",
+  "r4": "CLOSED / PASS: cycle 1 finished (22 cases, 19/22 closed, 0 FA) against the frozen system R2 bar; +80 positives (183 total toward d1). No cycle 2 authorized; no plain-regime arm in R-4.",
   "r5": "economics after/alongside scale according to the frozen plan",
   "training_authorized": false,
   "method": "Readout of P3_D_READINESS_V2.json grades against the frozen gate constraint list. Updated by re-measurement only."
