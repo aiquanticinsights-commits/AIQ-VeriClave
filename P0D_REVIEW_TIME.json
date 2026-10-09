@@ -1,0 +1,14 @@
+{
+  "record": "P0D engineer review-time measurement (fills the null field by reference, not by edit)",
+  "median_decision_time_s": 18.7,
+  "mean_decision_time_s": 19.9,
+  "population": "dispositioned review items, live review session 2026-09-29",
+  "sources": ["GATE_D_ACCEPTANCE.json (human-signed SSB 2026-10-01)", "REVIEW_p0d-20260929-142344.json (reviewer SSB, 5 items)"],
+  "context": {
+    "human_review_rate": "20% (1 exception / 5 tasks, recomputed)",
+    "reject_rate": "25% with verbatim grounds",
+    "override_rate": "25% with verbatim grounds"
+  },
+  "why_new_file": "P0D_REPORT.json.engineer_review_time_per_task is null and P0D_REPORT is frozen evidence: it is referenced here, never edited. This file carries the Gate-D-accepted live measurements instead.",
+  "date": "2026-10-09"
+}

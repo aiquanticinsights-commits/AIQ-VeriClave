@@ -445,7 +445,7 @@ latency?
 
 ## F. Training gates
 
-### D19. GRPO reward components (adopted in rewards.py)
+### D19. GRPO reward components (planned; no rewards.py in tree as of P3 final gate — future-conditional per §15)
 
 ```text
 mutant_kill
@@ -473,15 +473,21 @@ reference model is wrong
 requirements are ambiguous
 ```
 
-### D22. P1 training flow (Qwen to LoRA/SFT)
+### D22. P1 training flow (model-agnostic, readiness-gated — NOT Qwen-committed)
 
 ```text
-Qwen3-Coder-Next
+Selected Baseline (post bake-off AND post readiness gate)
         ↓
 verified AIQI trajectories
         ↓
-LoRA/SFT
+LoRA/SFT (only if justified; P3-D NOT READY as of P3 final gate)
 ```
+
+Prior wording hard-coded one specific model as the training source. Per the
+architecture review (§1 correction 1, §48 principles 2 and 9) and the
+measured P3-D NOT READY verdict, no model is pre-committed to training and
+no training direction is authorized. LoRA/SFT remains conditional on a
+future READY verdict plus a separate training authorization.
 
 ---
 
