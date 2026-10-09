@@ -1,0 +1,103 @@
+{
+  "memo": "P3-R-5 Training Economics & Feasibility Assessment",
+  "date": "2026-10-09",
+  "scope": "Analysis ONLY. No model training occurred, no GPU compute was purchased, no training data was formatted. R-5 analysis spend: $0.",
+  "question": "Whether training is economically justified IF AND ONLY IF the remaining P3 readiness constraints are eventually cleared (d1 scale, d10 itself).",
+  "figure_kinds": "Every figure carries value_kind: measured (from frozen evidence artifacts), reference (documented public rate with source+date), or assumption (planning number with sensitivity band). Nothing is invented silently.",
+  "measured_inputs": {
+    "logged_usage_tokens": {"value": 361246, "value_kind": "measured", "note": "Sum of usage.tokens across P3_A_QWEN14B, P3_C_PIPELINE_QWEN, P3_PIPELINE_LLAMA, R4_CYCLE_1, R5_TRAJECTORIES (T4-remeasure logged 0: usage not recorded there, so true volume is higher)"},
+    "labeled_generations": {"value": 466, "value_kind": "measured", "source": "P3_D_READINESS_V2.json"},
+    "positive_trajectories": {"value": 183, "value_kind": "measured", "source": "P3_D_READINESS_V2.json"},
+    "avg_tokens_per_generation": {"value": 775, "value_kind": "measured", "note": "361246/466; SFT dataset projection: 1000 positives x ~800 tok ~= 800K tokens"},
+    "evidence_json_bytes": {"value": 2066825, "value_kind": "measured", "note": "~2 MB: storage cost rounds to $0.00 at reference object-storage rates"},
+    "wall_runtimes_s": {"value": {"P3-A": 26912.7, "Q1-pipeline": 52991.9, "P3-C-llama": 7119.0, "R4-cycle-1-final-leg": 9989.6}, "value_kind": "measured", "note": "Local CPU; elapsed_s covers the final process leg only for resumed runs"},
+    "cash_spent_to_date_usd": {"value": 0, "value_kind": "measured", "note": "All compute local/sunk; all labor unpriced in this $0 project"}
+  },
+  "reference_rates": {
+    "as_of": "2026-10-09 (page snapshots Jul-Sep 2026 as noted)",
+    "rates": [
+      {"gpu": "RTX 4090 24GB", "usd_per_hr": 0.34, "tier": "RunPod Community", "source": "https://www.runpod.io/pricing", "page_date": "2026-07-17"},
+      {"gpu": "RTX 4090 24GB", "usd_per_hr": 0.74, "tier": "RunPod Secure", "source": "https://www.runpod.io/pricing", "page_date": "2026-07-17"},
+      {"gpu": "RTX 4090 24GB", "usd_per_hr": 0.441, "tier": "Vast.ai median verified", "source": "https://wtfisai.blog/runpod-vs-vast-ai/", "page_date": "2026-08-05"},
+      {"gpu": "A100 40GB", "usd_per_hr": 1.99, "tier": "Lambda single-GPU", "source": "https://lambda.ai/pricing", "page_date": "2026-09-12"},
+      {"gpu": "A100 PCIe", "usd_per_hr": 1.19, "tier": "RunPod Community", "source": "https://www.runpod.io/pricing", "page_date": "2026-07-17"},
+      {"gpu": "H100 PCIe 80GB", "usd_per_hr": 1.99, "tier": "RunPod Community", "source": "https://www.runpod.io/pricing", "page_date": "2026-07-17"},
+      {"gpu": "H100 PCIe 80GB", "usd_per_hr": 3.29, "tier": "Lambda single-GPU", "source": "https://lambda.ai/pricing", "page_date": "2026-09-12"},
+      {"gpu": "H100 SXM 80GB", "usd_per_hr": 2.69, "tier": "RunPod Community", "source": "https://www.runpod.io/pricing", "page_date": "2026-07-17"},
+      {"gpu": "A6000 48GB", "usd_per_hr": 1.09, "tier": "Lambda single-GPU", "source": "https://lambda.ai/pricing", "page_date": "2026-09-12"}
+    ],
+    "storage_ref_usd_per_gb_mo": {"value": "0.10-0.20", "value_kind": "reference", "source": "RunPod $0.10 / Vast.ai median $0.20 (Aug 2026 census)"},
+    "sensitivity_band": "All totals recomputed at 0.5x and 1.5x the reference rate."
+  },
+  "scenarios": [
+    {
+      "name": "Minimum",
+      "purpose": "Smallest credible LoRA/PEFT experiment",
+      "model": "Qwen2.5-Coder-14B-Instruct", "parameters_b": 14, "quantization": "Q4_K_M base + QLoRA",
+      "lora_rank": 8, "seq_len": 2048, "dataset_tokens": 800000, "epochs": 1,
+      "gpu_type": "RTX 4090 24GB (QLoRA 14B fits 24GB)", "rate_used_usd_per_hr": 0.34,
+      "train_gpu_hours": {"value": 2, "value_kind": "assumption", "note": "Setup-dominated: ~50 steps at any plausible throughput; band 1-4h"},
+      "eval_gpu_hours": {"value": 0, "value_kind": "assumption", "note": "Eval on local CPU at $0 cash (measured ~20 wall-h per full battery)"},
+      "retries": 1,
+      "compute_cost_usd": 0.68, "band_usd": [0.34, 1.5],
+      "dataset_prep_cash_usd": 0, "storage_cash_usd": 0.0,
+      "total_cash_usd": 0.68, "total_band_usd": [0.34, 1.5]
+    },
+    {
+      "name": "Expected",
+      "purpose": "Realistic first useful training experiment",
+      "model": "Qwen2.5-Coder-14B-Instruct", "parameters_b": 14, "quantization": "bf16 LoRA",
+      "lora_rank": 16, "seq_len": 2048, "dataset_tokens": 800000, "epochs": 3,
+      "gpu_type": "A100 40GB", "rate_used_usd_per_hr": 1.99,
+      "train_gpu_hours": {"value": 3, "value_kind": "assumption", "note": "~150 steps at 500-2000 tok/s effective; band 1.5-6h"},
+      "eval_gpu_hours": {"value": 2, "value_kind": "assumption", "note": "Full P3 battery on rented GPU at 10-30x CPU speed; band 1-4h"},
+      "retries": 2,
+      "compute_cost_usd": 17.91, "band_usd": [10, 45],
+      "dataset_prep_cash_usd": 0, "storage_cash_usd": 0.0,
+      "total_cash_usd": 17.91, "total_band_usd": [10, 45],
+      "arithmetic": "(3 train + 2 eval) hrs x $1.99 x ~2 runs (1 retry) ~= $17.91"
+    },
+    {
+      "name": "Stress",
+      "purpose": "Multiple runs/retries + larger model/longer training",
+      "model": "Qwen2.5-Coder-32B", "parameters_b": 32, "quantization": "QLoRA",
+      "lora_rank": 16, "seq_len": 4096, "dataset_tokens": 1600000, "epochs": 3,
+      "gpu_type": "H100 PCIe 80GB", "rate_used_usd_per_hr": 2.64,
+      "train_gpu_hours": {"value": 12, "value_kind": "assumption", "note": "Bigger model + longer context; band 6-24h"},
+      "eval_gpu_hours": {"value": 6, "value_kind": "assumption", "note": "Three full eval rounds; band 3-12h"},
+      "retries": 3,
+      "compute_cost_usd": 142.56, "band_usd": [50, 200],
+      "dataset_prep_cash_usd": 0, "storage_cash_usd": 0.01,
+      "total_cash_usd": 142.57, "total_band_usd": [50, 200],
+      "arithmetic": "Rate $2.64 = midpoint of $1.99/$3.29 H100 references; (12+6)h x $2.64 x ~3 runs ~= $142.56"
+    }
+  ],
+  "inference_eval_cost": {
+    "local_cpu_cash": 0,
+    "local_cpu_wall_h_per_full_battery": {"value": 20, "value_kind": "measured", "note": "Q1 14.7h + R4C1 leg 2.8h + R5 collection ~2h, rounded"},
+    "rented_gpu_per_full_eval_usd": {"value": "2-6", "value_kind": "assumption", "note": "1-2 GPU-h at $1.99 on A100-class; CPU is 10-30x slower (assumption band)"}
+  },
+  "cost_per_successful_task": {
+    "method": "Scenario total divided by expected INCREMENTAL held-out closes from the trained model. Expected incremental closes are UNMEASURED (that is the experiment), so this is a parametric break-even table, not a claim.",
+    "table": [
+      {"scenario": "Minimum ($0.68)", "closes_1": 0.68, "closes_5": 0.14, "closes_20": 0.03},
+      {"scenario": "Expected ($17.91)", "closes_1": 17.91, "closes_5": 3.58, "closes_20": 0.9},
+      {"scenario": "Stress ($142.57)", "closes_1": 142.57, "closes_5": 28.51, "closes_20": 7.13}
+    ],
+    "units": "USD per incremental close"
+  },
+  "comparison_vs_cpu_local": {
+    "cpu_cash_to_date_usd": 0,
+    "cpu_achieved": "R2 pipeline 20/20, T4 pipeline 20/20, R5 1/40 (all measured, $0 cash)",
+    "key_point": "The $0 baseline already achieves the R2/T4 bars. Training spend must therefore buy what $0 cannot: T4-standalone gains, R5 gains, latency, or generality — all currently unmeasured. Any spend without a measured gain target is expenditure without justification."
+  },
+  "break_even_threshold": "Training pencils out IFF all of: (a) d1 cleared (>=1000 positives with balance/diversity held); (b) a measured capability gap exists that $0 methods cannot close (held-out shortfall on T4-standalone or R5); (c) projected spend <= $50 (2.8x the Expected point estimate, inside its upper band) for the first experiment. None of (a)/(b) hold today.",
+  "economic_conclusion": "JUSTIFIED_IF",
+  "economic_conclusion_gates": ["d1_scale cleared with balance/diversity held", "measured held-out shortfall attributable to scale (not system)", "first-experiment spend capped at $50 with a pre-registered gain target"],
+  "spend_owner": "AIQI founder / project owner",
+  "r5_spending_authority_usd": 0,
+  "r5_analysis_spend_usd": 0,
+  "training_spend_authorization": "NOT GRANTED by R-5",
+  "training_authorized": false,
+  "future_training_budget": "TBD after R-5 and P3 decision gate"
+}

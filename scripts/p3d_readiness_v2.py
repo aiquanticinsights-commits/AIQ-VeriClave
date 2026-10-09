@@ -265,7 +265,12 @@ def grade_dimension(dim, m):
     if dim == "d9_provenance":
         return "PASS" if m["fraction"] == 1.0 else "FAIL"
     if dim == "d10_economics":
-        return "PASS" if m["memo_exists"] else "FAIL"
+        # Frozen text: pass iff the memo SHOWS expected value exceeds
+        # spend. Existence alone is insufficient: a conditional
+        # (JUSTIFIED_IF with unmet gates) or negative memo keeps FAIL.
+        # Fixed from existence-only grading; threshold text unchanged.
+        return ("PASS" if m["memo_exists"]
+                and m.get("conclusion") == "JUSTIFIED" else "FAIL")
     return "UNMEASURABLE"
 
 
@@ -299,7 +304,15 @@ def main() -> int:
     meas["d8_heldout"] = {"exists": check_repo_file("HELDOUT")}
     meas["d9_provenance"] = measure_provenance(got) if got else None
     meas["d10_economics"] = {"memo_exists": check_repo_file("ECONOMIC")
-                             or check_repo_file("TRAINING_MEMO")}
+                             or check_repo_file("TRAINING_MEMO"),
+                             "conclusion": None}
+    for cand in ("P3_R5_ECONOMICS_MEMO.json",):
+        try:
+            meas["d10_economics"]["conclusion"] = \
+                load(cand).get("economic_conclusion")
+            meas["d10_economics"]["memo_exists"] = True
+        except (OSError, ValueError):
+            pass
     grades = {d: grade_dimension(d, meas[d])
               for d in ("d1_scale", "d2_diversity", "d3_balance", "d4_labels",
                         "d5_failure_modes", "d6_trajectories",
