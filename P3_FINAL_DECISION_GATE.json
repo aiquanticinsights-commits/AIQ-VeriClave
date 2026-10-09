@@ -1,0 +1,28 @@
+{
+  "gate": "P3 final decision gate",
+  "date": "2026-10-09",
+  "lineage": "Follows P3_OVERALL_GATE (untouched), the frozen remediation plan (+A1), and the completed items R-1, R-2b(batch 1), R-2a/R-3, R-4, R-5. This file is a readout; it measures nothing new.",
+  "scale_confirmation": {
+    "r4_facts": "22 cases evaluated, 19 closed, 0 false acceptances (independently re-derived)",
+    "r4_answers": "Does the frozen system repair well? YES (PASS vs frozen R2 bar >= 4 + 0 FA).",
+    "d1_facts": "183 verifier-positive trajectories recomputed from frozen artifacts vs preregistered bar >= 1000; gap 817.",
+    "d1_answers": "Is there enough verified-positive training material to justify SFT? NO (FAIL).",
+    "why_both_hold": "Capability verdict (R-4) and corpus-volume count (d1) are different gates over different denominators. R-4 PASS added 80 positives but the d1 bar is absolute, not relative. Conflating them is exactly what the frozen P3-D anti-rule forbids: experiment-passed/dataset-exists is never sufficient justification for training."
+  },
+  "tracks": {
+    "P3-A": "PARTIAL (R2 17/20 breached by scale; T4 9/20 measured FAIL)",
+    "P3-B": "FAIL, closed, approved (ensemble ceiling 3/20; consensus floor 30%)",
+    "P3-C": "PASS, scoped, approved (Qwen + frozen pipeline: T4 20/20, R2 20/20, 0 FA)",
+    "P3-D": "NOT READY, closed (8/10 dimensions PASS; scale + economics FAIL)"
+  },
+  "remediation_completed": ["R-1 held-out split (16+8, frozen)", "R-2b batch 1 (11 real cases, frozen; A1: complete)", "R-2a/R-3 R5 bench (20) + 40 trajectories (frozen)", "R-4 cycle 1 CLOSED/PASS (19/22, 0 FA; pool-gate A1 recorded)", "R-5 economics memo (JUSTIFIED_IF, $0 authority, frozen)"],
+  "remaining_constraints": {
+    "d1_scale": "183/1000 verifier-positive trajectories; gap 817; closable only by further authorized scale cycles (~80/cycle at current yield)",
+    "d10_economics": "Memo concludes JUSTIFIED_IF with unmet gates (d1 cleared, measured held-out shortfall, $50 first-experiment cap); training spend NOT GRANTED"
+  },
+  "decision": "P3 = CLOSED → SYSTEM DIRECTION VALIDATED / TRAINING NOT AUTHORIZED",
+  "rationale": "Improving the verification system beat training a new model at every decision point; the corpus does not yet justify SFT.",
+  "next": "Scale cycles toward d1 only under separate authorization (each cycle frozen-protocol, checkpointed, re-measured); economics memo stands as the spending record; fresh readiness verdict after re-measure; separate P4 training authorization only after a READY verdict — never here.",
+  "training_authorized": false,
+  "method": "Readout of frozen verdicts and the recomputed counts above. No new measurement, no re-grading, no post-hoc change. Consistency enforced by test_p3_final_gate.py."
+}
