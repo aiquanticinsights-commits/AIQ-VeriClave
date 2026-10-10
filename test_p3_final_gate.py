@@ -32,12 +32,13 @@ class TestFinalGate(unittest.TestCase):
                   "P3_A_T4_REMEASURE.json", "P3_C_PIPELINE_QWEN.json"]:
             got[n] = load(n)
         m = measure_scale(got)
-        # Full recomputation including R5 + R4 scale outputs.
-        self.assertEqual(m["positive_trajectories"], 183)
         v2 = load("P3_D_READINESS_V2.json")
-        self.assertEqual(
-            v2["measurements"]["d1_scale"]["positive_trajectories"], 183)
-        self.assertEqual(v2["grades"]["d1_scale"], "FAIL")
+        # Live recomputation must equal the committed assessment.
+        self.assertEqual(m["positive_trajectories"],
+                         v2["measurements"]["d1_scale"]["positive_trajectories"])
+        # Grade follows the frozen rule (FAIL below 1000), whatever the count.
+        expect = "PASS" if m["positive_trajectories"] >= 1000 else "FAIL"
+        self.assertEqual(v2["grades"]["d1_scale"], expect)
         gate = load("P3_FINAL_DECISION_GATE.json")
         self.assertIn("183", json.dumps(gate))
         self.assertIn("817", json.dumps(gate))

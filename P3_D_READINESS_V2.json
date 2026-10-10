@@ -1,7 +1,7 @@
 {
   "track": "P3-D readiness v2 (assessment ONLY \u2014 nothing trained)",
   "spec": "P3_D_SPEC.json",
-  "date": "2026-10-09",
+  "date": "2026-10-10",
   "sources_read": [
     "P2_M2_DEEPSEEK.json",
     "P2_M2_LLAMA.json",
@@ -14,15 +14,15 @@
   "sources_missing": [],
   "measurements": {
     "d1_scale": {
-      "positive_trajectories": 183
+      "positive_trajectories": 266
     },
     "labeled": {
-      "labeled_generations": 616
+      "labeled_generations": 716
     },
     "d3_balance": {
-      "positives": 183,
-      "labeled": 616,
-      "fraction": 0.2971
+      "positives": 266,
+      "labeled": 716,
+      "fraction": 0.3715
     },
     "d2_diversity": {
       "task_families": [
@@ -54,8 +54,8 @@
       "further_wall_trajectories": true
     },
     "d6_trajectories": {
-      "complete": 300,
-      "total": 300,
+      "complete": 320,
+      "total": 320,
       "fraction": 1.0,
       "multi_round_histories": true
     },

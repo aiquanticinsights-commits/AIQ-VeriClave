@@ -1,0 +1,227 @@
+{
+  "date": "2026-10-09",
+  "run_id": "viv-20261009-123057",
+  "tool_version": "2026.1",
+  "target": "xc7a100tcsg324-1",
+  "batch_rc": -1,
+  "batch_duration_s": 2502.9,
+  "blocks": {
+    "gate_a_stop": {
+      "report": "vivado 2026.1 [xc7a100tcsg324-1]: PASS (626s)",
+      "evidence": {
+        "tool": "AMD Vivado",
+        "tool_version": "2026.1",
+        "target_device": "xc7a100tcsg324-1",
+        "run_id": "viv-20261009-123057",
+        "requirement_ids": [],
+        "vivado": {
+          "status": "PASS",
+          "checks": {
+            "synth": "PASS",
+            "timing": {
+              "wns_ns": 7.202,
+              "tns_ns": 0.0,
+              "whs_ns": 0.29
+            },
+            "util": {
+              "lut": 4,
+              "ff": 5,
+              "bram": 0,
+              "dsp": 0
+            },
+            "drc": {
+              "violations": null,
+              "clean": true
+            }
+          },
+          "duration_s": 625.7,
+          "reason": ""
+        },
+        "artifacts": [
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_a_stop/timing.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_a_stop/util.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_a_stop/drc.rpt"
+        ],
+        "artifact_hashes": {
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_a_stop/timing.rpt": "dff6b87d96cb5698",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_a_stop/util.rpt": "fcdf129340069536",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_a_stop/drc.rpt": "99990a911dfb3621"
+        },
+        "limitations": [],
+        "evidence_hash": "566038dd6049a14e"
+      }
+    },
+    "gate_b_wdog": {
+      "report": "vivado 2026.1 [xc7a100tcsg324-1]: PASS (626s)",
+      "evidence": {
+        "tool": "AMD Vivado",
+        "tool_version": "2026.1",
+        "target_device": "xc7a100tcsg324-1",
+        "run_id": "viv-20261009-123057",
+        "requirement_ids": [],
+        "vivado": {
+          "status": "PASS",
+          "checks": {
+            "synth": "PASS",
+            "timing": {
+              "wns_ns": 8.885,
+              "tns_ns": 0.0,
+              "whs_ns": 0.203
+            },
+            "util": {
+              "lut": 0,
+              "ff": 3,
+              "bram": 0,
+              "dsp": 0
+            },
+            "drc": {
+              "violations": null,
+              "clean": true
+            }
+          },
+          "duration_s": 625.7,
+          "reason": ""
+        },
+        "artifacts": [
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_b_wdog/timing.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_b_wdog/util.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_b_wdog/drc.rpt"
+        ],
+        "artifact_hashes": {
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_b_wdog/timing.rpt": "ef7fb55fae609af2",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_b_wdog/util.rpt": "56004e2c478c35ed",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_b_wdog/drc.rpt": "6a23976f9dea2587"
+        },
+        "limitations": [],
+        "evidence_hash": "988446c8673bf5f4"
+      }
+    },
+    "gate_d_brake": {
+      "report": "vivado 2026.1 [xc7a100tcsg324-1]: PASS (626s)",
+      "evidence": {
+        "tool": "AMD Vivado",
+        "tool_version": "2026.1",
+        "target_device": "xc7a100tcsg324-1",
+        "run_id": "viv-20261009-123057",
+        "requirement_ids": [],
+        "vivado": {
+          "status": "PASS",
+          "checks": {
+            "synth": "PASS",
+            "timing": {
+              "wns_ns": 8.111,
+              "tns_ns": 0.0,
+              "whs_ns": 0.409
+            },
+            "util": {
+              "lut": 2,
+              "ff": 3,
+              "bram": 0,
+              "dsp": 0
+            },
+            "drc": {
+              "violations": null,
+              "clean": true
+            }
+          },
+          "duration_s": 625.7,
+          "reason": ""
+        },
+        "artifacts": [
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_d_brake/timing.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_d_brake/util.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_d_brake/drc.rpt"
+        ],
+        "artifact_hashes": {
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_d_brake/timing.rpt": "855871d826c5514d",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_d_brake/util.rpt": "2e3be1352a562dc4",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_d_brake/drc.rpt": "1e24f95d3df7388e"
+        },
+        "limitations": [],
+        "evidence_hash": "5c45271188ab2e3c"
+      }
+    },
+    "gate_e_speed": {
+      "report": "vivado 2026.1 [xc7a100tcsg324-1]: PASS (626s)",
+      "evidence": {
+        "tool": "AMD Vivado",
+        "tool_version": "2026.1",
+        "target_device": "xc7a100tcsg324-1",
+        "run_id": "viv-20261009-123057",
+        "requirement_ids": [],
+        "vivado": {
+          "status": "PASS",
+          "checks": {
+            "synth": "PASS",
+            "timing": {
+              "wns_ns": 4.5,
+              "tns_ns": 0.0,
+              "whs_ns": null
+            },
+            "util": {
+              "lut": 1,
+              "ff": 1,
+              "bram": 0,
+              "dsp": 0
+            },
+            "drc": {
+              "violations": null,
+              "clean": true
+            }
+          },
+          "duration_s": 625.7,
+          "reason": ""
+        },
+        "artifacts": [
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_e_speed/timing.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_e_speed/util.rpt",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_e_speed/drc.rpt"
+        ],
+        "artifact_hashes": {
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_e_speed/timing.rpt": "4a621e5f061df2cf",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_e_speed/util.rpt": "619764187d38f998",
+          "C:\\Projects\\ChipDesign\\AIQ-VeriClave/viv_work_r2/gate_e_speed/drc.rpt": "4811d234d33b1346"
+        },
+        "limitations": [],
+        "evidence_hash": "9b5eebe109df96b8"
+      }
+    }
+  },
+  "trend_vs_sep30": {
+    "prev_run_id": "viv-20260930-131302",
+    "blocks": {
+      "gate_a_stop": {
+        "prev_status": "PASS",
+        "cur_status": "PASS",
+        "status_match": true,
+        "prev_wns": 7.202,
+        "cur_wns": 7.202
+      },
+      "gate_b_wdog": {
+        "prev_status": "PASS",
+        "cur_status": "PASS",
+        "status_match": true,
+        "prev_wns": 8.885,
+        "cur_wns": 8.885
+      },
+      "gate_d_brake": {
+        "prev_status": "PASS",
+        "cur_status": "PASS",
+        "status_match": true,
+        "prev_wns": 8.111,
+        "cur_wns": 8.111
+      },
+      "gate_e_speed": {
+        "prev_status": "PASS",
+        "cur_status": "PASS",
+        "status_match": true,
+        "prev_wns": 4.5,
+        "cur_wns": 4.5
+      }
+    },
+    "reliability": "4/4 blocks PASS",
+    "reproducibility": true
+  },
+  "audit_completeness": 1.0,
+  "signoff": "PENDING"
+}

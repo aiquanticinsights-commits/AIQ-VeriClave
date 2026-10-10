@@ -1,10 +1,10 @@
 {
   "record": "P3 remediation status",
-  "date": "2026-10-08",
+  "date": "2026-10-09",
   "p3d_training_readiness": "NOT READY",
   "remaining_binding_constraints": [
-    "d1_scale: Scale",
-    "d10_economics: Economics"
+    "d1_scale: Scale (183/1000 verifier-positive trajectories)",
+    "d10_economics: Economics (memo concludes JUSTIFIED_IF, unmet gates)"
   ],
   "cleared_through_remeasurement": [
     "d2_diversity: PASS (3 task families incl. R5; synthetic + rideprotect real design families)",
@@ -13,8 +13,8 @@
   ],
   "r3": "executed and frozen; severe capability-wall finding (1 pass / 39 fails under the frozen single-shot evaluation)",
   "r2b": "continue with the planned real RTL cases; do not replace the original frozen benchmark",
-  "r4": "R-4 Cycle 1 PASS. The frozen system-level R2 acceptance criterion was satisfied with 19/22 cases closed and 0 false acceptances, against a required threshold of >=4 closes with 0 false acceptances. False-acceptance status was independently re-derived. No additional R-4 cycles are required for gate closure.",
-  "r5": "economics after/alongside scale according to the frozen plan",
+  "r4": "R-4 CLOSED / PASS: 2 cycles, 42 trajectories, 39/44 closed, 0 FA (independently re-derived). +80 positives (183 total toward d1). Frozen R2 bar PASS. No cycle 3 authorized; no plain-regime arm in R-4.",
+  "r5": "economics memo: JUSTIFIED_IF (3 scenarios, $0 authority). Training NOT GRANTED by R-5.",
   "training_authorized": false,
   "method": "Readout of P3_D_READINESS_V2.json grades against the frozen gate constraint list. Updated by re-measurement only."
 }
