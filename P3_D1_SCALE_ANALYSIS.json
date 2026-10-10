@@ -1,0 +1,26 @@
+{
+  "record": "d1/scale resolution analysis (analysis only — no bar change, no cycles launched)",
+  "date": "2026-10-10",
+  "current_state": {
+    "positives": 266,
+    "bar": 1000,
+    "gap": 734,
+    "grade": "FAIL",
+    "provenance": "Recomputed from frozen artifacts; equals the committed P3-D assessment."
+  },
+  "yield_math": {
+    "cycle_1": "80 passing / 110 candidates over 22 cases (~3.6/case)",
+    "cycle_2": "83 passing / 100 candidates over 20 cases (~4.2/case)",
+    "projected_cycles_to_close": "~9 at current yield",
+    "projected_wall_time": "~60-100h at measured cycle pace",
+    "duplicate_caveat": "Further cycles repeat the same 20 P2 prompts. The frozen assessor counts repetitions as positives, so ~9 more cycles would flip d1 mechanically while adding little epistemic value (near-duplicate trajectories). Flipping the bar this way without pool expansion would be metric-chasing, and is recorded here as a risk, not a plan."
+  },
+  "options": {
+    "A_more_cycles": "Authorize ~9 R-4 cycles on the current pool. Flips d1 by volume; duplicates flagged above. Requires explicit authorization (multi-day compute). NOT authorized.",
+    "B_expand_pool_first": "Source batch-2 real cases and/or new training-eligible T4 probes, freeze them, then cycle. New distinct positives carry real information. Blocked on sourcing (four screens exhausted).",
+    "C_amend_counting": "Amend d1 to distinct-positive counting (dedupe by prompt). Intellectually honest but a spec change: needs rationale, authorization, and re-baselining. NOT proposed unilaterally.",
+    "D_plain_regime": "Run the excluded R-2b cases under the plain single-stage recipe. Currently FORBIDDEN by human directive (plain-regime arm not to run; excluded cases stay out). Listed for completeness only."
+  },
+  "recommendation": "B then A: expand the pool before burning cycles, so each cycle adds distinct positives; pursue A only with duplicate-accounting. C is a legitimate discussion if B stalls. D stays forbidden until the human lifts it. Decision required: none of A/B/C/D executes without explicit authorization.",
+  "training_authorized": false
+}

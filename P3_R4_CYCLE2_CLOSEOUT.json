@@ -1,0 +1,32 @@
+{
+  "record": "R-4 Cycle 2 closeout",
+  "source": "R4_CYCLE_2.json",
+  "spec_tags": ["p3-r4-scale-frozen", "p3-r4-scale-a1-frozen"],
+  "model": "qwen2.5-coder-14b-instruct",
+  "evaluated": {
+    "cases": 20,
+    "pool": "20 P2 (R2B excluded 11/11 by the frozen pool gate)",
+    "candidates": 100,
+    "passing_candidates": 83
+  },
+  "result": {
+    "closed": 20,
+    "pass_rate_exact": "20/20",
+    "false_acceptances": 0,
+    "false_acceptance_check": "independently re-derived with frozen value_gate over all 20 answers: 0"
+  },
+  "cumulative": {
+    "trajectories": 42,
+    "cycles": [1, 2],
+    "positives": 266,
+    "cycle_1": "19/22 closed, 0 FA",
+    "cycle_2": "20/20 closed, 0 FA"
+  },
+  "plain_regime": "NOT RUN. The 9+2 excluded R-2b cases remain outside R-4 exactly as the frozen pool gate requires. Attested by pool composition (origins P2 only) and the exclusion list.",
+  "closure": {
+    "status": "CLOSED",
+    "direction": "Human-directed: record cycle-2 evidence, launch no cycle 3, run no plain-regime arm.",
+    "training_authorized": false
+  },
+  "method": "Readout of R4_CYCLE_2.json and R4_TRAJECTORIES.json. No re-grading, no post-hoc change."
+}

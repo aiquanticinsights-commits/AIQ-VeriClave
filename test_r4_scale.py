@@ -120,5 +120,46 @@ class TestR4Verdict(unittest.TestCase):
             self.assertIn("constraint", row)
 
 
+class TestCycle2Closeout(unittest.TestCase):
+    def test_closeout_matches_cycle_file(self):
+        cyc = load("R4_CYCLE_2.json")
+        v = load("P3_R4_CYCLE2_CLOSEOUT.json")
+        self.assertEqual(len(cyc["rows"]), 20)
+        self.assertEqual(cyc["closed"], 20)
+        self.assertEqual(cyc["false_acceptances"], 0)
+        self.assertEqual(v["result"]["pass_rate_exact"], "20/20")
+        self.assertEqual(v["evaluated"]["passing_candidates"], 83)
+        self.assertEqual(v["cumulative"]["positives"], 266)
+        self.assertEqual(v["closure"]["status"], "CLOSED")
+        self.assertFalse(v["closure"]["training_authorized"])
+
+    def test_cycle2_pool_is_p2_only(self):
+        """The 11 excluded R-2b cases stayed out: every cycle-2 row is
+        P2-origin, and the exclusion list names all 11."""
+        cyc = load("R4_CYCLE_2.json")
+        self.assertEqual({r["origin"] for r in cyc["rows"].values()}, {"P2"})
+        self.assertEqual(len(cyc["excluded"]), 11)
+        v = load("P3_R4_CYCLE2_CLOSEOUT.json")
+        self.assertIn("NOT RUN", v["plain_regime"])
+
+
+class TestD1Analysis(unittest.TestCase):
+    def test_numbers_match_live_artifacts(self):
+        a = load("P3_D1_SCALE_ANALYSIS.json")
+        v2 = load("P3_D_READINESS_V2.json")
+        self.assertEqual(a["current_state"]["positives"],
+                         v2["measurements"]["d1_scale"]["positive_trajectories"])
+        self.assertEqual(a["current_state"]["gap"],
+                         1000 - a["current_state"]["positives"])
+        self.assertEqual(v2["grades"]["d1_scale"], "FAIL")
+
+    def test_no_execution_smuggled_in(self):
+        a = load("P3_D1_SCALE_ANALYSIS.json")
+        self.assertFalse(a["training_authorized"])
+        blob = json.dumps(a).lower()
+        self.assertIn("without explicit authorization", blob)
+        self.assertIn("forbidden", blob)
+
+
 if __name__ == "__main__":
     unittest.main()
