@@ -1,0 +1,59 @@
+{
+  "record": "P3 closure snapshot (experimentation stopped; readout only)",
+  "date": "2026-10-11",
+  "final_commit": "9518ed6",
+  "ci": "green / 432 tests (run 38098343162, vericlave-p0, 2026-10-11)",
+  "p3_verdict": "CLOSED",
+  "system_direction": "VALIDATED",
+  "d1_scale": "FAIL — 266/1000 verifier-positive trajectories",
+  "economics_d10": "not cleared — FAIL / JUSTIFIED_IF with unmet gates",
+  "training": "NOT AUTHORIZED",
+  "non_authorizations": [
+    "No further R-4 cycles (cycle 3+) without explicit re-authorization",
+    "No further Verilog RTL sourcing for batch 2 without explicit re-authorization",
+    "No benchmark changes (cases, prompts, graders, temperatures) without a frozen amendment",
+    "No bar changes (acceptance thresholds) without a frozen amendment",
+    "No plain-regime arm inside or alongside R-4",
+    "No model training, fine-tuning, LoRA, RL, or distillation",
+    "No training-data formatting (no trainer-ready shards)",
+    "No GPU/training spend ($0 authority; spend owner AIQI founder / project owner)",
+    "No held-out contact by training-eligible work (R-1 exclusion stands)"
+  ],
+  "frozen_evidence_references": [
+    "p3-a-spec-frozen", "p3-a-A1-frozen",
+    "p3-pipeline-bench-frozen", "p3-pipeline-bench-v2",
+    "p3-c-qwen-pipeline-frozen", "p3-c-evidence-frozen",
+    "p3-d-spec-frozen", "p3-d-evidence-frozen",
+    "p3-evidence-frozen", "p3-final-gate-frozen",
+    "p3-heldout-frozen", "p3-r2b-real-frozen",
+    "p3-r5-bench-frozen", "p3-r5-family-frozen",
+    "p3-r4-scale-frozen", "p3-r4-scale-a1-frozen",
+    "p3-r4-result-frozen", "p3-r4-cycle2-frozen",
+    "p3-remediation-plan-frozen", "p3-remediation-plan-a1-frozen",
+    "p3-r5-memo-frozen"
+  ],
+  "d1_reopen_conditions": [
+    "Explicit human re-authorization (this snapshot authorizes nothing further)",
+    "One of the recorded paths in P3_D1_SCALE_ANALYSIS.json (options A-D), or a newly authorized path",
+    "Pool expansion before volume if pursued (duplicates flagged in the analysis)",
+    "Frozen re-measurement after any new data; d1 flips only at >= 1000 under the unchanged rule",
+    "d10 gates re-evaluated alongside; P4 training authorization only after a READY verdict — never here"
+  ],
+  "post_p3": {
+    "phase_reading": {
+      "P0_system_foundation": "GO",
+      "P1_capability_diagnosis": "done",
+      "P2_model_experiments": "training not justified",
+      "P3_system_direction": "VALIDATED",
+      "d1_scale_266_1000": "not cleared",
+      "economics": "not cleared",
+      "training": "NOT AUTHORIZED"
+    },
+    "direction": "Post-P3 engineering/productization phase focused on the unresolved constraints — not P4 training. P3 proved enough to validate the system direction, but not enough to justify training.",
+    "branches": {
+      "product_system_work_without_training": "dashboard, adapters, harness hardening, docs, deployment readiness",
+      "future_d1_reopening": "only if justified under the conditions above"
+    }
+  },
+  "method": "Readout of frozen verdicts, tags, and the re-measured grades. No experiment executed, no model called, no evidence altered in writing this snapshot."
+}
