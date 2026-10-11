@@ -1,0 +1,15 @@
+{
+  "record": "P4 namespace framing (resolves the P4-SYS vs P4-TRAIN collision)",
+  "date": "2026-10-11",
+  "problem": "Prior records reference 'a separate P4 training authorization' while the proposed P4 workstreams (A-E) contain no training. One label, two meanings.",
+  "resolution": {
+    "P4-SYS": "System workstreams P4-A (structured generation), P4-B (verifier-guided generation), P4-C (ensemble), P4-D (real RTL expansion), P4-E (cost/latency optimization). Contains NO training, NO training authorization, NO training spend. This is the active P4.",
+    "P4-TRAIN": "A hypothetical future training authorization, separate from P4-SYS in name, evidence, and sign-off. Does NOT exist. Comes into being, if ever, only via its own authorization after a READY verdict — never as a side effect of P4-SYS work."
+  },
+  "rules": [
+    "No P4-SYS artifact may authorize, fund, or perform training.",
+    "No P4-SYS result may be cited as training authorization.",
+    "If P4-TRAIN is ever proposed, it gets its own frozen spec, its own evidence, and its own human authorization; the P4-SYS record stays untouched.",
+    "Reviews and tests must fail any P4-SYS artifact that smuggles training scope (same guardrail family as P3-D)."
+  ]
+}

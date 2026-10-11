@@ -1,0 +1,34 @@
+{
+  "spec": "P4-E cost/latency optimization — measurement spec (no optimization executed here)",
+  "status": "FROZEN — metrics, method, baselines, and decision rule pinned before any optimization work. No change after work starts.",
+  "question": "Can we achieve useful verification performance economically without training? (And if not, exactly when does training become economically justified?)",
+  "metrics": ["latency_per_task_s", "tokens_per_task", "cpu_ram_per_task", "verifier_runtime_s", "closure_iterations", "candidate_count", "cost_per_task_usd", "success_per_task"],
+  "method": {
+    "latency_tokens": "Read from run artifacts (latency_s, tokens, elapsed_s). Wall-clock on the same local CPU host unless stated.",
+    "cpu_ram": "Not logged per task in P3 artifacts: instrument from the next run (method: process peak RSS + wall time per case/sample). Baseline TBD.",
+    "verifier_runtime": "Not separately logged in P3 artifacts (verdicts carry no timings): instrument from the next run (method: time each verify() call). Baseline TBD.",
+    "closure_iterations": "Recorded rounds (plain recipe) or 1.0 for single-pass pipeline runs.",
+    "candidate_count": "k=5 (frozen pipeline) or BoN width for plain runs.",
+    "cost_cash": "Measured spend ($0 to date). Rented-GPU equivalents use R-5 reference rates only.",
+    "success": "Frozen bars only (closes/accuracy + 0 false acceptances). Never redefined."
+  },
+  "baselines": {
+    "source": "Frozen P3 evidence (recomputed 2026-10-11; means over completed samples/cases)",
+    "Q1_T4_pipeline_qwen": {"n": 20, "mean_latency_s": 2779.9, "mean_tokens": 2397.3, "success": "20/20", "candidates_per_sample": 7, "cash_usd": 0},
+    "Q1_R2_pipeline_qwen": {"n": 20, "mean_latency_s": 1181.4, "mean_tokens": 3952.8, "success": "20/20", "candidates_per_case": 5, "cash_usd": 0},
+    "R4C1_R2_pipeline_qwen": {"n": 22, "mean_latency_s": 1296.6, "mean_tokens": 3868.7, "success": "19/22", "candidates_per_case": 5, "cash_usd": 0},
+    "A1_T4_standalone_qwen": {"n": 20, "mean_latency_s": 2870.7, "success": "9/20", "cash_usd": 0},
+    "P3A_R2_plain_qwen": {"n": 20, "mean_rounds": 2.4, "first_pass": 10, "success": "17/20", "cash_usd": 0},
+    "cpu_ram_per_task": "TBD (instrument next run)",
+    "verifier_runtime_s": "TBD (instrument next run)"
+  },
+  "decision_rule": {
+    "optimization_accepted_iff": "Cost or latency improves vs the matching baseline AND success rate does not regress AND false acceptances stay 0, all measured on frozen benchmarks.",
+    "training_link": "If optimization plateaus above the R-5 break-even gates with a measured capability shortfall remaining, that shortfall — quantified here — becomes the training-justification evidence for a future P4-TRAIN proposal. P4-E itself never proposes training."
+  },
+  "guardrails": [
+    "No benchmark, bar, or verifier changes to improve numbers (that is grading one's own homework).",
+    "No training, no training spend, no training authorization (P4-SYS rules).",
+    "Every optimization claim ships with before/after measurements on the same frozen cases."
+  ]
+}
