@@ -1,9 +1,9 @@
 {
   "record": "P3 remediation status",
-  "date": "2026-10-09",
+  "date": "2026-10-11",
   "p3d_training_readiness": "NOT READY",
   "remaining_binding_constraints": [
-    "d1_scale: Scale (183/1000 verifier-positive trajectories)",
+    "d1_scale: Scale (266/1000 verifier-positive trajectories)",
     "d10_economics: Economics (memo concludes JUSTIFIED_IF, unmet gates)"
   ],
   "cleared_through_remeasurement": [
@@ -15,6 +15,8 @@
   "r2b": "continue with the planned real RTL cases; do not replace the original frozen benchmark",
   "r4": "R-4 CLOSED / PASS: 2 cycles, 42 trajectories, 39/44 closed, 0 FA (independently re-derived). +80 positives (183 total toward d1). Frozen R2 bar PASS. No cycle 3 authorized; no plain-regime arm in R-4.",
   "r5": "economics memo: JUSTIFIED_IF (3 scenarios, $0 authority). Training NOT GRANTED by R-5.",
+  "d1_decision": "PARKED by human direction 2026-10-11: no further R-4 scale cycles, no further Verilog RTL sourcing. d1 stays FAIL (266/1000) by measurement. Revisit only via explicit re-authorization (options A-D stand recorded in P3_D1_SCALE_ANALYSIS.json).",
+  "final_gate": "APPROVED 2026-10-11: P3 closed, system direction validated, training not authorized.",
   "training_authorized": false,
   "method": "Readout of P3_D_READINESS_V2.json grades against the frozen gate constraint list. Updated by re-measurement only."
 }

@@ -21,6 +21,13 @@
     "d10_economics": "Memo concludes JUSTIFIED_IF with unmet gates (d1 cleared, measured held-out shortfall, $50 first-experiment cap); training spend NOT GRANTED"
   },
   "decision": "P3 = CLOSED → SYSTEM DIRECTION VALIDATED / TRAINING NOT AUTHORIZED",
+  "human_approval": {
+    "date": "2026-10-11",
+    "decision": "APPROVED — the final gate stands as recorded: P3 closed, system direction validated, training not authorized. Scale parked (no further R-4 cycles, no further RTL sourcing); d1/d10 remain FAIL by measurement, not by neglect.",
+    "basis": "Reviewed track verdicts, remediation completions (R-1..R-5), the d1 scale analysis (266/1000 with duplicate-caveat), the JUSTIFIED_IF economics memo, and the confirmation that R-4 PASS and d1 FAIL measure different gates.",
+    "not_approved": "No training authorization, no scale-cycle authorization, no bar amendment, no change to any frozen evidence.",
+    "reviewer": "human operator (name not supplied)"
+  },
   "rationale": "Improving the verification system beat training a new model at every decision point; the corpus does not yet justify SFT.",
   "next": "Scale cycles toward d1 only under separate authorization (each cycle frozen-protocol, checkpointed, re-measured); economics memo stands as the spending record; fresh readiness verdict after re-measure; separate P4 training authorization only after a READY verdict — never here.",
   "training_authorized": false,
