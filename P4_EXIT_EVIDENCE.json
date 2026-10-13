@@ -1,0 +1,53 @@
+{
+  "block": "async_fifo",
+  "steps": {
+    "intent_valid": [],
+    "artifacts": [
+      "checker",
+      "coverage",
+      "sva",
+      "test"
+    ],
+    "golden_violations": [],
+    "mutant_violations": [
+      "full stuck low at depth (REQ-P4D-01)"
+    ],
+    "mutant_killed": true,
+    "diagnostic": {
+      "code": "ASSERTION_FAIL",
+      "source": "frm-check"
+    },
+    "mutant_diagnostic": "MUTANT_SURVIVED",
+    "closure": {
+      "rounds": 3,
+      "disposition": "PASS"
+    },
+    "trace": {
+      "total": 1,
+      "closed": 1,
+      "completeness": 1.0,
+      "missing": []
+    },
+    "ledger": {
+      "records": 2,
+      "chain_ok": true,
+      "audit": 1.0
+    },
+    "formal": {
+      "verdict": "PROVE",
+      "engine": "sby-bmc",
+      "line": "fifo_full_exact: PROVEN (sby-bmc)",
+      "execution": "UNAVAILABLE-on-host (Windows; Linux CI runs sby)"
+    },
+    "repro": {
+      "python": "3.11.5",
+      "platform": "Windows-AMD64",
+      "tools": {
+        "verilator": "UNAVAILABLE",
+        "yosys": "UNAVAILABLE",
+        "sby": "UNAVAILABLE"
+      }
+    }
+  },
+  "verdict": "DEMONSTRATED"
+}
