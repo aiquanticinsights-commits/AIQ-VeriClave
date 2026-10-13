@@ -17,14 +17,14 @@ P3 CLOSED → P4 system/workflow → P5 held-out qualification → P6 productiza
 | P4-04 | Define held-out design families | P0 | **DONE** (this cycle: `P4_HELDOUT_v1.json` frozen — 3 dev + 4 held-out families, contamination rules + 6 schema tests) | frozen family manifest |
 | P4-05 | Structured verification-intent schema | P0 | **DONE** (this cycle: `intent.py` typed schema + fail-closed validation + round-trip; `test_intent.py` 10 tests) | schema + tests |
 | P4-06 | Typed generation interface | P0 | **DONE** (this cycle: `generate.py` — SVA/covergroup/checker/test emitters from validated intent only, invalid intents refused; `test_generate.py` 10 tests) | generated-artifact tests |
-| P4-07 | Machine-readable verifier feedback | P0 | Diagnostic schema (SYNTAX_ERROR…CLOCK_DOMAIN_MISMATCH) + tests |
-| P4-08 | Qualify 3-round closure boundary | P0 | OPEN | boundary-test evidence (no Round 4, no overwrites) |
-| P4-09 | Requirement-to-evidence traceability | P0 | OPEN | end-to-end trace artifacts (states per §7.7) |
-| P4-10 | EDA adapter maturity metadata | P1 | OPEN | adapter registry (L1–L5 per tool×function) |
-| P4-11 | GitHub evidence workflow | P1 | OPEN | CI evidence artifacts on PRs |
-| P4-12 | Developer-value experiment definition | P1 | OPEN | pilot protocol (human-only vs assisted) |
-| P4-13 | Reproducibility envelope | P1 | OPEN | reproduction report (Docker/WSL pinned) |
-| P4-14 | P5 qualification protocol draft | P1 | OPEN | frozen-protocol specification |
+| P4-07 | Machine-readable verifier feedback | P0 | **DONE** (this cycle: `diagnostics.py` frozen 11-code schema + remedy routing + FailureEvent bridge; `test_diagnostics.py` 8 tests) | Diagnostic schema + tests |
+| P4-08 | Qualify 3-round closure boundary | P0 | **DONE** (this cycle: `closure.py` R0–R3 + escalation + tripwire tests; `test_closure.py` 9 tests) | boundary-test evidence (no Round 4, no overwrites) |
+| P4-09 | Requirement-to-evidence traceability | P0 | **DONE** (this cycle: `trace.py` 7-state chains + completeness; `test_trace.py` 6 tests) | end-to-end trace artifacts (states per §7.7) |
+| P4-10 | EDA adapter maturity metadata | P1 | **DONE** (this cycle: `adapter_registry.py` L1–L5 evidence-backed entries; `test_adapter_registry.py` 7 tests) | adapter registry (L1–L5 per tool×function) |
+| P4-11 | GitHub evidence workflow | P1 | **DONE** (this cycle: `.github/pull_request_template.md` evidence checklist; CI upload pre-existing, verified) | CI evidence artifacts on PRs |
+| P4-12 | Developer-value experiment definition | P1 | **DONE** (this cycle: `PILOT_PROTOCOL.md` human-vs-assisted design, preregistration rule) | pilot protocol (human-only vs assisted) |
+| P4-13 | Reproducibility envelope | P1 | **DONE** (this cycle: `repro.py` env/tool/git/file-hash envelope + `test_repro.py` 6 tests) | reproduction report (Docker/WSL pinned) |
+| P4-14 | P5 qualification protocol draft | P1 | **DONE** (this cycle: `P5_QUALIFICATION_PROTOCOL.md` frozen-before-execution draft, explicit non-goals) | frozen-protocol specification |
 
 Also tracked: this file itself (roadmap tracker = DONE on creation).
 
