@@ -16,7 +16,7 @@ P3 CLOSED → P4 system/workflow → P5 held-out qualification → P6 productiza
 | P4-03 | Freeze P4 benchmark protocol | P0 | **DONE** (this cycle: `P4_BENCH_v1.json` frozen + `test_p4_bench.py` 7 tests) | versioned benchmark tag |
 | P4-04 | Define held-out design families | P0 | **DONE** (this cycle: `P4_HELDOUT_v1.json` frozen — 3 dev + 4 held-out families, contamination rules + 6 schema tests) | frozen family manifest |
 | P4-05 | Structured verification-intent schema | P0 | **DONE** (this cycle: `intent.py` typed schema + fail-closed validation + round-trip; `test_intent.py` 10 tests) | schema + tests |
-| P4-06 | Typed generation interface | P0 | OPEN | generated-artifact tests |
+| P4-06 | Typed generation interface | P0 | **DONE** (this cycle: `generate.py` — SVA/covergroup/checker/test emitters from validated intent only, invalid intents refused; `test_generate.py` 10 tests) | generated-artifact tests |
 | P4-07 | Machine-readable verifier feedback | P0 | Diagnostic schema (SYNTAX_ERROR…CLOCK_DOMAIN_MISMATCH) + tests |
 | P4-08 | Qualify 3-round closure boundary | P0 | OPEN | boundary-test evidence (no Round 4, no overwrites) |
 | P4-09 | Requirement-to-evidence traceability | P0 | OPEN | end-to-end trace artifacts (states per §7.7) |
