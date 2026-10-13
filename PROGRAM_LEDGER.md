@@ -111,3 +111,5 @@
 | P4-04 | Doc benchmark verdict: plan ADOPTED with no content changes required | This row |
 
 Next: P4-03 (freeze P4 benchmark protocol) → P4-04 (held-out families) per roadmap order.
+
+| P4-05 | P4-03 executed: `P4_BENCH_v1.json` frozen (tracks P4-05..P4-09, 11-diagnostic schema, R0–R3 boundary, regression guard, CPU-only env) + `test_p4_bench.py` 7 tests green; roadmap row marked DONE | Files + suite, this cycle |
