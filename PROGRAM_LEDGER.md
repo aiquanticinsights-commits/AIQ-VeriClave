@@ -113,3 +113,4 @@
 Next: P4-03 (freeze P4 benchmark protocol) → P4-04 (held-out families) per roadmap order.
 
 | P4-05 | P4-03 executed: `P4_BENCH_v1.json` frozen (tracks P4-05..P4-09, 11-diagnostic schema, R0–R3 boundary, regression guard, CPU-only env) + `test_p4_bench.py` 7 tests green; roadmap row marked DONE | Files + suite, this cycle |
+| P4-06 | P4-04 executed: `P4_HELDOUT_v1.json` frozen (3 dev families grounded in P0–P3 assets + 4 new held-out: async-fifo, round-robin-arbiter, interrupt-controller, reset-synchronizer; contamination rules; same C1–C5 bars + FA=0 blind grading) + `test_p4_heldout.py` 6 tests green; roadmap row marked DONE | Files + suite, this cycle |

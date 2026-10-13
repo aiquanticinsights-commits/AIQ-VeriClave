@@ -14,7 +14,7 @@ P3 CLOSED → P4 system/workflow → P5 held-out qualification → P6 productiza
 | P4-01 | `CAPABILITY_RESULT_RECONCILIATION.md` | P0 | **DONE** (this cycle) | this file's companion |
 | P4-02 | `ARCHITECTURE_STATUS.md` | P0 | **DONE** (this cycle) | companion file |
 | P4-03 | Freeze P4 benchmark protocol | P0 | **DONE** (this cycle: `P4_BENCH_v1.json` frozen + `test_p4_bench.py` 7 tests) | versioned benchmark tag |
-| P4-04 | Define held-out design families | P0 | OPEN | frozen family manifest |
+| P4-04 | Define held-out design families | P0 | **DONE** (this cycle: `P4_HELDOUT_v1.json` frozen — 3 dev + 4 held-out families, contamination rules + 6 schema tests) | frozen family manifest |
 | P4-05 | Structured verification-intent schema | P0 | OPEN | schema + tests |
 | P4-06 | Typed generation interface | P0 | OPEN | generated-artifact tests |
 | P4-07 | Machine-readable verifier feedback | P0 | Diagnostic schema (SYNTAX_ERROR…CLOCK_DOMAIN_MISMATCH) + tests |
