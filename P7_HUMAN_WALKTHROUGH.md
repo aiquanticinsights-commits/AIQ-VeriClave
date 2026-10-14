@@ -184,6 +184,7 @@ the blinded comparison (they see only artifacts + evidence, never your
 process notes first).
 
 ## 10. FAQ for starters
+- **Running the interactive runner instead?** If an operator drives `pilot_human.py` for your session, your checker file needs one extra contract: set a global `RESULT` dict with keys `defects_found`, `mutants_total`, `false_alarms`, `iterations`, `artifacts` (list). The runner executes it isolated and records only that dict — it never reads your logic. Timers, questions, and sealing are handled for you; everything in §§6–9 above still applies to *your* work.
 
 - **Stuck?** Stuck time is data — log it in `notes` and keep going; the 4h cap protects you. Ask methodology questions anytime (in the PR or an issue); you just won't be told expected results.
 - **My checker disagrees with the spec?** Re-read the spec sheet first; if still conflicted, write down BOTH interpretations in `notes` and pick one. Ambiguity reports are valuable findings.

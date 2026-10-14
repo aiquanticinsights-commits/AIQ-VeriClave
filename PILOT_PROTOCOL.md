@@ -30,3 +30,12 @@ evidence completeness · developer satisfaction (1–5 + note).
 - Proprietary participant RTL stays local; only aggregate metrics leave the bench.
 - Human sign-off on every release-impacting conclusion.
 - Pre-register: tasks, bars, arms, and analysis plan BEFORE first run (this file + ledger row = preregistration).
+
+## Amendment A1 — assisted execution of the human arm (recorded, maintainer-acked)
+A scripted runner (`pilot_human.py`) may operate timers, attestation prompts,
+sandboxed execution, record-keeping, and sealing for a human-arm session.
+Assisted *judgment* (authoring, debugging decisions, review opinions,
+satisfaction) by any agent voids the run. Runner questions come exclusively
+from the in-repo fixed bank (neutrality-tested); the runner imports no
+oracle/assisted modules (import-tested). This amendment changes execution
+mechanics only — tasks, mutants, bars, and acceptance are untouched.
