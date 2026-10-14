@@ -1,0 +1,109 @@
+{
+  "families": {
+    "async-fifo": {
+      "family": "async-fifo",
+      "mutants": {
+        "full-stuck-0": {
+          "killed": true
+        },
+        "count-stuck": {
+          "killed": true
+        },
+        "pop-drops-two": {
+          "killed": true
+        }
+      },
+      "golden_fa": 0,
+      "closure": {
+        "rounds": 1,
+        "disposition": "PASS"
+      },
+      "trace": {
+        "total": 1,
+        "closed": 1,
+        "completeness": 1.0,
+        "missing": []
+      },
+      "ledger_ok": true,
+      "verdict": "PASS"
+    },
+    "round-robin-arbiter": {
+      "family": "round-robin-arbiter",
+      "mutants": {
+        "fixed-priority": {
+          "killed": true
+        },
+        "grant-stuck": {
+          "killed": true
+        }
+      },
+      "golden_fa": 0,
+      "closure": {
+        "rounds": 1,
+        "disposition": "PASS"
+      },
+      "trace": {
+        "total": 1,
+        "closed": 1,
+        "completeness": 1.0,
+        "missing": []
+      },
+      "ledger_ok": true,
+      "verdict": "PASS"
+    },
+    "interrupt-controller": {
+      "family": "interrupt-controller",
+      "mutants": {
+        "threshold-ignored": {
+          "killed": true
+        },
+        "priority-inverted": {
+          "killed": true
+        },
+        "claim-no-clear": {
+          "killed": true
+        }
+      },
+      "golden_fa": 0,
+      "closure": {
+        "rounds": 1,
+        "disposition": "PASS"
+      },
+      "trace": {
+        "total": 1,
+        "closed": 1,
+        "completeness": 1.0,
+        "missing": []
+      },
+      "ledger_ok": true,
+      "verdict": "PASS"
+    },
+    "reset-synchronizer": {
+      "family": "reset-synchronizer",
+      "mutants": {
+        "one-flop": {
+          "killed": true
+        },
+        "stuck-0": {
+          "killed": true
+        }
+      },
+      "golden_fa": 0,
+      "closure": {
+        "rounds": 1,
+        "disposition": "PASS"
+      },
+      "trace": {
+        "total": 1,
+        "closed": 1,
+        "completeness": 1.0,
+        "missing": []
+      },
+      "ledger_ok": true,
+      "verdict": "PASS"
+    }
+  },
+  "freeze_intact": true,
+  "overall": "PASS",
+  "reproducible": true
+}
