@@ -1,0 +1,70 @@
+{
+  "arm": "assisted",
+  "config": "deterministic-P4-pipeline, 0 LLM calls",
+  "tasks": {
+    "round-robin-arbiter": {
+      "family": "round-robin-arbiter",
+      "llm_calls": 0,
+      "note": "deterministic P4 pipeline config; production LLM latency additive",
+      "authoring_time_s": 0.0,
+      "artifacts_generated": [
+        "checker",
+        "coverage",
+        "sva",
+        "test"
+      ],
+      "false_alarms": 0,
+      "defects_discovered": 2,
+      "mutants_total": 2,
+      "diagnostics": [
+        "TRACE_MISMATCH",
+        "TRACE_MISMATCH"
+      ],
+      "iterations": 1,
+      "closure": "PASS",
+      "rework_rounds": 0,
+      "evidence_completeness": 1.0,
+      "ledger_ok": true,
+      "accepted_artifacts": 4,
+      "rejected_artifacts": 0,
+      "total_task_time_s": 0.001,
+      "review_time_s": null,
+      "satisfaction": null,
+      "compute_cost_usd": 0.0,
+      "verdict": "PASS"
+    },
+    "interrupt-controller": {
+      "family": "interrupt-controller",
+      "llm_calls": 0,
+      "note": "deterministic P4 pipeline config; production LLM latency additive",
+      "authoring_time_s": 0.0,
+      "artifacts_generated": [
+        "checker",
+        "coverage",
+        "sva",
+        "test"
+      ],
+      "false_alarms": 0,
+      "defects_discovered": 3,
+      "mutants_total": 3,
+      "diagnostics": [
+        "TRACE_MISMATCH",
+        "TRACE_MISMATCH",
+        "ASSERTION_FAIL"
+      ],
+      "iterations": 1,
+      "closure": "PASS",
+      "rework_rounds": 0,
+      "evidence_completeness": 1.0,
+      "ledger_ok": true,
+      "accepted_artifacts": 4,
+      "rejected_artifacts": 0,
+      "total_task_time_s": 0.0,
+      "review_time_s": null,
+      "satisfaction": null,
+      "compute_cost_usd": 0.0,
+      "verdict": "PASS"
+    }
+  },
+  "human_arm": "PENDING \u2014 see HUMAN_ARM_RUNBOOK.md (no simulated humans)"
+}
