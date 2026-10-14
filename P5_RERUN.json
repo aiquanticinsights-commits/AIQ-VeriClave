@@ -1,0 +1,35 @@
+{
+  "executor": "independent-clean-process",
+  "baseline": "P5_EXECUTION.json (committed)",
+  "fresh": {
+    "families": {
+      "async-fifo": {
+        "verdict": "PASS"
+      },
+      "interrupt-controller": {
+        "verdict": "PASS"
+      },
+      "reset-synchronizer": {
+        "verdict": "PASS"
+      },
+      "round-robin-arbiter": {
+        "verdict": "PASS"
+      }
+    },
+    "freeze_intact": true,
+    "overall": "PASS"
+  },
+  "comparison": {
+    "match": true,
+    "fresh_overall": "PASS",
+    "baseline_overall": "PASS",
+    "fresh_freeze_intact": true,
+    "families_compared": [
+      "async-fifo",
+      "interrupt-controller",
+      "reset-synchronizer",
+      "round-robin-arbiter"
+    ],
+    "verdict": "REPRODUCED"
+  }
+}
