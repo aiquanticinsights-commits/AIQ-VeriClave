@@ -1,5 +1,6 @@
 """Unit tests for machine-readable verifier feedback (no infra)."""
 import json
+import os
 import unittest
 
 from diagnostics import (DIAGNOSTICS, REMEDY, Diagnostic, diagnose,
@@ -16,7 +17,7 @@ class TestSchema(unittest.TestCase):
             self.assertIn(c, DIAGNOSTICS)
 
     def test_matches_bench_manifest(self):
-        bench = json.load(open(r'C:\Projects\ChipDesign\AIQ-VeriClave\P4_BENCH_v1.json',
+        bench = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'P4_BENCH_v1.json'),
                                encoding='utf-8'))
         self.assertEqual(set(bench["diagnostics"]), DIAGNOSTICS)
 

@@ -30,5 +30,6 @@ RUN python3 -m venv /opt/vericlave-venv \
 COPY . /work/AIQ-VeriClave
 WORKDIR /work/AIQ-VeriClave
 
-# P0 contract: entire executable gate (ARCHITECTURE.md acceptance mapping)
+# P0 contract: entire executable gate (acceptance mapping in the consolidated
+# architecture doc + ARCHITECTURE_DELTAS_V8.md)
 CMD ["/opt/vericlave-venv/bin/python", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"]

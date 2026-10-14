@@ -1,0 +1,46 @@
+# AIQ-VeriClave P5 independent re-run (second executor: Linux CI).
+# Runs p5_rerun.py in a clean process against frozen inputs and compares
+# byte-identically with committed P5_EXECUTION.json. Any mismatch fails loudly.
+# Stdlib only — no pip install, no GPU, no EDA tools required.
+name: p5-rerun
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "p5_execute.py"
+      - "p5_rerun.py"
+      - "P5_FREEZE_v1.json"
+      - "P4_BENCH_v1.json"
+      - "P4_HELDOUT_v1.json"
+      - "P5_EXECUTION.json"
+      - "test_p5_*.py"
+      - ".github/workflows/p5-rerun.yml"
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  independent-rerun:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Python version (recorded, not enforced)
+        run: python3 --version
+
+      - name: Independent re-run (clean process, frozen baseline)
+        run: python3 p5_rerun.py
+
+      - name: Focused unit tests (portable subset)
+        run: >
+          python3 -m unittest test_p5_rerun test_p5_execute
+          test_p5_freeze test_p4_heldout test_p4_bench test_diagnostics
+
+      - name: Upload re-run evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: p5-rerun-evidence
+          path: P5_RERUN.json

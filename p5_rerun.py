@@ -13,11 +13,12 @@ that a one-command operation for whoever does it next.
 from __future__ import annotations
 
 import json
+import os
 import subprocess
 import sys
 
-BASE = r'C:\Projects\ChipDesign\AIQ-VeriClave'
-BASELINE = BASE + r'\P5_EXECUTION.json'
+BASE = os.path.dirname(os.path.abspath(__file__))
+BASELINE = os.path.join(BASE, "P5_EXECUTION.json")
 RUN_META_KEYS = ("reproducible",)
 
 
@@ -63,6 +64,6 @@ if __name__ == "__main__":
                              {f: {"verdict": vv["verdict"]} for f, vv in v.items()})
                         for k, v in fresh.items()},
               "comparison": finding}
-    with open("P5_RERUN.json", "w", encoding="utf-8") as f:
+    with open(os.path.join(BASE, "P5_RERUN.json"), "w", encoding="utf-8") as f:
         json.dump(record, f, indent=2)
     print(json.dumps(finding, indent=2))

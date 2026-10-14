@@ -1,8 +1,9 @@
 """Unit tests for the frozen P4 benchmark protocol (no infra)."""
 import json
+import os
 import unittest
 
-PATH = r'C:\Projects\ChipDesign\AIQ-VeriClave\P4_BENCH_v1.json'
+PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'P4_BENCH_v1.json')
 REQUIRED_DIAGNOSTICS = {"SYNTAX_ERROR", "FORMAL_COUNTEREXAMPLE", "ASSERTION_FAIL",
                         "TIMEOUT", "UNPROVEN", "MUTANT_SURVIVED", "TRACE_MISMATCH",
                         "WIDTH_MISMATCH", "SIGNAL_NOT_FOUND", "RESET_MISMATCH",

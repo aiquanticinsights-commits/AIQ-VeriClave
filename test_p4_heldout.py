@@ -1,8 +1,9 @@
 """Unit tests for the frozen held-out family manifest (no infra)."""
 import json
+import os
 import unittest
 
-PATH = r'C:\Projects\ChipDesign\AIQ-VeriClave\P4_HELDOUT_v1.json'
+PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'P4_HELDOUT_v1.json')
 
 
 def load():

@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 
 from closure import ClosureBoundary
 from diagnostics import from_failure_event
@@ -24,7 +25,7 @@ from intent import Clock, Reset, Signal, VerificationIntent
 from trace import Traceability
 
 FROZEN = ("P5_FREEZE_v1.json", "P4_BENCH_v1.json", "P4_HELDOUT_v1.json")
-BASE = r'C:\Projects\ChipDesign\AIQ-VeriClave'
+REPO_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 
 def sha(p: str) -> str:
@@ -37,7 +38,7 @@ def sha(p: str) -> str:
 
 def freeze_guard() -> dict:
     """Snapshot frozen inputs. Call again after the run; mismatch aborts."""
-    return {f: sha(f"{BASE}\\{f}") for f in FROZEN}
+    return {f: sha(os.path.join(REPO_ROOT, f)) for f in FROZEN}
 
 
 # --------------------------------------------------------------------------

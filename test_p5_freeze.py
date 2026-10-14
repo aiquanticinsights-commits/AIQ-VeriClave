@@ -1,12 +1,13 @@
 """Unit tests for P5 freeze consistency (no infra)."""
 import json
+import os
 import unittest
 
-BASE = r'C:\Projects\ChipDesign\AIQ-VeriClave'
+BASE = os.path.dirname(os.path.abspath(__file__))
 
 
 def load(name):
-    with open(f'{BASE}\\{name}', encoding='utf-8') as f:
+    with open(os.path.join(BASE, name), encoding='utf-8') as f:
         return json.load(f)
 
 
@@ -21,7 +22,7 @@ class TestFreeze(unittest.TestCase):
         import os
         for f in ("P5_QUALIFICATION_PROTOCOL.md", "P4_HELDOUT_v1.json",
                   "P4_BENCH_v1.json", "P4_EXIT_REVIEW.md"):
-            self.assertTrue(os.path.exists(f"{BASE}\\{f}"), f)
+            self.assertTrue(os.path.exists(os.path.join(BASE, f)), f)
 
     def test_families_match_manifest(self):
         freeze = load('P5_FREEZE_v1.json')
