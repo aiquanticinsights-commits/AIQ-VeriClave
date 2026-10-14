@@ -34,6 +34,13 @@ jobs:
       - name: Independent re-run (clean process, frozen baseline)
         run: python3 p5_rerun.py
 
+      - name: Gate on REPRODUCED verdict (mismatch fails the job)
+        run: >
+          python3 -c "import json;
+          v=json.load(open('P5_RERUN.json'))['comparison']['verdict'];
+          assert v=='REPRODUCED', v;
+          print('verdict:', v)"
+
       - name: Focused unit tests (portable subset)
         run: >
           python3 -m unittest test_p5_rerun test_p5_execute
