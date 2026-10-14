@@ -1,7 +1,7 @@
 # P4 Exit Review — GO with conditions (evidence: `P4_EXIT_EVIDENCE.json`)
 
 Date: 2026-10-13. Reviewer: opencode session (machine-generated draft) —
-**human sign-off: PENDING** (named human required per `policy.HUMAN_SIGNOFF_ACTIONS`).
+**human sign-off: SIGNED — Satish Sura, 2026-10-13** (per `policy.HUMAN_SIGNOFF_ACTIONS`).
 
 ## Method
 End-to-end demonstration (`demo_p4_exit.py`) on async-fifo (held-out family
@@ -34,4 +34,4 @@ P4-01..P4-14 artifacts exist with green tests.
 (E2 across the executable items); pilot execution (P4-12) and independent
 re-runs remain open by design. Formal *execution* on this host recorded
 UNAVAILABLE (Windows); Linux CI owns sby-backed proof per `formal_policy.py`.
-No training authorized or required for this verdict. Human sign-off PENDING.
+No training authorized or required for this verdict. Human sign-off: SIGNED (Satish Sura, 2026-10-13).

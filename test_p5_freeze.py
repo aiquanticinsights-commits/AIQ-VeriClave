@@ -13,7 +13,7 @@ def load(name):
 class TestFreeze(unittest.TestCase):
     def test_freeze_status(self):
         d = load('P5_FREEZE_v1.json')
-        self.assertEqual(d["status"], "prepared-pending-signoff")
+        self.assertEqual(d["status"], "ratified")
         self.assertTrue(d["repo_commit"])
         self.assertEqual(len(d["repo_commit"]), 40)
 
@@ -35,9 +35,11 @@ class TestFreeze(unittest.TestCase):
         self.assertIn("P4_BENCH_v1.json", freeze["acceptance"]["source"])
         self.assertIn("FA=0", freeze["acceptance"]["bars"])
 
-    def test_signoff_still_pending(self):
+    def test_signoff_ratified(self):
         d = load('P5_FREEZE_v1.json')
-        self.assertIn("PENDING", d["human_signoff"])
+        self.assertEqual(d["status"], "ratified")
+        self.assertIn("Satish Sura", d["human_signoff"])
+        self.assertNotIn("PENDING", d["human_signoff"])
 
     def test_model_config_complete(self):
         mc = load('P5_FREEZE_v1.json')["model_config"]
