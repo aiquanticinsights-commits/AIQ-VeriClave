@@ -11,6 +11,26 @@
 - Use ONLY the frozen tasks: `round-robin-arbiter`, `interrupt-controller`
   (definitions in `pilot_assist.py:TASKS`). Same mutants, same bars.
 
+## Attestation procedure (gate before any task work)
+
+Run `pilot_human.attest_gate()` (scripted; no manual substitute) BEFORE
+starting task 1. The mapping is uniform: **yes = clean on all three
+questions**. The gate echoes the recorded meaning; any non-yes answer
+aborts the session with a sealed abort record — no tasks, no times, no
+data (protocol amendment A1).
+
+Pre-session blackout checklist (prevents recurrence of the 2026-10-14
+abort):
+1. Close AI assistants, LLM browser tabs, and copilot-style completions.
+2. Confirm you understand the uniform mapping: yes/yes/yes proceeds;
+   anything else aborts. (The retired Q2 wording — "have you used no AI
+   assistance?" — admitted two readings of a "no" answer; the current
+   wording does not. If any question ever reads ambiguously to you, STOP
+   and ask before answering: a confused attestation voids the session
+   either way.)
+3. Work only from the blinded spec sheets in `P7_PILOT_HUMAN_TEMPLATE.json`
+   plus this runbook and the walkthrough. Never open assisted-arm outputs.
+
 ## Procedure (per task, capped at 4 hours each)
 1. Record start time. Work unassisted: no AIQ-VeriClave pipeline, no LLM
    help beyond what the protocol allows (none). Editor + simulator + docs.

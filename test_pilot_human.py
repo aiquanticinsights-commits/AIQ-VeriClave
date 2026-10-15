@@ -7,8 +7,8 @@ import unittest
 
 import pilot_human
 from pilot_human import (BANNED_TERMS, PHASES, PilotSession, PhaseError,
-                         QUESTION_BANK, ask_number, ask_yes_no, run_checker_module,
-                         seal_record)
+                         QUESTION_BANK, ask_number, ask_yes_no, attest_gate,
+                         run_checker_module, seal_record)
 
 
 class FakeClock:
@@ -151,6 +151,60 @@ class TestAskHelpers(unittest.TestCase):
         self.assertEqual(ask_number("q", input_fn=lambda p: "4.5", print_fn=lambda x: None), 4.5)
         answers = iter(["abc", "-1", "3"])
         self.assertEqual(ask_number("q", input_fn=lambda p: next(answers), print_fn=lambda x: None), 3.0)
+
+
+def _scripted_answers(*words):
+    it = iter(words)
+    echoed = []
+
+    def input_fn(prompt):
+        return next(it)
+
+    def print_fn(msg):
+        echoed.append(msg)
+
+    return input_fn, print_fn, echoed
+
+
+class TestAttestGate(unittest.TestCase):
+    """Regression tests for the 2026-10-14 abort: the old Q2 wording
+    ('have you used no AI assistance?') admitted two readings of 'no'.
+    The gate requires uniform yes=clean and echoes the recorded meaning."""
+
+    def test_q2_wording_is_affirmative(self):
+        q2 = QUESTION_BANK["attest_no_ai"]
+        self.assertIn("Q2", q2)
+        self.assertIn("did you", q2.lower())
+        self.assertNotRegex(q2.lower(), r"\bused no\b")
+
+    def test_all_yes_is_clean_with_echo(self):
+        input_fn, print_fn, echoed = _scripted_answers("yes", "yes", "yes")
+        r = attest_gate(input_fn, print_fn)
+        self.assertTrue(r["clean"])
+        self.assertIsNone(r["abort_reason"])
+        self.assertEqual(r["answers"],
+                         {"attest_no_peek": True, "attest_no_ai": True,
+                          "attest_spec_only": True})
+        self.assertTrue(any("clean on Q1" in m for m in echoed), echoed)
+
+    def test_each_no_aborts_naming_the_question(self):
+        for i, key in enumerate(("attest_no_peek", "attest_no_ai",
+                                 "attest_spec_only")):
+            words = ["yes", "yes", "yes"]
+            words[i] = "no"
+            input_fn, print_fn, echoed = _scripted_answers(*words)
+            r = attest_gate(input_fn, print_fn)
+            self.assertFalse(r["clean"], key)
+            self.assertIn(f"{key}=no", r["abort_reason"], key)
+            self.assertTrue(any("ABORT" in m for m in echoed), key)
+
+    def test_runbook_has_attestation_procedure(self):
+        here = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(here, "HUMAN_ARM_RUNBOOK.md"),
+                  encoding="utf-8") as f:
+            text = f.read()
+        self.assertIn("## Attestation procedure", text)
+        self.assertIn("yes = clean", text)
 
 
 if __name__ == "__main__":

@@ -21,7 +21,7 @@ TASKS = ("round-robin-arbiter", "interrupt-controller")
 # below is the enforced counterpart, tested in test_pilot_human.py).
 QUESTION_BANK = {
     "attest_no_peek": "Q1: This session, have you worked only from the allowed materials (spec sheets, runbook, walkthrough)? (yes/no)",
-    "attest_no_ai": "Q2: This session, have you used no AI assistance for authoring? (yes/no)",
+    "attest_no_ai": "Q2: This session, did you author everything yourself with no AI assistance? (yes/no)",
     "attest_spec_only": "Q3: Are you working from the spec sheets only? (yes/no)",
     "initials": "Your initials (used in the output filename):",
     "checker_path": "Path to your checker module file for this task:",
@@ -117,7 +117,7 @@ def ask_yes_no(prompt: str, input_fn=input, print_fn=print) -> bool:
 
 
 def ask_number(prompt: str, input_fn=input, print_fn=print,
-               lo: float = 0.0) -> float:
+             lo: float = 0.0) -> float:
     while True:
         raw = input_fn(prompt + " ").strip()
         try:
@@ -129,6 +129,30 @@ def ask_number(prompt: str, input_fn=input, print_fn=print,
             print_fn(f"Please enter a number >= {lo}.")
             continue
         return val
+
+
+ATTEST_KEYS = ("attest_no_peek", "attest_no_ai", "attest_spec_only")
+
+
+def attest_gate(input_fn=input, print_fn=print) -> dict:
+    """Scripted attestation gate: all three answers must be yes (uniform
+    yes=clean mapping across Q1/Q2/Q3). Echoes the recorded meaning back
+    so ambiguity is caught at answer time, not post-hoc. Returns
+    {"clean": bool, "answers": {...}, "abort_reason": str|None}.
+    No tasks may start unless clean is True."""
+    answers = {}
+    for key in ATTEST_KEYS:
+        answers[key] = ask_yes_no(QUESTION_BANK[key], input_fn, print_fn)
+    bad = [k for k, v in answers.items() if not v]
+    if not bad:
+        print_fn("Recorded: clean on Q1 (allowed materials only), Q2 (no "
+                 "AI authoring), Q3 (spec sheets only). Proceeding.")
+        return {"clean": True, "answers": answers, "abort_reason": None}
+    reason = ("attestation not clean: "
+              + ", ".join(f"{k}=no" for k in bad)
+              + " — no tasks started, no data collected (protocol A1)")
+    print_fn("ABORT. " + reason)
+    return {"clean": False, "answers": answers, "abort_reason": reason}
 
 
 def run_checker_module(path: str, timeout_s: int = 600) -> dict:
