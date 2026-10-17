@@ -8,7 +8,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="aiq-vericlave",
-    version="0.9.0",
+    version="0.9.1",
     author="Satish Sura",
     author_email="satish@aiqi.in",
     description="AIQ-VeriClave: Evidence-first AI verification platform for silicon design",

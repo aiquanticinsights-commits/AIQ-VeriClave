@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "aiq-vericlave"
-version = "0.9.0"
+version = "0.9.1"
 description = "AIQ-VeriClave: Evidence-first AI verification platform for silicon design"
 readme = "README.md"
 license = {text = "Apache-2.0"}
