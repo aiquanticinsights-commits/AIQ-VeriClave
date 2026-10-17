@@ -43,8 +43,10 @@ execution pipeline: [`../V2X-OBU-AIS230/docs/AI_VERIFY_EXECUTION_PLAN.md`](../V2
 ## Quickstart
 
 ```powershell
-# 1. Python 3.10+ (repo CI uses 3.11). CPU-only; no GPU needed for P0.
-pip install -r requirements.txt   # cocotb, pytest, pyyaml (optional)
+# 1. Python 3.10+ (repo CI uses 3.11). CPU-only; no GPU needed.
+pip install .                        # installs aiq-vericlave + deps
+# or, for development:
+pip install -e ".[dev]"
 
 # 2. Contract check — stdlib only, runs anywhere:
 python -m unittest discover -s . -p "test_*.py"
@@ -70,21 +72,30 @@ agentic workflow (skills per pipeline stage), see [`OPENCODE_WORKFLOW.md`](OPENC
 | `sim_adapters.py`, `vcd_events.py`, `formal_policy.py`, `uvm_gen.py` | Vendor log adapters, VCD drift pinpointer, bounded-formal policy, UVM skeletons |
 | `datasets.py` | External corpora registry (license/consumer/caveats enforced by tests) |
 | `bakeoff.py`, `mutate.py`, `localize.py`, `repair.py`, `review.py`, `portability.py`, … | Pipeline stage implementations |
+| `p5_execute.py`, `p5_rerun.py` | P5 freeze-gated execution + independent re-run |
+| `pilot_assist.py`, `pilot_human.py` | P7 pilot: assisted arm + interactive human arm |
+| `simple_signoff.py` | Automated gate checks + plain-English sign-off CLI |
 | `test_*.py` | Deterministic unit tests (fixed seeds, no network, no GPU) |
 | `skills/` | OpenCode skill definitions per stage (`ai-verify-harness`, `ai-mutate`, …) |
 | `P0*_*.md`, `P1_*`, `P2_*`, `P3_*`, `GATE_*` | Signed gate reviews and evidence records |
-| `.github/workflows/vericlave.yml` | CI |
+| `.github/workflows/` | CI: `vericlave.yml` (tests), `p5-rerun.yml` (re-run), `release.yml` (packaging), `signoff.yml` (gated sign-off) |
 
 ## Roadmap (gated — phases unlock on evidence, never on dates)
 
-- [x] **PHASE 0** — CPU-first P0: harness, frozen models, C1–C5 baselines → **GO (V8 sign-off)**
-- [x] **PHASE 1** — CPU model benchmark + baseline pick → **COMPLETE**
-- [x] **PHASE 2** — Verification system evaluation → **CLOSED, training NOT authorized** (walls documented)
-- [ ] **PHASE 3** — Proprietary dataset (trajectories, mutants, proofs, closures) — *in progress: 4 controlled tracks*
-- [ ] **PHASE 4** — SFT/LoRA, only if a model-specific limitation is proven
-- [ ] **PHASE 5** — Specialized small models (router, classifiers, reranker)
-- [ ] **PHASE 6** — GRPO experiment, only if a measured residual suits RL
-- [ ] **PHASE 7** — Productization (local-first, Apache-2.0 weights, eval cards)
+Program track (P0–P7 plan, see [`DEVELOPMENT_ROADMAP_P4_P7.md`](DEVELOPMENT_ROADMAP_P4_P7.md)):
+
+- [x] **P0** — CPU-first baseline: harness, frozen models, C1–C5 → **GO (V8 sign-off)**
+- [x] **P1** — CPU model benchmark + baseline pick → **COMPLETE**
+- [x] **P2** — Verification system evaluation → **CLOSED, training NOT authorized**
+- [x] **P3** — Capability tracks (4 controlled experiments) → **CLOSED** (walls stand)
+- [x] **P4** — Benchmark protocol, held-out families, intent/generation, diagnostics → **EXIT SIGNED**
+- [x] **P5** — Freeze-gated execution: 4/4 PASS, independent re-run REPRODUCED → **v0.9.0**
+- [ ] **P6** — Productization: packaging (PyPI/Docker), release automation → *in progress*
+- [ ] **P7** — Pilot: human-only vs assisted → *assisted arm done, human arm pending*
+
+> The `PHASE 0–7` training-strategy roadmap in [`p0.py`](p0.py) (SFT/LoRA, specialized
+> models, GRPO) remains **unauthorized** — PHASE 2 closed with training NOT authorized,
+> and the walls (T4, R2) are tracked as open issues rather than worked around.
 
 ## Design principles (the short version)
 
