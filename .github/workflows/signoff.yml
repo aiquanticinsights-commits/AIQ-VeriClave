@@ -1,0 +1,100 @@
+name: AIQ-VeriClave Sign-Off
+
+on:
+  workflow_dispatch:
+    inputs:
+      phase:
+        description: 'Phase to sign off (P0, P4, P5, etc.)'
+        required: true
+        type: choice
+        options:
+          - P0
+          - P4
+          - P5
+          - P1
+          - P2
+          - P3
+      signoff:
+        description: 'Agree or Disagree'
+        required: true
+        type: choice
+        options:
+          - Agree
+          - Disagree
+      name:
+        description: 'Your name'
+        required: true
+      role:
+        description: 'Your role (Lead, Reviewer, Owner, etc.)'
+        required: true
+      notes:
+        description: 'Any notes (optional)'
+        required: false
+      phase:
+        description: 'Phase to sign off (P0, P1, P2, P3, P4, P5, P6, P7)'
+        required: true
+        type: choice
+        options:
+          - P0
+          - P1
+          - P2
+          - P3
+          - P4
+          - P5
+          - P6
+          - P7
+
+permissions:
+  contents: write
+  contents: read
+
+jobs:
+  signoff:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          
+      - name: Install dependencies
+        run: |
+          pip install pyyaml
+          
+      - name: Run automated gate checks
+        id: gates
+        run: |
+          python simple_signoff.py --check-gates
+        continue-on-error: false
+        
+      - name: Record sign-off
+        if: github.event.inputs.signoff == 'Agree'
+        run: |
+          python simple_signoff.py --signoff --non-interactive \
+            --phase "${{ github.event.inputs.phase }}" \
+            --name "${{ github.event.inputs.name }}" \
+            --role "${{ github.event.inputs.role }}" \
+            --notes "${{ github.event.inputs.notes }}"
+        env:
+          SIGNOFF_NAME: ${{ github.event.inputs.name }}
+          SIGNOFF_ROLE: ${{ github.event.inputs.role }}
+          SIGNOFF_NOTES: ${{ github.event.inputs.notes }}
+          
+      - name: Commit sign-off
+        if: github.event.inputs.signoff == 'Agree'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add PROGRAM_LEDGER.md
+          git commit -m "Sign-off: ${{ github.event.inputs.phase }} ${{ github.event.inputs.signoff }} by ${{ github.event.inputs.name }} (${{ github.event.inputs.role }})"
+          git push
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
