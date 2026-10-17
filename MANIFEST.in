@@ -1,0 +1,115 @@
+# MANIFEST.in for AIQ-VeriClave
+# Include all necessary files for distribution
+
+# Include all Python files
+recursive-include . *.py
+
+# Include documentation
+include README.md
+include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+include CODE_OF_CONDUCT.md
+include LICENSE
+include INSTALL.md
+
+# Include configuration files
+include pyproject.toml
+include setup.py
+include setup.cfg
+include requirements.txt
+include requirements-dev.txt
+
+# Include documentation
+recursive-include docs *.md *.rst *.txt *.png *.jpg *.svg
+
+# Include configuration files
+include .github/workflows/*.yml
+include .github/workflows/*.yaml
+include .github/ISSUE_TEMPLATE/*.md
+include .github/ISSUE_TEMPLATE/*.yml
+include .github/PULL_REQUEST_TEMPLATE.md
+
+# Include configuration files
+include .gitignore
+include .dockerignore
+include Dockerfile
+include docker-compose.yml
+include docker-compose.override.yml.example
+
+# Include configuration directories
+recursive-include .github *
+recursive-include configs *
+recursive-include config *
+recursive-include scripts *
+
+# Include skills
+recursive-include skills *
+
+# Include test files
+recursive-include tests *.py
+recursive-include tests *.json
+recursive-include tests *.yaml
+recursive-include tests *.yml
+
+# Include evidence and data
+recursive-include evidence *.json *.md *.csv
+recursive-include data *.json *.csv *.txt
+
+# Include Docker
+include Dockerfile
+include docker-compose.yml
+include docker-compose.override.yml.example
+include .dockerignore
+
+# Include skills directory
+recursive-include skills *
+
+# Include all markdown files
+recursive-include . *.md
+
+# Include JSON configuration files
+recursive-include . *.json
+
+# Include YAML files
+recursive-include . *.yml
+recursive-include . *.yaml
+
+# Include requirements
+include requirements*.txt
+
+# Include license and legal
+include LICENSE
+include LICENSE.txt
+include NOTICE
+include NOTICE.txt
+
+# Exclude patterns
+prune .git
+prune __pycache__
+prune .pytest_cache
+prune .mypy_cache
+prune .ruff_cache
+prune .coverage
+prune .tox
+prune dist
+prune build
+prune *.egg-info
+prune .venv
+prune venv
+prune .venv
+prune node_modules
+prune .next
+prune .git
+prune *.egg-info
+prune *.pyc
+prune *.pyo
+prune *.pyd
+prune .DS_Store
+prune Thumbs.db
+prune *.log
+prune *.tmp
+prune *.temp
+prune *.swp
+prune *.swo
+prune *~

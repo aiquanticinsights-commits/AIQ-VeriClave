@@ -1,35 +1,107 @@
-# AIQ-VeriClave P0 CPU image — mirrors WSL Ubuntu truth layer (locked 2026-09-28).
-# WSL reference: Ubuntu 26.04, Verilator 5.032, Yosys 0.52, SBY 0.68,
-# Python 3.14 + cocotb 2.1.0 + pytest 9.1.1 in venv (PEP 668).
-# Docker uses Ubuntu 24.04 LTS (nearest stable image with apt verilator/yosys);
-# version drift is caught by CI `*- --version` checks, not assumed equal.
-FROM ubuntu:24.04
+# AIQ-VeriClave Docker Image
+# Multi-stage build for minimal production image
 
+# =============================================================================
+# Stage 1: Base build environment with EDA tools
+# =============================================================================
+FROM ubuntu:24.04 AS builder
+
+# Build arguments
+ARG TARGETPLATFORM
+ARG BUILDPLATFORM
+ARG TARGETOS
+ARG TARGETARCH
+
+# Environment
 ENV DEBIAN_FRONTEND=noninteractive \
     PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
 
+# Install system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3 python3-venv python3-pip \
-    verilator yosys sby g++ \
-    git make curl ca-certificates \
- && rm -rf /var/lib/apt/lists/* \
-  || (apt-get update && apt-get install -y --no-install-recommends \
-     python3 python3-venv python3-pip \
-     verilator yosys g++ \
-     git make curl ca-certificates \
-  && rm -rf /var/lib/apt/lists/*)
-# (sby is absent from some Ubuntu apt pools — CI treats it as non-blocking P0;
-# WSL host carries SBY 0.68 as the reference formal runner. g++ enables
-# --cc simulation builds inside the image for the E2 benchmark.)
-WORKDIR /work
-COPY requirements.txt /work/requirements.txt
-RUN python3 -m venv /opt/vericlave-venv \
- && /opt/vericlave-venv/bin/pip install --no-cache-dir -r /work/requirements.txt
+    python3 \
+    python3-venv \
+    python3-pip \
+    python3-dev \
+    python3-venv \
+    verilator \
+    yosys \
+    sby \
+    g++ \
+    git \
+    make \
+    curl \
+    ca-certificates \
+    pkg-config \
+    && rm -rf /var/lib/apt/lists/*
 
-COPY . /work/AIQ-VeriClave
-WORKDIR /work/AIQ-VeriClave
+# Create virtual environment
+RUN python3 -m venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
 
-# P0 contract: entire executable gate (acceptance mapping in the consolidated
-# architecture doc + ARCHITECTURE_DELTAS_V8.md)
-CMD ["/opt/vericlave-venv/bin/python", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py"]
+# Upgrade pip and install build dependencies
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel
+
+# =============================================================================
+# Stage 2: Python dependencies
+# =============================================================================
+FROM builder AS python-deps
+
+# Copy requirements first for better caching
+COPY requirements.txt /tmp/requirements.txt
+
+# Install Python dependencies
+RUN pip install --no-cache-dir --upgrade pip setuptools wheel && \
+    pip install --no-cache-dir -r /tmp/requirements.txt
+
+# Install the package in development mode
+COPY . /app
+WORKDIR /app
+RUN pip install --no-cache-dir -e .
+
+# =============================================================================
+# Stage 3: Final runtime image
+# =============================================================================
+FROM ubuntu:24.04 AS runtime
+
+# Install runtime dependencies only
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3 \
+    python3-venv \
+    verilator \
+    yosys \
+    sby \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy virtual environment from builder
+COPY --from=python-deps /opt/venv /opt/venv
+ENV PATH="/opt/venv/bin:$PATH"
+
+# Copy application code
+COPY --from=builder /app /app
+WORKDIR /app
+
+# Create non-root user
+RUN groupadd -r vericlave && useradd -r -g vericlave -m -d /home/vericlave -s /bin/bash vericlave
+USER vericlave
+
+# Set working directory
+WORKDIR /home/vericlave
+
+# Default command runs the test suite
+CMD ["python", "-m", "unittest", "discover", "-s", ".", "-p", "test_*.py", "-v"]
+
+# Health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=10s --retries=3 \
+    CMD python -c "import sys; sys.exit(0)" || exit 1
+
+# Labels
+LABEL org.opencontainers.image.title="AIQ-VeriClave"
+LABEL org.opencontainers.image.description="AIQ-VeriClave: Evidence-first AI verification platform for silicon design"
+LABEL org.opencontainers.image.version="0.9.0"
+LABEL org.opencontainers.image.authors="Satish Sura <satish@aiqi.in>"
+LABEL org.opencontainers.image.source="https://github.com/aiquanticinsights-commits/AIQ-VeriClave"
+LABEL org.opencontainers.image.documentation="https://aiqi.in/docs"
+LABEL org.opencontainers.image.licenses="Apache-2.0"

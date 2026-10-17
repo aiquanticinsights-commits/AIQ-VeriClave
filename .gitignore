@@ -51,3 +51,8 @@ R5_PARTIAL.json
 
 R4_PARTIAL.json
 
+dist/
+build/
+*.egg-info/
+viv_work_r2/
+
