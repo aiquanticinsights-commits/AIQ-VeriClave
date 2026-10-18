@@ -25,7 +25,8 @@ QUESTION_BANK = {
     "attest_spec_only": "Q3: Are you working from the spec sheets only? (yes/no)",
     "initials": "Your initials (used in the output filename):",
     "checker_path": "Path to your checker module file for this task:",
-    "retry_measure": "Retry this task's measurement? (yes/no):",
+    "checker_help": "Enter a path, a number from the list, '?' for options, "
+                    "or 'abort' to stop:",
     "phase_done": "Type DONE when finished (timer stops):",
     "review_minutes": "Review minutes, as a number:",
     "reviewer": "Reviewer initials (your own are fine):",
@@ -228,6 +229,88 @@ def _repo_commit() -> str:
     return "unknown"
 
 
+_CHECKER_SKIP_PREFIXES = ("test_", "conftest", "pilot_", "eval_", "p5")
+
+
+def _normalize_path_input(raw: str) -> str:
+    p = raw.strip()
+    while p:
+        if len(p) >= 2 and p[0] == p[-1] and p[0] in ("'", '"'):
+            p = p[1:-1].strip()
+            continue
+        low = p.lower()
+        for pre in ("python3 ", "python ", "py ", ".\\", "./"):
+            if low.startswith(pre):
+                p = p[len(pre):].strip()
+                break
+        else:
+            break
+    return p
+
+
+def _candidate_checkers(root: str, task: str) -> list[str]:
+    tokens = [t for t in task.split("-") if len(t) >= 2]
+    try:
+        names = [n for n in sorted(os.listdir(root))
+                 if n.lower().endswith(".py")
+                 and not n.lower().startswith(_CHECKER_SKIP_PREFIXES)]
+    except OSError:
+        return []
+    hits = [n for n in names if any(t in n.lower() for t in tokens)]
+    if hits:
+        return [os.path.join(root, n) for n in hits]
+    chk = [n for n in names if "chk" in n.lower() or "checker" in n.lower()]
+    return [os.path.join(root, n) for n in chk]
+
+
+def _show_checker_menu(cands, print_fn) -> None:
+    print_fn("Candidate checker files (enter a number, or paste a full path):")
+    for i, c in enumerate(cands, 1):
+        print_fn(f"  {i}. {c}")
+
+
+def _prompt_checker(task: str, input_fn, print_fn) -> str | None:
+    cands = _candidate_checkers(os.getcwd(), task)
+    prompt = QUESTION_BANK.get("checker_path",
+                               "Path to your checker module file for this task:")
+    hint = QUESTION_BANK.get(
+        "checker_help",
+        "Enter a path, a number, '?' for options, or 'abort' to stop:")
+    while True:
+        raw = _normalize_path_input(input_fn(prompt + " "))
+        low = raw.lower()
+        if low in ("abort", "quit", "exit"):
+            return None
+        if raw == "" or low in ("?", "help", "list", "ls"):
+            if cands:
+                _show_checker_menu(cands, print_fn)
+            else:
+                print_fn("No nearby .py files found; paste a full path.")
+            print_fn(hint)
+            continue
+        if raw.isdigit() and cands:
+            idx = int(raw)
+            if 1 <= idx <= len(cands):
+                return cands[idx - 1]
+            print_fn("No such option.")
+            continue
+        path = os.path.abspath(raw)
+        if os.path.isdir(path):
+            sub = _candidate_checkers(path, task)
+            if sub:
+                cands = sub
+                _show_checker_menu(cands, print_fn)
+            else:
+                print_fn(f"No .py files found in {path}; paste a full path.")
+            continue
+        if os.path.isfile(path):
+            return path
+        print_fn(f"Not found: {path}")
+        if cands:
+            _show_checker_menu(cands, print_fn)
+        print_fn(hint)
+
+
 def main(input_fn=input, print_fn=print, clock=time.monotonic,
          outdir: str | None = None) -> int:
     """Drive one full human-arm session from start to sealed record.
@@ -284,21 +367,15 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
         checker = ""
         data = None
         while True:
-            checker = _ask_text("checker_path", input_fn, print_fn)
-            if not checker:
-                print_fn("A checker path is required to measure.")
-                continue
+            checker = _prompt_checker(task, input_fn, print_fn)
+            if checker is None:
+                break
             try:
                 data = run_checker_module(checker)
+                break
             except (FileNotFoundError, ValueError, RuntimeError) as exc:
                 print_fn(f"Checker run failed: {exc}")
-                retry = QUESTION_BANK.get(
-                    "retry_measure",
-                    "Retry this task's measurement? (yes/no):")
-                if not ask_yes_no(retry, input_fn, print_fn):
-                    break
-                continue
-            break
+                print_fn("Enter '?' to list candidate files, or 'abort' to stop.")
         measure_s = session.end_phase(expect=f"task-{i}-measure")
         results[task] = {
             "authoring_seconds": round(author_s, 1),

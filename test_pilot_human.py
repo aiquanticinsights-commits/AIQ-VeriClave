@@ -266,8 +266,8 @@ class TestMainRunner(unittest.TestCase):
     def test_incomplete_session_not_submittable(self):
         bad = os.path.join(tempfile.mkdtemp(), "missing.py")
         words = ["AA", "yes", "yes", "yes",
-                 "DONE", bad, "no", "0", "AA", "x",
-                 "DONE", "not-a-file", "no", "0", "AA", "x",
+                 "DONE", bad, "abort", "0", "AA", "x",
+                 "DONE", "not-a-file", "abort", "0", "AA", "x",
                  "5", "note"]
         d = tempfile.mkdtemp()
         code, echoed = self._run(words, d)
@@ -281,6 +281,46 @@ class TestMainRunner(unittest.TestCase):
         for task in pilot_human.TASKS:
             self.assertIsNone(rec["tasks"][task]["defects_found"])
         self.assertTrue(any("NOT valid pilot evidence" in m for m in echoed))
+
+    def test_numbered_checker_menu(self):
+        d = tempfile.mkdtemp()
+        body = ('RESULT = {"defects_found": 2, "mutants_total": 2, '
+                '"false_alarms": 0, "iterations": 1, "artifacts": []}\n')
+        for name in ("chk_round_robin.py", "chk_interrupt_controller.py"):
+            with open(os.path.join(d, name), "w", encoding="utf-8") as f:
+                f.write(body)
+        words = ["AA", "yes", "yes", "yes",
+                 "DONE", "1", "3", "AA", "n",
+                 "DONE", "1", "2", "AA", "n",
+                 "4", "ok"]
+        cwd = os.getcwd()
+        os.chdir(d)
+        try:
+            code, echoed = self._run(words, d)
+        finally:
+            os.chdir(cwd)
+        self.assertEqual(code, 0)
+        files = [f for f in os.listdir(d) if f.startswith("P7_PILOT_HUMAN_")]
+        self.assertEqual(len(files), 1)
+        rec = json.load(open(os.path.join(d, files[0]), encoding="utf-8"))
+        self.assertTrue(rec["complete"])
+        self.assertEqual(rec["tasks"]["round-robin-arbiter"]["defects_found"], 2)
+        self.assertEqual(rec["tasks"]["interrupt-controller"]["defects_found"], 2)
+
+
+class TestCheckerPathHelpers(unittest.TestCase):
+    def test_normalize_strips_quotes_and_python(self):
+        n = pilot_human._normalize_path_input
+        self.assertEqual(n('  "C:\\x\\chk.py" '), "C:\\x\\chk.py")
+        self.assertEqual(n("python chk_round_robin.py"), "chk_round_robin.py")
+        self.assertEqual(n("py ./chk.py"), "chk.py")
+
+    def test_candidates_skip_infra_and_tests(self):
+        d = tempfile.mkdtemp()
+        for name in ("chk_rr.py", "test_x.py", "pilot_x.py"):
+            open(os.path.join(d, name), "w", encoding="utf-8").close()
+        cands = pilot_human._candidate_checkers(d, "round-robin-arbiter")
+        self.assertEqual(cands, [os.path.join(d, "chk_rr.py")])
 
 
 if __name__ == "__main__":
