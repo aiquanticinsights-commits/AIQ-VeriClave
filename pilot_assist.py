@@ -8,6 +8,7 @@ No simulated humans anywhere in this file.
 from __future__ import annotations
 
 import json
+import os
 import time
 
 from closure import ClosureBoundary
@@ -143,10 +144,17 @@ def run_pilot() -> dict:
     return out
 
 
-if __name__ == "__main__":
+def main(outdir: str | None = None) -> int:
+    """Run the assisted arm, write P7_PILOT_ASSISTED.json, print verdicts."""
     rep = run_pilot()
-    with open("P7_PILOT_ASSISTED.json", "w", encoding="utf-8") as f:
+    path = os.path.join(outdir or ".", "P7_PILOT_ASSISTED.json")
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(rep, f, indent=2)
     for fam, r in rep["tasks"].items():
         print(f"{fam}: {r['verdict']} defects={r['defects_discovered']}/{r['mutants_total']} "
               f"FA={r['false_alarms']} iters={r['iterations']} t={r['total_task_time_s']}s")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
