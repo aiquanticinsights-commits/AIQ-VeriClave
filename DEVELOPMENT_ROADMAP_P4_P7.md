@@ -28,10 +28,26 @@ P3 CLOSED → P4 system/workflow → P5 held-out qualification → P6 productiza
 
 Also tracked: this file itself (roadmap tracker = DONE on creation).
 
-## P5 → P6 → P7 gates (entry criteria, not started)
-- **P5**: P4 exit (core ≥E2, critical E3 where frozen) + frozen protocol/families/model/criteria → independent eval, leakage controls, FP + review-burden quantified.
-- **P6**: P5 E3 + reproducible deploy, install docs, CI/CD, retention, security model, logging, recovery, stable interface.
-- **P7**: P6 stable + controlled pilot (human-only baseline vs assisted), productivity/quality delta, economics, satisfaction, risks documented.
+## P5 → P6 → P7 gates (status reconciled 2026-10-18)
+
+- **P5 — DONE.** P4 exit signed; freeze ratified; independent re-run REPRODUCED; v0.9.0/V0.9.1 shipped. Evidence: `P5_FREEZE_v1.json` (ratified), `P5_EXECUTION.json`, `P5_RERUN.json`.
+
+- **P6 — IN-PROGRESS** (productization). Per-criterion status:
+
+  | P6 entry criterion | Status | Evidence / remaining |
+  |---|---|---|
+  | P5 qualification at E3 | **DONE** | independent re-run REPRODUCED (`P5_RERUN.json`) |
+  | Reproducible deploy | **DONE (source + Docker)** | Dockerfile builds + runs full contract suite; see `DOCKER_BUILD.md` |
+  | Install docs | **DONE** | `INSTALL.md` |
+  | CI/CD | **DONE** | `vericlave.yml`, `p5-rerun.yml`, `release.yml`, `signoff.yml` all green |
+  | Retention | **DONE** | `INSTALL.md` §Retention; `RECOVERY.md` |
+  | Security model | **DONE** | `SECURITY_MODEL.md` |
+  | Logging | **DONE** | `LOGGING.md` |
+  | Recovery | **DONE** | `RECOVERY.md` (crash-safe partials + resume) |
+  | Stable interface | **DONE** | frozen interfaces in `ARCHITECTURE_STATUS.md` |
+  | Registry publish (PyPI / Docker Hub) | **BLOCKED** | needs `PYPI_API_TOKEN` / `TEST_PYPI_API_TOKEN` / `DOCKER_*` secrets — owner action, not a code gap |
+
+- **P7 — IN-PROGRESS** (pilot value). Assisted arm PASS (`P7_PILOT_ASSISTED.json`); **human arm ABORTED** at the attestation gate (`P4-21`) and must be re-run by a named human with no AI authoring help. E4 / developer-value remains unclaimed until that session completes.
 
 ## Training decision framework (standing)
 Training NOT authorized merely because: more data / model available / larger model wins / benchmark hard / d1 low. Reconsider only on: repeatable gap + exhausted system methods + adequate scale/diversity + contamination screened + balanced labels + learnability + held-out eval + measurable hypothesis + cost justification + audit preservation. (No change — restated for tracker completeness.)

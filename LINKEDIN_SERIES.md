@@ -1,5 +1,5 @@
 # AIQ-VeriClave — LinkedIn Series (9 posts)
-Architecture · Plan · Status · Accomplished · Pending. All figures from signed repo evidence (P0_SIGNOFF_V8.md, P1/P2 completion reviews, P3 scope doc, P4 exit review, P5 freeze + execution/rerun records, v0.9.0 release).
+Architecture · Plan · Status · Accomplished · Pending. All figures from signed repo evidence (P0_SIGNOFF_V8.md, P1/P2 completion reviews, P3 scope doc, P4 exit review, P5 freeze + execution/rerun records, v0.9.1 release).
 
 ---
 

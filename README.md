@@ -13,7 +13,9 @@ closure, human sign-off.
 
 - **Status**: P0 signed GO (gates A–E PASS, C1 = 95.12%) · P1 complete ·
   P2 closed with training explicitly NOT authorized (capability walls stand —
-  see reviews; honesty is the feature) · P3 experimental program in progress.
+  see reviews; honesty is the feature) · P3 CLOSED (system direction validated /
+  training not authorized) · P4 exit signed · P5 qualified + independently
+  reproduced · P6 productization and P7 pilot in progress.
 - **License**: Apache-2.0 — see [LICENSE](LICENSE).
 - **Contributing**: start with [CONTRIBUTING.md](CONTRIBUTING.md) and the
   [Code of Conduct](CODE_OF_CONDUCT.md).
@@ -36,9 +38,9 @@ SPEC + RTL ─► ROUTER ─► GENERATORS (BoN) ─► MACHINE VERIFIERS ─►
 4. **Judge + close**: majority vote with self-check discipline, GoGoTB-style root-cause closure, stall detection (`ai-close`).
 5. **Evidence ledger** (`evidence.py`): hash-chained, 100% audit completeness required, named-human sign-off — no anonymous approvals, no silent gaps.
 
-Full design: [`AIQ_VERICLAVE_MODEL_BLUEPRINT.md`](AIQ_VERICLAVE_MODEL_BLUEPRINT.md) ·
-build order: [`ARCHITECTURE.md`](ARCHITECTURE.md) · diagrams: [`DIAGRAMS.md`](DIAGRAMS.md) ·
-execution pipeline: [`../V2X-OBU-AIS230/docs/AI_VERIFY_EXECUTION_PLAN.md`](../V2X-OBU-AIS230/docs/AI_VERIFY_EXECUTION_PLAN.md).
+Full design: [`Arch-Docs/AIQ_VERICLAVE_MODEL_BLUEPRINT.md`](Arch-Docs/AIQ_VERICLAVE_MODEL_BLUEPRINT.md) ·
+build order: [`Arch-Docs/ARCHITECTURE.md`](Arch-Docs/ARCHITECTURE.md) · diagrams: [`DIAGRAMS.md`](DIAGRAMS.md) ·
+consolidated architecture: [`AIQ-VeriClave_Architecture_Document_Fixed&FinalVersion1.0.md`](AIQ-VeriClave_Architecture_Document_Fixed&FinalVersion1.0.md).
 
 ## Quickstart
 
@@ -89,8 +91,8 @@ Program track (P0–P7 plan, see [`DEVELOPMENT_ROADMAP_P4_P7.md`](DEVELOPMENT_RO
 - [x] **P2** — Verification system evaluation → **CLOSED, training NOT authorized**
 - [x] **P3** — Capability tracks (4 controlled experiments) → **CLOSED** (walls stand)
 - [x] **P4** — Benchmark protocol, held-out families, intent/generation, diagnostics → **EXIT SIGNED**
-- [x] **P5** — Freeze-gated execution: 4/4 PASS, independent re-run REPRODUCED → **v0.9.0**
-- [ ] **P6** — Productization: packaging (PyPI/Docker), release automation → *in progress*
+- [x] **P5** — Freeze-gated execution: 4/4 PASS, independent re-run REPRODUCED → **v0.9.1**
+- [ ] **P6** — Productization: packaging + docs + CI/CD done → *in progress* (registry publish blocked on secrets)
 - [ ] **P7** — Pilot: human-only vs assisted → *assisted arm done, human arm pending*
 
 > The `PHASE 0–7` training-strategy roadmap in [`p0.py`](p0.py) (SFT/LoRA, specialized

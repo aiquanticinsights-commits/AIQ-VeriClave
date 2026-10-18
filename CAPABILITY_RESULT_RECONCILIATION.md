@@ -40,11 +40,13 @@
 
 | Track | Raw result | Verdict / maturity |
 |---|---|---|
-| P3-A 14B local (Qwen2.5-Coder-14B Q4_K_M) | R2 17 closes, FA=0 re-derived; T4 re-measure partial | partial — final verdict sign-off pending |
-| P3-B ensemble (llama+DeepSeek) | union ceiling 3/20 < bar 4 — capability, not selection, problem | **FAIL** (informative) |
-| P3-C structured pipeline | 8/20 closes, 0 FA (baseline 0→8) | partial — final verdict + Qwen amendment pending |
+| P3-A 14B local (Qwen2.5-Coder-14B Q4_K_M) | R2 17/20 closes, FA=0 re-derived (PASS); T4 9/20 = 0.45, FA=0 (amendment A1 re-measure, 20/20 completed) | **PARTIAL / recorded** — R2 wall breached by scale, T4 wall STANDS; verdict + sign-off in `P3_A_VERDICT.json` | 
+| P3-B ensemble (llama+DeepSeek) | union ceiling 3/20 < bar 4 — capability, not selection problem | **FAIL** (closed, approved; `P3_B_ENSEMBLE_VERDICT.json`) |
+| P3-C structured pipeline | Qwen + frozen pipeline: T4 20/20, R2 20/20, 0 FA (llama-only baseline 0/20 + 8/20) | **PASS, scoped, human-APPROVED 2026-10-06** (`P3_C_QWEN_VERDICT.json`) |
 | P3-D data readiness | 278 generations; negatives-rich; no held-out; diversity 1 family / 4–16 bits | **not SFT-ready**; held-out + diversity required |
 | Vivado repeat execution | qualified functions reproducible (`VIVADO_GATES.json`, adapter) | **E2→E3** for qualified functions only — never "full Vivado support" |
+
+**P3 closure (reconciled 2026-10-18):** P3 is CLOSED with signed track verdicts — P3-A PARTIAL, P3-B FAIL (approved), P3-C PASS (approved), P3-D NOT READY (closed). Overall decision recorded in `P3_OVERALL_GATE.json` and `P3_FINAL_DECISION_GATE.json` (human-approved 2026-10-11): *system direction validated / training NOT authorized*. No P3-A/P3-C verdict remains pending; earlier "pending sign-off" wording in this file was stale.
 
 ## Carried constraints (inputs to P4+, not reopeners)
 

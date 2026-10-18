@@ -21,9 +21,9 @@ python eval_harness.py            # 100-task mock report with token/USD ledger
 python p5_rerun.py                # independent re-run vs committed baseline
 ```
 
-Full suite: `python -m unittest discover -s . -p "test_*.py"`.
-Note: a few portability/docker-dependent modules can stall `discover` on some
-hosts (tracked T-02) — run the focused subsets above if that happens.
+Full suite: `python -m unittest discover -s . -p "test_*.py"` (565 tests,
+~80 s on a dev host; T-02 fixed — toolkit probes are now bounded so the suite
+never stalls).
 
 ## Option B — Docker (pinned, reproducible)
 

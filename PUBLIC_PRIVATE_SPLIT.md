@@ -7,7 +7,7 @@ Enforced by review, not by tooling. When in doubt, keep PRIVATE.
 
 - framework (`router.py`, `eval_harness.py`, `rewards.py`, `p0.py`, `evidence.py`, `policy.py`, `compute.py`, `cache_policy.py`, `compact.py`)
 - generic verification infrastructure (`sim_adapters.py`, `vcd_events.py`, `formal_policy.py`, `uvm_gen.py`)
-- documentation (`ARCHITECTURE.md`, `DIAGRAMS.md`, `OPENCODE_WORKFLOW.md`, `ENVIRONMENT_LOCKIN_PLAN.md`, `Dockerfile`, `.github/workflows/`)
+- documentation (`Arch-Docs/ARCHITECTURE.md`, `DIAGRAMS.md`, `OPENCODE_WORKFLOW.md`, `ENVIRONMENT_LOCKIN_PLAN.md`, `SECURITY_MODEL.md`, `Dockerfile`, `.github/workflows/`)
 - open-source integrations, benchmark examples (no customer RTL)
 
 ## PRIVATE / RESTRICTED (this repo — never mirror)
