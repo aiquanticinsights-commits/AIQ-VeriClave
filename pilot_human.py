@@ -25,6 +25,7 @@ QUESTION_BANK = {
     "attest_spec_only": "Q3: Are you working from the spec sheets only? (yes/no)",
     "initials": "Your initials (used in the output filename):",
     "checker_path": "Path to your checker module file for this task:",
+    "retry_measure": "Retry this task's measurement? (yes/no):",
     "phase_done": "Type DONE when finished (timer stops):",
     "review_minutes": "Review minutes, as a number:",
     "reviewer": "Reviewer initials (your own are fine):",
@@ -181,13 +182,15 @@ def run_checker_module(path: str, timeout_s: int = 600) -> dict:
     return data
 
 
-def seal_record(record: dict, outdir: str) -> tuple[str, str]:
+def seal_record(record: dict, outdir: str,
+                prefix: str = "P7_PILOT_HUMAN_") -> tuple[str, str]:
     """Write sealed JSON + return (path, sha256). Post-seal it is read-only
-    to this runner: reruns create new files, never amend."""
+    to this runner: reruns create new files, never amend. `prefix` lets a
+    non-submittable record (aborted/incomplete) land under a distinct name."""
     initials = record.get("engineer", "xx").strip().lower() or "xx"
     stamp = record.get("finished", "noseal")
     safe_stamp = "".join(c if (c.isalnum() or c in "-_") else "-" for c in stamp)
-    path = os.path.join(outdir, f"P7_PILOT_HUMAN_{initials}-{safe_stamp}.json")
+    path = os.path.join(outdir, f"{prefix}{initials}-{safe_stamp}.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(record, f, indent=2)
     digest = hashlib.sha256(open(path, "rb").read()).hexdigest()
@@ -229,9 +232,11 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
          outdir: str | None = None) -> int:
     """Drive one full human-arm session from start to sealed record.
 
-    Returns 0 on a sealed session, 1 on an attestation abort (sealed abort
-    record), 2 if the record could not be sealed. All prompts come from
-    QUESTION_BANK; the runner never authors checks or anticipates results.
+    Returns 0 on a sealed complete session, 1 on an attestation abort
+    (sealed abort record), 2 if the record could not be sealed, 3 on a
+    sealed-but-incomplete session (>=1 task with no valid measurement; not
+    submittable evidence). All prompts come from QUESTION_BANK; the runner
+    never authors checks or anticipates results.
     """
     outdir = outdir or os.getcwd()
     session = PilotSession(clock=clock)
@@ -250,12 +255,14 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
     session.end_phase(expect="attest")
     if not gate["clean"]:
         record = {"engineer": initials, "repo_commit": commit,
-                  "started": started, "finished": _now(), "aborted": True,
+                  "started": started, "finished": _now(), "complete": False,
+                  "aborted": True,
                   "abort_reason": gate["abort_reason"], "attestation": gate,
                   "tasks": {}, "phases_seconds": session.times,
                   "log": session.log, "runner": "pilot_human"}
         try:
-            path, digest = seal_record(record, outdir)
+            path, digest = seal_record(record, outdir,
+                                       prefix="P7_PILOT_ABORTED_")
         except OSError as exc:
             print_fn(f"Could not seal abort record: {exc}")
             return 2
@@ -264,6 +271,7 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
         return 1
 
     results: dict[str, dict] = {}
+    incomplete: list[str] = []
     total = len(TASKS)
     for i, task in enumerate(TASKS, start=1):
         session.begin_phase()
@@ -284,8 +292,10 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
                 data = run_checker_module(checker)
             except (FileNotFoundError, ValueError, RuntimeError) as exc:
                 print_fn(f"Checker run failed: {exc}")
-                if not ask_yes_no("Retry this task's measurement?",
-                                  input_fn, print_fn):
+                retry = QUESTION_BANK.get(
+                    "retry_measure",
+                    "Retry this task's measurement? (yes/no):")
+                if not ask_yes_no(retry, input_fn, print_fn):
                     break
                 continue
             break
@@ -300,6 +310,10 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
             "iterations": None if data is None else data["iterations"],
             "artifacts": [] if data is None else list(data.get("artifacts", [])),
         }
+        if data is None:
+            incomplete.append(
+                f"task '{task}': no valid measurement (checker not run or "
+                "RESULT contract failed)")
 
         session.begin_phase()
         results[task]["review_minutes"] = ask_number(
@@ -313,23 +327,39 @@ def main(input_fn=input, print_fn=print, clock=time.monotonic,
     satisfaction = ask_number(
         QUESTION_BANK.get("satisfaction", "Satisfaction (1-5):"),
         input_fn, print_fn)
-    satisfaction_note = _ask_text("notes", input_fn, print_fn)
+    satisfaction_note = _ask_text("satisfaction_note", input_fn, print_fn)
     session.end_phase(expect="satisfaction")
 
     session.begin_phase()
+    complete = not incomplete
     record = {"engineer": initials, "repo_commit": commit, "started": started,
-              "finished": _now(), "satisfaction": satisfaction,
+              "finished": _now(), "complete": complete,
+              "satisfaction": satisfaction,
               "satisfaction_note": satisfaction_note, "tasks": results,
               "phases_seconds": session.times, "log": session.log,
               "runner": "pilot_human"}
+    if not complete:
+        record["incomplete_reasons"] = incomplete
+        prefix = "P7_PILOT_INCOMPLETE_"
+    else:
+        prefix = "P7_PILOT_HUMAN_"
     try:
-        path, digest = seal_record(record, outdir)
+        path, digest = seal_record(record, outdir, prefix=prefix)
     except OSError as exc:
         print_fn(f"Could not seal record: {exc}")
         return 2
-    print_fn(f"\nSession sealed:\n  {path}\n  sha256 {digest}")
     session.end_phase(expect="seal")
-    return 0
+    if complete:
+        print_fn(f"\nSession sealed:\n  {path}\n  sha256 {digest}")
+        return 0
+    print_fn("\nWARNING: session INCOMPLETE — one or more tasks produced no "
+             "valid measurement.")
+    print_fn("This record is NOT valid pilot evidence and must NOT be "
+             "submitted:")
+    for reason in incomplete:
+        print_fn(f"  - {reason}")
+    print_fn(f"\nSealed incomplete record:\n  {path}\n  sha256 {digest}")
+    return 3
 
 
 if __name__ == "__main__":

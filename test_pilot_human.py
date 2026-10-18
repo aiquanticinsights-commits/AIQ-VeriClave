@@ -243,6 +243,7 @@ class TestMainRunner(unittest.TestCase):
         self.assertEqual(len(files), 1)
         rec = json.load(open(os.path.join(d, files[0]), encoding="utf-8"))
         self.assertFalse(rec.get("aborted", False))
+        self.assertTrue(rec["complete"])
         self.assertEqual(rec["engineer"], "SS")
         self.assertEqual(set(rec["tasks"]), set(pilot_human.TASKS))
         self.assertEqual(rec["tasks"]["round-robin-arbiter"]["defects_found"], 2)
@@ -254,13 +255,32 @@ class TestMainRunner(unittest.TestCase):
         d = tempfile.mkdtemp()
         code, echoed = self._run(["SS", "yes", "no", "yes"], d)
         self.assertEqual(code, 1)
-        files = [f for f in os.listdir(d) if f.startswith("P7_PILOT_HUMAN_")]
+        files = [f for f in os.listdir(d) if f.startswith("P7_PILOT_ABORTED_")]
         self.assertEqual(len(files), 1)
         rec = json.load(open(os.path.join(d, files[0]), encoding="utf-8"))
         self.assertTrue(rec["aborted"])
         self.assertEqual(rec["tasks"], {})
         self.assertIn("attest_no_ai=no", rec["abort_reason"])
         self.assertTrue(any("ABORT" in m for m in echoed))
+
+    def test_incomplete_session_not_submittable(self):
+        bad = os.path.join(tempfile.mkdtemp(), "missing.py")
+        words = ["AA", "yes", "yes", "yes",
+                 "DONE", bad, "no", "0", "AA", "x",
+                 "DONE", "not-a-file", "no", "0", "AA", "x",
+                 "5", "note"]
+        d = tempfile.mkdtemp()
+        code, echoed = self._run(words, d)
+        self.assertEqual(code, 3)
+        files = os.listdir(d)
+        self.assertEqual(len(files), 1)
+        self.assertTrue(files[0].startswith("P7_PILOT_INCOMPLETE_"), files)
+        rec = json.load(open(os.path.join(d, files[0]), encoding="utf-8"))
+        self.assertFalse(rec["complete"])
+        self.assertNotEqual(rec.get("incomplete_reasons"), [])
+        for task in pilot_human.TASKS:
+            self.assertIsNone(rec["tasks"][task]["defects_found"])
+        self.assertTrue(any("NOT valid pilot evidence" in m for m in echoed))
 
 
 if __name__ == "__main__":
