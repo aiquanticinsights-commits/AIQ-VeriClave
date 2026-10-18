@@ -137,7 +137,20 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha
 
-      - name: Build and push
+      - name: Build image (always; verifies the Dockerfile)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          load: true
+          tags: aiq-vericlave:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke-run image (contract suite)
+        run: docker run --rm aiq-vericlave:ci
+
+      - name: Push to Docker Hub
         if: env.DOCKER_USER != '' && env.DOCKER_PASS != ''
         uses: docker/build-push-action@v5
         with:

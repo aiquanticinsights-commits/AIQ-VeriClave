@@ -1,9 +1,16 @@
 __pycache__/
 *.pyc
 .git/
+.github/
 .venv/
+venv/
 evidence/
 runs/
+dist/
+build/
+*.egg-info/
 *.vcd
 *.fst
 *.ghw
+*.log
+*_PARTIAL*.json
