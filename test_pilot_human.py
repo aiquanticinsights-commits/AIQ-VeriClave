@@ -207,5 +207,61 @@ class TestAttestGate(unittest.TestCase):
         self.assertIn("yes = clean", text)
 
 
+class TestMainRunner(unittest.TestCase):
+    def _checker(self, body):
+        d = tempfile.mkdtemp()
+        p = os.path.join(d, "chk.py")
+        open(p, "w", encoding="utf-8").write(body)
+        return p
+
+    def _run(self, words, outdir):
+        it = iter(words)
+
+        def input_fn(prompt):
+            try:
+                return next(it)
+            except StopIteration:
+                return "DONE"
+
+        echoed = []
+        code = pilot_human.main(input_fn=input_fn, print_fn=echoed.append,
+                                clock=FakeClock(), outdir=outdir)
+        return code, echoed
+
+    def test_clean_session_seals_two_tasks(self):
+        chk = self._checker('RESULT = {"defects_found": 2, "mutants_total": 2, '
+                            '"false_alarms": 0, "iterations": 1, '
+                            '"artifacts": ["tb.sv"]}\n')
+        words = ["SS", "yes", "yes", "yes",
+                 "DONE", chk, "30", "SS", "ok",
+                 "DONE", chk, "20", "SS", "ok",
+                 "5", "clean"]
+        d = tempfile.mkdtemp()
+        code, echoed = self._run(words, d)
+        self.assertEqual(code, 0)
+        files = [f for f in os.listdir(d) if f.startswith("P7_PILOT_HUMAN_")]
+        self.assertEqual(len(files), 1)
+        rec = json.load(open(os.path.join(d, files[0]), encoding="utf-8"))
+        self.assertFalse(rec.get("aborted", False))
+        self.assertEqual(rec["engineer"], "SS")
+        self.assertEqual(set(rec["tasks"]), set(pilot_human.TASKS))
+        self.assertEqual(rec["tasks"]["round-robin-arbiter"]["defects_found"], 2)
+        self.assertEqual(rec["satisfaction"], 5.0)
+        self.assertEqual(set(rec["phases_seconds"]),
+                         set(pilot_human.PHASES) - {"seal"})
+
+    def test_abort_blocks_all_task_data(self):
+        d = tempfile.mkdtemp()
+        code, echoed = self._run(["SS", "yes", "no", "yes"], d)
+        self.assertEqual(code, 1)
+        files = [f for f in os.listdir(d) if f.startswith("P7_PILOT_HUMAN_")]
+        self.assertEqual(len(files), 1)
+        rec = json.load(open(os.path.join(d, files[0]), encoding="utf-8"))
+        self.assertTrue(rec["aborted"])
+        self.assertEqual(rec["tasks"], {})
+        self.assertIn("attest_no_ai=no", rec["abort_reason"])
+        self.assertTrue(any("ABORT" in m for m in echoed))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)
