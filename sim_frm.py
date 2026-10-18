@@ -318,10 +318,24 @@ def rtl_hash(rtl_path: str = DEFAULT_RTL) -> str:
     return h.hexdigest()[:12]
 
 
+def _reachable(cmd: list[str], timeout_s: int = 15) -> bool:
+    """Run a bounded reachability probe; anything but a clean exit is False."""
+    try:
+        p = subprocess.run(cmd, capture_output=True, text=True,
+                           timeout=timeout_s)
+        return p.returncode == 0
+    except (OSError, subprocess.SubprocessError):
+        return False
+
+
 def tool_ok() -> bool:
-    """Verilator reachable (plus g++/make where needed for --cc builds)."""
+    """Verilator reachable (plus g++/make where needed for --cc builds).
+
+    Bounded probe: a WSL that exists on PATH but has no working Verilator must
+    fail fast and let callers skip, never hang the suite (tracked T-02).
+    """
     if os.name == "nt":
-        return shutil.which("wsl") is not None
+        return _reachable(_wsl(["verilator", "--version"]), timeout_s=15)
     return shutil.which("verilator") is not None
 
 

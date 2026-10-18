@@ -55,6 +55,14 @@ def _tool(name: str) -> list[str]:
     return [found] if found else [name]
 
 
+def _reachable(cmd: list[str], timeout_s: int = 15) -> bool:
+    """Bounded reachability probe: a tool that exists on PATH but does not run
+    (e.g. wsl.exe present with no tool inside) must fail fast and be treated as
+    UNAVAILABLE, never block discovery (tracked T-02)."""
+    rc, _ = _run(cmd, timeout_s=timeout_s)
+    return rc == 0
+
+
 def _git_commit() -> str:
     """Repo commit under test (empty outside a worktree — recorded)."""
     rc, log = _run(["git", "rev-parse", "--short", "HEAD"], timeout_s=30)
@@ -72,7 +80,7 @@ def _image_tag() -> str:
 
 
 def ver(cmd: list[str]) -> str:
-    rc, log = _run(cmd, timeout_s=60)
+    rc, log = _run(cmd, timeout_s=20)
     if rc == 127:
         return "UNAVAILABLE"
     for line in log.splitlines():
@@ -115,7 +123,7 @@ def collect(env: str) -> dict:
     rtl = os.path.join(os.path.dirname(HERE), "rideprotect-rv", "rtl",
                        "wb_dma.v")
     if os.name == "nt":
-        toolchain_here = shutil.which("wsl") is not None
+        toolchain_here = _reachable(_tool("verilator") + ["--version"])
     else:
         toolchain_here = shutil.which("verilator") is not None
     if os.path.isfile(rtl) and toolchain_here:
@@ -148,7 +156,7 @@ def collect(env: str) -> dict:
         c["yosys_synth"] = {"pass": None, "reason": "no toolchain here"}
     demo = os.path.join(HERE, "formal", "demo", "cnt.sby")
     if os.name == "nt":
-        sby_here = shutil.which("wsl") is not None
+        sby_here = _reachable(_tool("sby") + ["--version"])
     else:
         sby_here = shutil.which("sby") is not None
     if sby_here and os.path.isfile(demo):
