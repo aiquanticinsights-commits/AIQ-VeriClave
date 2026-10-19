@@ -61,7 +61,17 @@ python eval_harness.py            # -> JSON: accuracy by kind + tokens/USD/CPU l
 ```
 
 Optional (gated, non-blocking): Verilator 5, Yosys, SymbiYosys (`sby`),
-Vivado xsim, `fsdb2vcd`. Missing tools skip gracefully. For the OpenCode
+Vivado xsim, `fsdb2vcd`. Missing tools skip gracefully. For the OpenCode agentic workflow (skills per pipeline stage), see \`[OPENCODE_WORKFLOW.md](OPENCODE_WORKFLOW.md).
+
+## User Verification Guide
+
+For test engineers and LLM-aided verification newcomers, see the step-by-step onboarding:
+
+- [Fresh-Laptop Prerequisites](PREREQ_FRESH_LAPTOP.md): OS, WSL2, EDA tools, Python, and the minimal install script.
+- [Quick-Start Verification Guide](QUICKSTART.md): one-command pipeline, two test examples, sign-off flow.
+- [BYO_RTL_GUIDE.md](BYO_RTL_GUIDE.md): deeper design methodology, intent generation, mutation/localization/closure pipeline.
+
+The console entry point is `vericlave-verify-full <rtl_dir>` (see `verify.py` and `pyproject.toml` [project.scripts]). For the OpenCode
 agentic workflow (skills per pipeline stage), see [`OPENCODE_WORKFLOW.md`](OPENCODE_WORKFLOW.md).
 
 ## Repository layout
