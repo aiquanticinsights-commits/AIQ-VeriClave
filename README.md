@@ -70,6 +70,7 @@ For test engineers and LLM-aided verification newcomers, see the step-by-step on
 - [Fresh-Laptop Prerequisites](PREREQ_FRESH_LAPTOP.md): OS, WSL2, EDA tools, Python, and the minimal install script.
 - [Quick-Start Verification Guide](QUICKSTART.md): one-command pipeline, two test examples, sign-off flow.
 - [BYO_RTL_GUIDE.md](BYO_RTL_GUIDE.md): deeper design methodology, intent generation, mutation/localization/closure pipeline.
+- [FPGA Toolchain Plan](FPGA_TOOLCHAIN_PLAN.md): complete tool mapping, GitHub equivalents, and install plan for missing FPGA verification tools.
 
 The console entry point is `vericlave-verify-full <rtl_dir>` (see `verify.py` and `pyproject.toml` [project.scripts]). For the OpenCode
 agentic workflow (skills per pipeline stage), see [`OPENCODE_WORKFLOW.md`](OPENCODE_WORKFLOW.md).
